@@ -18,4 +18,6 @@ const containerStyle = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  fontSize: "12px",
+  fontWeight: "500",
 });
