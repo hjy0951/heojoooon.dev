@@ -1,8 +1,18 @@
+import { css } from "#/styled-system/css";
+import ProfileCard from "@/components/ProfileCard";
+
 export default function Home() {
   return (
-    <div>
+    <div className={containerStyle}>
       <main>Main</main>
-      <footer>Footer</footer>
+
+      <ProfileCard />
     </div>
   );
 }
+
+const containerStyle = css({
+  display: "flex",
+  flexDir: "column",
+  alignItems: "center",
+});
