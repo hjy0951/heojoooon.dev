@@ -1,6 +1,15 @@
-import { defineConfig } from "@pandacss/dev";
+import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
+
+const globalCss = defineGlobalStyles({
+  "html, body": {
+    w: "full",
+    h: "full",
+  },
+});
 
 export default defineConfig({
+  globalCss,
+
   // Whether to use css reset
   preflight: true,
 
@@ -16,5 +25,5 @@ export default defineConfig({
   },
 
   // The output directory for your css system
-  outdir: "styled-system",
+  outdir: "./styled-system",
 });
