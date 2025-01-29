@@ -1,18 +1,5 @@
-import { css } from "#/styled-system/css";
-import ProfileCard from "@/components/ProfileCard";
+import { MainPage } from "@/components/Pages";
 
 export default function Home() {
-  return (
-    <div className={containerStyle}>
-      <main>Main</main>
-
-      <ProfileCard />
-    </div>
-  );
+  return <MainPage />;
 }
-
-const containerStyle = css({
-  display: "flex",
-  flexDir: "column",
-  alignItems: "center",
-});
