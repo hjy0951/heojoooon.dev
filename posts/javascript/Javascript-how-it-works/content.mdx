@@ -1,0 +1,117 @@
+---
+slug: Javascript-how-it-works
+title: "JavaScript의 동작 방식"
+description: "Call Stack? Event Loop? JavaScript는 어떻게 동작할까?"
+tags: ["javascript"]
+createdAt: "2023.04.21"
+updatedAt: ""
+---
+
+# Javascript 동작 원리
+
+위는 JavaScript Engine인 `V8 Engine`의 구조이다.
+
+- **Memory Heap** : 변수와 객체에 대한 메모리 할당이 일어나는 곳
+  - 객체는 모두 Heap 안에 할당
+- **Call Stack** : 코드 실행에 따라 스택 프레임이 쌓이는 곳
+
+Call Stack이 1개이므로 `Single Thread`이다.<br/>
+
+✅ 즉, JavaScript는 **Single Thread** 기반으로, <u>동시에 하나의 작업만을 처리</u>할 수 있다.
+
+## <br/>
+
+# JavaScript Runtime (실행 환경)
+
+![js-runtime-1](/contents/javascript/Javascript-how-it-works/1.png)
+![js-runtime-2](/contents/javascript/Javascript-how-it-works/2.png)
+
+`JavaScript Engine`을 구동하는 환경인 `브라우저`는 여러 개의 `thread`를 사용한다.
+
+- **Web APIs**
+  > DOM, AJAX, Timer 등 구동 환경이 제공하는 API
+  - svg, fetch, canvas, setTimeout 등등
+  - setTimeout, setInterval 등이 실행되면 API thread에서 timer가 실행된다.
+- **Callback queue**
+  > 비동기 함수가 실행된 후, callback 함수들이 대기하는 곳
+  - 다른 함수의 인자로 넘겨진 함수로 `동기 callback`의 경우, 바로 callback queue에 들어가지만, `비동기 callback`의 경우, 비동기 조건이 갖춰졌을때 callback queue에 들어간다.
+- **Event Loop**
+  > Call Stack이 빈 상태일 때, callback queue에 있는 callback들을 Call Stack으로 보내 실행시키는 역할
+  - 즉, JavaScript Engine과 구동 환경 사이에 상호 연동을 위한 장치
+
+## <br/>
+
+# Call Stack
+
+> 여러 함수들을 호출하는 `script`에서 해당 위치를 추적하는 `Interpreter`를 위한 메커니즘
+
+즉, 함수(?)가 실행되면 순서대로 쌓이는 구조이다.<br/>
+정확히는 코드가 실행되면서 생겨나는 `Execution Context`가 쌓이는 공간이다.<br/>
+프로세스가 시작되면 `Global Context`가 가장 먼저 쌓이고, 함수가 실행되면서 새로운 `Context`들이 위로 쌓인다.<br/>
+프로세스 종료시 `Global Context`가 Call Stack에서 빠지면서 종료된다.<br/>
+
+```jsx showLineNumbers
+function first() {
+  console.log("first");
+  second();
+}
+
+function second() {
+  console.log("second");
+}
+
+first();
+```
+
+<br />
+아래는 위 코드가 실행되면서 Call Stack에 context가 쌓이는 순서를 보여준다.
+
+![js-callstack-1](/contents/javascript/Javascript-how-it-works/3.png)
+![js-callstack-2](/contents/javascript/Javascript-how-it-works/4.png)
+
+## <br/>
+
+# Event Loop
+
+> Single Thread를 보완하기 위해 `비동기 callback`을 사용하여 **Multi-Thread인 것처럼** 보여준다.
+
+대표적인 비동기 callback에는 `Promise`가 있다.<br/>
+JavaScript 코드 실행중에 이벤트와 같은 **비동기 처리가 필요한 callback**을 만나면 조건을 만족할 때 callback queue에 callback이 쌓인다.<br/>
+Event Loop는 Call Stack이 비어 실행시킬 Context가 없다면 이렇게 쌓인 callback들을 밀어 넣어 실행시킨다.<br/>
+이러한 작업을 `tick`이라고 하고 계속 반복한다.<br/>
+`Call Stack`이 비어있다는 것은 해당 `callback`이 불린 함수의 `Execution Context`의 위에 더이상 아무 `Context`가 쌓여있지 않고, 모두 실행 완료되어 `Call Stack`을 빠져나간 상태를 말하는 것 같다.
+
+![js-eventloop](/contents/javascript/Javascript-how-it-works/5.png)
+[이미지 출처](https://iamsjy17.github.io/javascript/2019/07/20/how-to-works-js.html)
+
+[Event Loop Simulation](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)에 들어가면 실제 Event Loop가 실행되는 과정을 시뮬레이션해볼 수 있다.
+
+## <br/>
+
+# Callback Queue
+
+📌 Ref. [mdn](https://ko.javascript.info/event-loop)
+
+**Event Loop**가 처리하는 **callback queue**에는 <u>우선순위에 따른 3 종류의 queue</u>가 존재한다.
+
+### 1. Microtask Queue
+
+- **Promise, async/await**, process.nextTick,  Object.observe, MutationObserver 등의 함수들이 callback을 Microtask queue에 넣는다.
+
+### 2. Animation Frames
+
+- requestAnimationFrame과 같이 **브라우저 렌더링과 관련된 task**를 넘겨받는 Queue.
+
+### 3. Task Queue (Macrotask Queue)
+
+- **setTimeout**, setInterval, setImmediate, I/O, UI 렌더링 등의 함수들이 callback을 Task queue에 넣는다.
+- `setTimeout(callback, 0)`를 하더라도 0ms를 parameter로 받아 바로 실행되는 것이 아니라 우선 순위가 높은 `Queue`에 다른 `task`가 존재한다면 이를 먼저 처리하고 `Task Queue`의 `task`를 하나 가져가서 실행한다.
+
+## Queue Priority
+
+Queue들의 우선 순위는 다음과 같다.
+
+- Microtask Queue > Animation Frames > Task Queue
+
+따라서 **Microtask Queue**나 **Animation Frames**에 callback이 존재한다면, 모든 callback을 **Call Stack**으로 가져온다.<br/>
+하지만 Task Queue에서는 callback 1개만을 가져오고 다른 Queue에 callback이 존재하는지 확인하게 된다.

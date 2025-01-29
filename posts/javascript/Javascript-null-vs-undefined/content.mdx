@@ -1,0 +1,52 @@
+---
+slug: Javascript-null-vs-undefined
+title: "null vs undefined"
+description: "비슷하지만 다른 두 타입"
+tags: ["javascript"]
+createdAt: "2023.08.04"
+updatedAt: ""
+---
+
+### null
+
+> 변수를 선언하고 빈 값을 할당한 상태 (비어있는 객체)
+
+- 즉, 자료형이 없는 상태
+- 의도적으로 값이 비어있음을 표현
+  - `undefined`는 값이 지정되지 않은 경우를 의미하지만, `null`은 변수가 어느 객체도 가리키고 있지 않음을 의미
+
+### undefined
+
+> 변수를 선언하고 값을 할당하지 않은 상태
+
+- Primitive Type
+- 자동으로 `undefined`가 할당되는 경우
+  - 변수에 값을 할당하지 않았을 때
+  - 메서드와 선언에서 변수가 할당받지 못했을 때
+  - 함수가 값을 `return`하지 않았을 때
+
+### 차이
+
+```tsx showLineNumbers
+// 1. typeof
+typeof null; // object
+typeof undefined; //undefined
+
+// 2. 비교
+null == undefined; // true
+null === undefined; // false
+// null과 undefined는 각각 null, undefined의 Primitive Type을 가짐
+
+// 3. isNaN
+isNaN(1 + null); // false
+isNaN(1 + undefined); // true
+```
+
+### 결론
+
+- `null`은 현재 변수가 값을 가리키지 않는 비어있는 상태
+- `undefined`는 변수가 값 자체를 할당 받지 못한 상태
+
+✅ tip!
+
+- `typeof null`은 출력하면 `object`이다. 하지만 이는 여전히 **원시 타입(primitive value)** 로, `JavaScript`에서는 구현 버그로 간주한다.

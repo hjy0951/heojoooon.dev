@@ -1,0 +1,73 @@
+---
+slug: develop-dvh
+title: "dvh?"
+description: "vh에 버그가 있다고?"
+tags: ["develop"]
+createdAt: "2023.09.29"
+updatedAt: ""
+---
+
+## **[Bug 141832](https://bugs.webkit.org/show_bug.cgi?id=141832)**
+
+> **Viewport height is taller than the visible part of the document in some mobile browsers**
+
+WebKit에 명시된 일부 모바일 환경에서 뷰포트가 화면에 보이는 것보다 큰 vh의 버그이다.
+
+이전 프로젝트에서 모바일 chrome 환경에서 개발한 서비스의 메뉴 바가 chrome의 하단 바로 덮여 <br/>사용할 수 없었던 현상이 있었는데, 이것 또한 위의 버그로 인해 발생했던 버그이다.
+
+당시에는 script 코드로 현재 화면에 보이는 영역의 높이를 새로 계산하여 화면을 렌더링했다.
+
+```jsx showLineNumbers
+const setScreenSize = () => {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+};
+```
+
+하지만, 스크롤로 chrome 하단 바가 사라지면 사라진 바의 자리가 흰색으로 아무것도 그려지지 않은 상태로 남아 있었고,<br/>데스크탑 chrome에서 개발자 도구의 반응형 모드로 화면의 크기를 동적으로 변경하면 처음 계산한 높이가 다시 계산되지 않아 원하는대로 동작하지 않았다.
+
+이 또한 **resize** event에 대해 listener를 등록하여 해결할 수 있다.<br/>
+하지만 style 파일과 script 파일을 모두 동시에 수정해야하는 불편함이 있었다.<br/>
+따라서 이러한 문제를 손쉽게 해결할 수 있는 요소를 발견하여 소개해보려고 한다.
+
+## 새로운 Viewport!
+
+📌 Ref. https://ishadeed.com/article/new-viewport-units/
+
+![dvh](/contents/develop/develop-dvh/1.png)
+
+### dvh
+
+> Dynamic Viewport Height
+
+dvh는 현재 보여지는 뷰포트의 높이를 **동적**으로 가져오는 것이 포인트이다.
+
+만약 모바일 환경에서 스크롤을 통해 주소창이 확장되거나 축소되면, dvh 값이 업데이트 된다.
+
+물론, 뷰포트에 변화가 생기면서 콘텐츠의 크기가 재조정될 수 있기 때문에 편의성과 성능 면에서 비용이 발생할 수 있다.
+
+![svh](/contents/develop/develop-dvh/2.png)
+
+### svh
+
+> Short Viewport Height
+
+svh는 현재 보여지는 뷰포트의 높이중 가장 작은 높이를 가져온다.
+
+즉, 위 그림에서 볼 수 있듯이 브라우저에서 제공하는 인터페이스를 제외한 화면의 높이이다.
+
+![lvh](/contents/develop/develop-dvh/3.png)
+
+### lvh
+
+> Large Viewpor Height
+
+lvh는 현재 보여지는 뷰포트의 높이중 가장 긴 높이를 가져온다.
+
+즉, 위 그림에서 볼 수 있듯이 브라우저에서 제공하는 인터페이스를 포함한 화면의 높이이다.
+
+<br />
+### 정리
+
+- dvh, svh, lvh를 적절히 사용하면 좀 더 유연한 화면 구성을 만들 수 있지 않을까 싶다.
+- 비용이 존재하더라도 화면 크기를 계산하는 script 코드를 추가하는 것보다 위의 요소들을 사용하는 것이 유용하고 개발자 입장에서도 편할 것 같다.

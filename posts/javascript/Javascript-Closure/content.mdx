@@ -1,0 +1,58 @@
+---
+slug: Javascript-Closure
+title: "JavaScript의 Closure"
+description: "Execution Context로 인해 생긴 특징"
+tags: ["javascript"]
+createdAt: "2023.08.20"
+updatedAt: ""
+---
+
+✅ **Lexical Scoping (Ref. [zerocho님](https://www.zerocho.com/category/Javascript/post/5740531574288ebc5f2ba97e))**
+
+- `Scope`는 함수 호출이 아닌 **선언**시 생김
+
+  - 즉, 함수를 선언한 순간, 내부의 변수는 자신으로부터 가장 가까운 `Scope`부터 변수를 참조함
+
+  ```jsx showLineNumbers
+  var name = "zero";
+  function log() {
+    console.log(name); // zero -> 함수 선언시 전역 변수 name을 참조
+  }
+
+  function wrapper() {
+    var name = "nero"; // wrapper 함수에서 발생한 내부 변수이므로 외부에서 참조 불가
+    log();
+  }
+  wrapper();
+  ```
+
+- 위와 같은 특징을 이용하여 `비공개 변수`를 만들어 접근을 불가하도록 만들 수 있음
+- 이러한 이유로 전역 변수 생성은 지양
+  - 라이브러리 사용시 변수가 섞일 수 있기 때문
+
+➕ **IIFE(즉시 호출 함수 표현식)**
+
+- `(function() {})();` 구문
+- 함수를 선언과 동시에 실행
+- 라이브러리를 만들 때 많이 활용
+
+## Closure
+
+> `Execution Context`는 종료되었지만, 외부 함수의 `Lexical Environment`가 `Garbage Collection`에 의해 제거되지 않고 살아남아 동작하는 현상
+
+- 외부 함수의 `Execution Context`와 해당 함수의 변수가 `Scope Chain`으로 연결되어 `Closure` 내부에 유지됨
+  - `Scope Chain`으로 `Reference`가 존재하기 때문에 가비지 컬렉션의 대상이 되지 않고 메모리에 남아있는 것으로 예상됨
+    - 이로 인해 **메모리 사용량이 많아질 수 있다**는 단점이 존재할 듯
+    - 또한 `Scope Chain`을 거슬러 올라가는 현상이 발생하여 **성능이 저하**될 수도 있음
+
+### 장점
+
+- 함수 내부의 변수와 상태를 외부에서 **직접 접근하지 못하도록** 비공개로 유지할 수 있음
+  - 데이터 은닉 및 캡슐화
+- 함수를 **동적으로 생성하고 재활용**하는 패턴을 만들 수 있음
+
+### 단점
+
+- 외부 변수들에 의해 **메모리 사용량**이 많아질 수 있음
+  - 직접 눈에 보이지는 않지만 메모리 상에 존재하는 외부 변수에 접근해야 하기 때문
+- 중첩해서 사용할 경우, 코드 복잡도가 상당히 올라가고 가독성을 해치며 유지보수가 어려워질 수 있음

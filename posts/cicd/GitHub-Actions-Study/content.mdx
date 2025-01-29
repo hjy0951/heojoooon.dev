@@ -1,0 +1,54 @@
+---
+slug: GitHub-Actions-Study
+title: "GitHub-Actions"
+description: "CI/CD와 GitHub Actions"
+tags: ["cicd"]
+createdAt: "2023.10.02"
+updatedAt: ""
+---
+
+## CI
+
+> **Continuous Integration**, 지속적인 통합
+
+- 소스코드의 새로운 변경 사항이 정기적으로 빌드 및 테스트되어 공유 **Repository에 통합**하는 것
+- 협업시 자동화된 빌드, 테스트를 통해 소스코드 충돌을 방지할 수 있다.
+- 또한, 커밋마다 빌드와 관련된 테스트가 이루어지며 동작을 확인하여 문제가 발생하지 않도록 한다.
+- **Goal**
+  - 버그를 신속하게 찾아 해결
+  - 소프트웨어 품질 개선
+  - 새로운 업데이트의 검증 및 릴리즈 시간 단축
+
+## CD
+
+> **Continuous Delivery** or **Continuous Deployment**, 지속적인 서비스 제공 혹은 지속적인 배포
+
+- 변경 사항이 Repo에 반영될 뿐만 아니라 프로덕션까지 배포되는 것
+  - 업데이트 사항이 CI 과정을 통과하면 자동으로 프로덕션에 배포
+
+## <br/>
+
+## GitHub Actions
+
+📌 Ref. [카카오엔터프라이즈 테크 블로그](https://tech.kakaoenterprise.com/180)
+
+- GitHub에서 제공하는 빌드, 테스트, 배포 파이프라인을 자동화할 수 있는 CI/CD 플랫폼
+  - 유사품: Jenkins, Circle CI, Travis
+- YAML 포맷을 사용하여 가독성이 높고 이미 구현된 많은 액션들을 활용하여 CI/CD 플로우 작성이 가능하다.
+- 또한 GitHub Actions는 편의성을 위해 여러가지 **action**들을 제공한다.
+  - checkout, cache 등등..
+
+### Workflow
+
+- GitHub Actions의 최상위 개념
+- 특정 목적을 위한 일련의 실행 트리거, 환경, 기능들을 모두 포함
+- github/workflows 폴더 아래에 YAML 파일로 작성할 수 있다.
+  - 여러 workflow가 존재할 수 있다.
+- 속성
+  - on
+    - workflow가 언제 실행될지 정의
+  - jobs
+    - workflow가 실행될 때 수행할 Job을 정의
+      - Job은 독립된 환경에서 돌아가는 하나의 처리 단위
+      - 여러 Job을 정의할 수 있고, 각각 독립적인 환경에서 실행된다.
+    - runs-on과 steps 속성을 필수로 정의해야 한다.

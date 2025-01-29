@@ -1,0 +1,111 @@
+---
+slug: recoil-study
+title: "Recoil"
+description: "메타가 개발한 전역 상태 관리 도구"
+tags: ["recoil"]
+createdAt: "2023.06.10"
+updatedAt: ""
+---
+
+## [Recoil](https://recoiljs.org/ko/docs/introduction/core-concepts/)
+
+> Meta에서 개발한 React 상태 관리 라이브러리
+
+- 앱에서 **하나의 상태 변경이 다른 여러 컴포넌트에 영향을 줄 수 있는 상황**이 많이 존재하여 상태 관리 라이브러리가 등장
+  - 이를 React스럽게 해결하고자 Meta에서 개발
+  - `redux`, `Mobx` 등은 React 전용 라이브러리가 아니기 때문에 React 내부 Scheduler에 접근할 수 없음
+- `Atom` → `Selector` → `React Component` 로 이루어지는 데이터 흐름
+- Context API를 기반으로 구현
+- 함수형 컴포넌트에서만 사용 가능
+
+![recoil-atoms-and-components](/contents/recoil/recoil-study/1.png)
+
+하나의 상태를 여러 컴포넌트가 구독하고 있어 영향을 줄 수 있는 상황을 잘 보여주는 그림인 것 같다.
+
+### Atom
+
+> 상태의 단위
+
+- 컴포넌트가 구독할 수 있는 `React State`의 개념
+- `Atom`의 값이 변경되면 해당 `Atom`을 구독하고 있는 모든 컴포넌트들이 변경된 새로운 값을 반영하여 `Re-rendering`
+- 동일한 `Atom`이 여러 컴포넌트에서 사용되는 경우, 모든 컴포넌트는 상태를 공유함
+- `key`와 `default value`로 구성
+  - 당연히 `key`는 `unique`해야 함
+
+```jsx showLineNumbers
+// atom 함수를 이용하여 생성
+const fontSizeState = atom({
+  key: "fontSizeState",
+  default: 14,
+});
+
+// 컴포넌트에 상태로 사용할 때는 useRecoilState로 선언
+const [fontSize, setFontSize] = useRecoilState(fontSizeState);
+
+// 추가로 값만, 혹은 변경사항만 저장하고 싶을 때 함수를 달리하여 사용 가능
+// useRecoilValue(): atom의 값을 불러옴
+// useSetRecoilState(): atom의 내용을 업데이트
+```
+
+### Selector
+
+> 다른 `Atom`들 혹은 다른 `Selector`들을 입력으로 받아 사용하는 순수 함수
+
+- 상위 `Atom` 혹은 `Selector`가 변경되면 하위의 `Selector` 함수들도 다시 실행됨
+- `key`와 `get`, `set`으로 구성되고, `set`은 optional
+- `Selector`도 `Atom`과 마찬가지로 다른 컴포넌트가 구독할 수 있고, 똑같이 변경사항이 발생하면 `Re-rendering`이 일어남
+- 공식 문서에서는 최소한의 상태들만 `Atom`으로 저장하고, 이를 이용하여 파생되는 데이터는 `Selector`로 명시한 함수들을 이용하여 효율적으로 계산하고 필요한 상태들을 최소한으로 저장한다고 함
+  - 즉, `Atom`을 가공해서 사용해야 하는 경우, 따로 다른 `Atom`으로 저장하는 것이 아니라 `Selector`를 이용해서 도출
+
+```jsx
+/*
+- get property는 입력을 받아 실행될 함수
+- 이를 통해 다른 atom이나 selector에 접근할 수 있음
+- 내부에서 사용되는 get method는 atom 접근을 위한 함수 */
+const fontSizeLabelState = selector({
+  key: 'fontSizeLabelState',
+  get: ({get}) => {
+    const fontSize = get(fontSizeState);
+    const unit = 'px';
+
+    return `${fontSize}${unit}`;
+  },
+});
+
+// selector를 사용할 때에는 useRecoilValue를 사용
+const fontSizeLabel = useRecoilValue(fontSizeLabelState);
+
+// set 예시
+/*
+- set의 parameter는 1.Atom, 2.새로운 값
+- 이 경우, useRecoilState로 set 함수를 객체로 받아올 수 있음 */
+const counterAtom = atom({
+	key: "counter",
+	default : 0
+})
+
+const countChange = selector({
+	key: "selector",
+	get: ({get}) => get(counterAtom) % 2 === 0,
+	set: ({set}, newValue) => set(counterAtom, newValue as number)
+});
+```
+
+### Atom Effects
+
+> `Side Effect`를 관리하고 `Atom`을 초기화 또는 동기화하기 위한 API
+
+- 다음과 같은 상황에 활용할 수 있음
+  - 상태 동기화
+  - 로컬 스토리지 지속성
+  - 비동기적 스토리지 지속성
+  - …
+- `Recoil`로 저장한 데이터는 새로고침시 사라짐
+  - 이를 해결하기 위해 `effects`를 이용하여 `Local Storage`에 저장
+    - 이를 통해 데이터를 동기적으로 불러올 수 있음
+
+✅ 새로고침시 Recoil의 데이터가 사라지는 이유
+
+- 웹 페이지를 새로고침하면 브라우저의 이전에 생성된 모든 데이터와 상태가 초기화됨
+  - JavaScript 코드가 다시 실행되어 다시 Execution Context를 생성
+  - 즉, JavaScript의 Execution Context와 브라우저 메모리에 저장된 정보가 초기화되기 때문

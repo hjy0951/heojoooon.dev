@@ -1,0 +1,179 @@
+---
+slug: GitHub-Actions-application-and-improvement
+title: "GitHub Actions 적용기"
+description: "GitHub Actions를 적용하고 caching을 통한 개선"
+tags: ["cicd"]
+createdAt: "2023.10.07"
+updatedAt: ""
+---
+
+지난번에 간단하게 CI/CD와 GitHub Actions에 대해 정리하였다.<br/>
+따라서 현재 진행중인 사이드 프로젝트에서도 PR을 검증하는 용도로 잘 쓸 수 있지 않을까 생각하여 적용해보았다.
+
+## 프로젝트에 적용해보자!
+
+아래는 처음 적용한 actions workflow이다.
+
+```yaml showLineNumbers
+name: PR CI-test before merging
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  CI-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Check lint
+        run: yarn eslint src/**/*.{tsx,ts}
+
+      - name: Check format
+        run: yarn prettier src/**/*.{tsx,ts} --check
+
+      - name: Check types
+        run: tsc -p tsconfig.json --noEmit
+
+  Build-Test:
+    runs-on: ubuntu-latest
+    needs: [CI-Test]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project
+        run: yarn build
+```
+
+위 workflow의 동작은 다음과 같다.<br/>
+먼저, **CI-Test** job을 실행하고, **runs-on** 속성에 `ubuntu-latest`를 입력하여 job이 실행된 환경을 설정한다.<br/>
+그리고 **checkout action <u>(actions/checkout@3)</u>** 으로 GitHub repo에 저장된 <u>코드를 action이 실행될 서버로 받아온다.</u><br/>
+이후, `npm, yarn`과 같은 패키지 관리자를 통해 의존성을 설치하고, lint, 코드 포맷, 타입 검사 등을 실행한다.<br/>
+그리고 **needs**을 이용해 앞의 검사가 정상적으로 실행됐다면, 다시 코드를 내려받고 의존성 설치 후 빌드 테스트를 진행한다.
+
+다음은 위 actions의 실행 결과이다.<br/>
+시간은 총 3분 39초로, 두 개의 job이 비슷한 시간동안 실행된다.<br/>
+하지만, 자세히 보면 의존성 설치 과정이 **두 job 모두에서 약 1분 동안 실행**되는 것을 확인할 수 있다.
+
+![github-actions-v1-1](/contents/cicd/GitHub-Actions-application-and-improvement/1.png)
+![github-actions-v1-2](/contents/cicd/GitHub-Actions-application-and-improvement/2.png)
+![github-actions-v1-3](/contents/cicd/GitHub-Actions-application-and-improvement/3.png)
+
+따라서 의존성 설치에 대한 시간이 불필요하다고 생각하여, 이를 `캐싱`을 통해 개선해보고자 했다.
+
+## [actions/cache](https://github.com/actions/cache)를 이용한 개선!
+
+GitHub Actions은 **cache action**을 제공한다.<br/>
+cache action은 특정 key 값을 이용해 데이터를 캐싱하고, 이후 같은 key를 가지고 접근한다면 캐싱된 파일을 가져오도록 동작한다.<br/>
+cache action에서 주로 사용되는 속성은 `key`,`path`,`restore-keys`이다.
+
+- **key** : 캐싱된 데이터를 불러오기 위한 값
+- **path** : 데이터가 캐싱되고 복원될 경로
+- **restore-keys** : key를 이용해 캐싱된 데이터를 찾지 못했을 때, 대체 용도로 사용할 key들이 정렬된 리스트
+
+다음과 괕은 과정을 통해 캐싱을 적용하였다.<br/>
+
+1. 의존성 설치로 인해 소요되는 시간을 줄일 것이기 때문에 `node_modules`의 파일을 캐싱해야 한다.
+2. `yarn.locks` 파일이 변하지 않는다면, 추가로 설치된 의존성이 없기 때문에 <u>해당 파일을 key에 사용한다.</u>
+3. 의존성 설치 전, 캐싱 데이터가 존재하는지 확인하고 없는 경우에만 의존성을 설치한다.
+
+이렇게 완성된 workflow는 다음과 같다.
+
+```yaml showLineNumbers
+name: PR CI-test before merging
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  CI-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Check lint
+        run: yarn eslint src/**/*.{tsx,ts}
+
+      - name: Check format
+        run: yarn prettier src/**/*.{tsx,ts} --check
+
+      - name: Check types
+        run: tsc -p tsconfig.json --noEmit
+
+  Build-Test:
+    runs-on: ubuntu-latest
+    needs: [CI-Test]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Build project
+        run: yarn build
+```
+
+<br />
+
+이제 이전 결과와 비교해보자!<br />
+우선 시간이 <u>1분 33초</u>로, 3분 39초에서 **약 2분, 즉 58% 정도** 줄어들었다.<br />
+물론, 두 job의 의존성이 모두 캐싱되어있는 상황이지만, 의존성이 바뀌더라도 약 1분 정도의 시간이 추가될 것이라 예상한다.<br />
+그렇더라도 빌드 테스트에서 약 1분이 줄어들기 때문에 충분히 개선할 가치가 있다고 생각한다.
+
+![github-actions-v2-1](/contents/cicd/GitHub-Actions-application-and-improvement/4.png)
+![github-actions-v2-2](/contents/cicd/GitHub-Actions-application-and-improvement/5.png)
+![github-actions-v2-3](/contents/cicd/GitHub-Actions-application-and-improvement/6.png)
+
+참고로 캐싱된 데이터들은 actions 탭의 왼쪽 메뉴중 cache를 통해 확인 가능하다.
+
+![github-actions-cache-1](/contents/cicd/GitHub-Actions-application-and-improvement/7.png)
+![github-actions-cache-2](/contents/cicd/GitHub-Actions-application-and-improvement/8.png)
+
+### 이 정도로도 성에 안찬다면?
+
+의존성 설치 과정이 중복되어 개선한 것은 좋지만,
+
+> 모든 파일을 다 확인할 필요가 있을까?
+
+라는 생각을 할 수도 있다. <br/>
+[뱅크샐러드의 개선 방법](https://blog.banksalad.com/tech/github-action-npm-cache/)에서는 변경 사항에 대해서만 테스트를 진행하는 방법이 담겨있다.<br/>
+추후 프로젝트가 커져 workflow가 진행되는 속도가 더 길어진다면 적용해...보자....
+
+<strike>아직은 길어야 2-3분이라 크게 불편함을 못느끼기 때문에...</strike>

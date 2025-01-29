@@ -1,0 +1,68 @@
+---
+slug: tanstack-query-review
+title: "Tanstack-Query 사용 후기"
+description: "개발자의 귀찮은 일을 많이 덜어주는 도구"
+tags: ["tanstackQuery"]
+createdAt: "2023.02.24"
+updatedAt: ""
+---
+
+📌 Ref.
+
+- [기억보다 기록을 님](https://kyounghwan01.github.io/blog/React/react-query/basic/#%E1%84%89%E1%85%A1%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%92%E1%85%A1%E1%84%82%E1%85%B3%E1%86%AB-%E1%84%8B%E1%85%B5%E1%84%8B%E1%85%B2)
+- [카카오 테크 블로그](https://tech.kakao.com/2022/06/13/react-query/)
+- [Tanstack Query 공식 문서](https://tanstack.com/query/v3/)
+
+<br />
+부스트캠프에서 사용했던 `Tanstack-Query`를 사용하면서 느꼈던 점을 정리해보려고 한다.
+`React-Query`라고만 알고 있었지만 이름이 바뀌었다.
+
+## React-Query란?
+
+> React App에서 data fetching, 캐싱, 동기화, 서버 데이터 업데이트 등을 쉽게 해주는 React 라이브러리
+> React App 내부에서 간단하고 직관적으로 사용 가능한 API를 제공
+
+✅ React-Query에서 제공하는 다양한 기능들을 활용하여 간단하게 API 요청이 가능하여 핵심 로직에 집중이 가능하다.
+
+### 등장 배경
+
+> Redux, Mobx, Recoil 등과 같은 다양하고 훌륭한 상태 관리 라이브러리가 존재하지만, 클라이언트 데이터를 다루기에 적합하고, 서버 데이터를 관리하기에는 적합하지 않기 때문
+
+- 컴포넌트끼리 공유해야 하는 전역 상태를 효율적으로 관리하기 위해 사용되어야 하는데 굳이 저장하고 있지 않아도 될 데이터들을 전역으로 들고 있게 되는 경우가 발생하여 효율적이지 못한 것 같아보였다.
+- 또한 클라이언트 데이터, 서버 데이터가 store 안에 섞여버리고, 이러한 데이터들이 상호작용하면서 서버 데이터도, 클라이언트 데이터도 아닌 혼종이 생겨난다.
+
+✅ 따라서 React-Query를 사용하여 서버와 클라이언트 데이터를 분리한다.
+
+### 왜 쓸까?
+
+> 프론트 개발자가 구현하기 귀찮은 일들을 수행해준다.
+
+1. 캐싱
+2. GET 해온 데이터에 대해 update를 하면 자동으로 GET을 다시 수행
+3. 데이터가 오래 되었다고 판단되면 다시 GET (invalidateQueries)
+4. 동일한 데이터를 여러번 요청하면 한번만 요청 (옵션으로 중복 허용 시간 설정 가능)
+5. 무한 스크롤
+6. 비동기 과정을 선언적으로 관리할 수 있다.
+7. react hook과 사용하는 구조가 비슷하다.
+
+### 많은 Option
+
+- React Query를 찾아볼때마다 느끼는 것은 Option이 정말 많다는 것이다.
+- 이를 통해 많은 부분에서 customizing이 가능하다.
+  - onSuccess, onError, onSetteld, onMutate …
+  - 동작과 관련된 옵션 외에도 많은 옵션들이 존재한다…
+
+### 📌 느낀 점
+
+![실제 사용시 줄어든 코드](/contents/tanstackQuery/tanstack-query-review/1.png)
+
+지훈님께서 React-Query를 사용하자는 말을 듣고, 조금씩 공부해가면서 PR에서 React-Query가 적용된 부분을 보았다.<br/>
+이전에는 서버로부터 데이터를 받아오는 코드들 때문에 `useEffect`가 무분별하게 사용되었다.<br/>
+그리고 그에 따른 `state`들도 많이 생겨났다.<br/>
+
+하지만 `React-Query`를 적용하고 나니, `useEffect`가 사용된 부분이 사라지면서 코드 또한 크게 줄어들었다.<br/>
+또한 `React-Query`에서 제공하는 많은 옵션들로 가독성 또한 크게 올라간 것을 확인할 수 있었다.<br/>
+
+Loading 처리를 위해 `isLoading`을 `state`로 만들고, `data fetching`이 완료되면 `isLoading`을 `false`로 하는 등의 로직을 많이 사용하였는데, 이러한 부분이 if문 한 줄로 정리가 되었다.<br/>
+또 `delete, post, fetch` 등 서버 데이터의 변화가 생기는 경우에도 쿼리가 성공한 경우, `invalidateQueries`로 key에 대한 데이터를 업데이트하여 최신 데이터를 유지할 수 있는 로직도 굉장히 좋아보였다.<br/>
+이 당시에는 구현에만 급급하여 제대로 사용하지 못했던 것 같아 추가로 학습해볼 계획이다.

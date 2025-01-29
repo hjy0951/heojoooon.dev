@@ -1,0 +1,115 @@
+---
+slug: Javascript-EventLoop
+title: "Event Loop?"
+description: "비동기 처리를 위한 JavaScript의 장치"
+tags: ["javascript"]
+createdAt: "2023.04.27"
+updatedAt: ""
+---
+
+## JavaScript 병렬 처리
+
+앞에 작성한 글을 다시 상기하자면, JavaScript는 Single Thread 언어이다.<br/>
+하지만 **Event Loop**를 이용하여 **Multi Thread 인 것처럼** 동작할 수 있다.<br/>
+
+### Javascript Engine
+
+브라우저마다 다른 엔진을 가지며 `webkit, v8` 등이 존재한다.<br/>
+자바스크립트 엔진은 <u>자바스크립트 코드를 해석하고 실행하는 인터프리터</u>이다.<br/>
+엔진은 크게 **Heap**과 **Call Stack**로 나뉘어진다.
+Heap에서는 메모리 할당이 일어나며 변수, 객체 등이 저장되는 창고이다.<br/>
+
+### Call Stack
+
+Call Stack은 함수가 실행되는 순서대로 쌓이는 스택으로 함수 실행시 push, 종료시 pop된다.<br/>
+
+### Event Loop
+
+Event Loop는 Callback(task) Queue에서 Callback 함수를 꺼내서 동작시킨다.<br/>
+먼저, Event Loop에서는 이벤트 발생시 호출되는 Callback 함수들을 Callback Queue에 전달한다.
+그리고 Call Stack과 Callback Queue를 모니터링하며 Call Stack이 **비었을 때**, Callback queue의 callback 함수들을 Call Stack에 넣어준다.<br/>
+
+## libuv
+
+**libuv**는 NodeJS의 Event Loop에 존재하는 라이브러리로, 비동기 입출력, 이벤트 기반에 초점을 맞춘 라이브러리이다.<br/>
+전통적으로 IO 처리는 요청마다 새로운 thread를 사용하지만, libuv는 **비동기, non-blocking**으로 처리한다.<br/>
+이벤트를 모니터링하며 **node.js가 libuv 위에서 동작**한다.<br/>
+node.js의 core는 `v8 api, libuv api`로 구현되어 있다.<br/>
+
+### 동작
+
+- node instance가 생성될 때, libuv에는 **worker thread pool**이 생성된다.
+  - worker thread는 **default로 4개**
+  - worker thread는 **kernel에서 지원하지 않는 작업들을 수행**한다.
+    - file system 관련 작업 등
+- application 단에서 코드가 실행되면 libuv가 호출된다.
+- libuv가 비동기 처리를 할지, 동기 처리를 할지 판단한다.
+- 비동기 작업이 들어오면, libuv는 kernel 단에서 비동기 함수들을 호출하거나 worker thread에게 작업을 넘겨준다.
+- 작업이 완료되면 system call을 libuv 내의 Event Loop에 callback으로 등록된다.
+
+![javascript-runtime](/contents/javascript/Javascript-EventLoop/1.png)
+📌 [이미지 출처](https://velog.io/@tastestar/Node.js-libuv)
+
+![javascript-runtime](/contents/javascript/Javascript-EventLoop/2.png)
+📌 [이미지 출처](https://sjh836.tistory.com/149)
+
+<br />
+
+### libuv의 Event Loop (in NodeJS)
+
+![javascript-runtime](/contents/javascript/Javascript-EventLoop/3.png)
+
+- timers → pending callbacks → idle, prepare → poll → check → close callbacks 순으로 호출
+- 각 단계는 자신의 queue를 가지고 있다.
+- callback의 유형에 맞는 queue에 등록이 된다.
+- 각 단계에서 다음 단계로 넘어가는 것을 `tick` 이라고 한다.
+- 위 6단계를 Round-Robin 방식으로 순회하며 동작한다.
+
+### timers
+
+- timer와 관련된 비동기 작업을 관리한다.
+  - setTimeout, setInterval에 등록된 callback
+- min-heap 자료구조 기반
+
+### pending callbacks
+
+- 이전 event loop 단계가 반복되면서 수행되지 못한 callback들을 쌓아두고 실행한다.
+- event loop의 `pending_queue`에 들어가 있는 callback들을 실핸한다.
+  - error handler callback이 여기에 등록된다.
+
+### idle, prepare
+
+- 매 tick마다 실행되고, Node.js 내부 관리를 위해 사용한다고만 설명되어 있다.
+- 모든 queue가 비어있으면 idle이 되어 tick frequency가 떨어져 event loop 단계가 천천히 실행되도록 하는 용도?
+
+### poll
+
+- 대부분의 callback을 관리한다.
+- `watcher_queue`를 이용하여 관리한다.
+  - 비동기 작업이 완료되었을 경우, 순서를 보장하기 위해 해당 queue 사용
+  - `watcher`는 FD(file descriptor)를 가지고 있어 OS가 FD가 준비되었다고 알리면 event loop가 해당하는 watcher를 찾아 callback을 실행한다.
+
+### check
+
+- setImmediate()로 등록된 callback을 관리한다.
+
+### close callbacks
+
+- close, destroy와 같은 event 타입의 callback을 처리한다.
+
+![javascript-runtime](/contents/javascript/Javascript-EventLoop/4.png)
+📌 [이미지 출처](https://www.korecmblog.com/node-js-event-loop/)
+
+## Task Queue & Microtask Queue
+
+- Event Loop가 처리하는 callback queue에는 우선순위에 따른 2 종류의 queue가 존재한다.
+
+### 1. Task Queue
+
+- **setTimeout**, setInterval, setImmediate, requestAnimationFrame, I/O, UI 렌더링 등의 함수들이 callback을 Task queue에 넣는다.
+
+### 2. Microtask Queue
+
+- **Promise**, process.nextTick,  Object.observe, MutationObserver 등의 함수들이 callback을 Microtask queue에 넣는다.
+
+✅ Event Loop는 Microtask queue의 모든 task들을 처리한 후, Task queue의 task들을 처리한다.
