@@ -10,7 +10,7 @@ type PostGridItemProps = {
 
 const PostGridItem = ({ title, createdAt, slug }: PostGridItemProps) => {
   return (
-    <Link href={`/`} className={containerStyle}>
+    <Link href={`/posts/${slug}`} className={containerStyle}>
       <div className={coverImageWrawpperStyle}>
         <Image
           className={coverImageStyle}
