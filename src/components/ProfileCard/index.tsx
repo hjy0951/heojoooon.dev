@@ -57,9 +57,11 @@ const ProfileCard = () => {
 export default ProfileCard;
 
 const containerStyle = css({
-  padding: "20px",
+  padding: "24px 36px",
   display: "flex",
-  gap: "12px",
+  gap: "20px",
+  boxShadow: "0 1px 3px rgba(0,0,0,0.24), 0 1px 2px rgba(0,0,0,0.24)",
+  borderRadius: "12px",
 });
 
 const imageWrapperStyle = css({ width: "180px" });

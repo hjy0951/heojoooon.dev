@@ -18,6 +18,7 @@ const PostGridItem = ({ title, createdAt, slug }: PostGridItemProps) => {
           alt={`"${title}" 커버 이미지`}
           width={440}
           height={330}
+          priority
         />
       </div>
 
@@ -44,6 +45,7 @@ const containerStyle = css({
 });
 
 const coverImageWrawpperStyle = css({
+  position: "relatvie",
   maxWidth: "440px",
   maxHeight: "330px",
 });
