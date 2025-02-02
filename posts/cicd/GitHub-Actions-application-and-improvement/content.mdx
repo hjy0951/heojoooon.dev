@@ -7,7 +7,7 @@ createdAt: "2023.10.07"
 updatedAt: ""
 ---
 
-지난번에 간단하게 CI/CD와 GitHub Actions에 대해 정리하였다.<br/>
+지난번에 간단하게 CI/CD와 GitHub Actions에 대해 정리하였다.
 따라서 현재 진행중인 사이드 프로젝트에서도 PR을 검증하는 용도로 잘 쓸 수 있지 않을까 생각하여 적용해보았다.
 
 ## 프로젝트에 적용해보자!
@@ -53,14 +53,14 @@ jobs:
         run: yarn build
 ```
 
-위 workflow의 동작은 다음과 같다.<br/>
-먼저, **CI-Test** job을 실행하고, **runs-on** 속성에 `ubuntu-latest`를 입력하여 job이 실행된 환경을 설정한다.<br/>
-그리고 **checkout action <u>(actions/checkout@3)</u>** 으로 GitHub repo에 저장된 <u>코드를 action이 실행될 서버로 받아온다.</u><br/>
-이후, `npm, yarn`과 같은 패키지 관리자를 통해 의존성을 설치하고, lint, 코드 포맷, 타입 검사 등을 실행한다.<br/>
+위 workflow의 동작은 다음과 같다.
+먼저, **CI-Test** job을 실행하고, **runs-on** 속성에 `ubuntu-latest`를 입력하여 job이 실행된 환경을 설정한다.
+그리고 **checkout action <u>(actions/checkout@3)</u>** 으로 GitHub repo에 저장된 <u>코드를 action이 실행될 서버로 받아온다.</u>
+이후, `npm, yarn`과 같은 패키지 관리자를 통해 의존성을 설치하고, lint, 코드 포맷, 타입 검사 등을 실행한다.
 그리고 **needs**을 이용해 앞의 검사가 정상적으로 실행됐다면, 다시 코드를 내려받고 의존성 설치 후 빌드 테스트를 진행한다.
 
-다음은 위 actions의 실행 결과이다.<br/>
-시간은 총 3분 39초로, 두 개의 job이 비슷한 시간동안 실행된다.<br/>
+다음은 위 actions의 실행 결과이다.
+시간은 총 3분 39초로, 두 개의 job이 비슷한 시간동안 실행된다.
 하지만, 자세히 보면 의존성 설치 과정이 **두 job 모두에서 약 1분 동안 실행**되는 것을 확인할 수 있다.
 
 ![github-actions-v1-1](/contents/cicd/GitHub-Actions-application-and-improvement/1.png)
@@ -71,15 +71,15 @@ jobs:
 
 ## [actions/cache](https://github.com/actions/cache)를 이용한 개선!
 
-GitHub Actions은 **cache action**을 제공한다.<br/>
-cache action은 특정 key 값을 이용해 데이터를 캐싱하고, 이후 같은 key를 가지고 접근한다면 캐싱된 파일을 가져오도록 동작한다.<br/>
+GitHub Actions은 **cache action**을 제공한다.
+cache action은 특정 key 값을 이용해 데이터를 캐싱하고, 이후 같은 key를 가지고 접근한다면 캐싱된 파일을 가져오도록 동작한다.
 cache action에서 주로 사용되는 속성은 `key`,`path`,`restore-keys`이다.
 
 - **key** : 캐싱된 데이터를 불러오기 위한 값
 - **path** : 데이터가 캐싱되고 복원될 경로
 - **restore-keys** : key를 이용해 캐싱된 데이터를 찾지 못했을 때, 대체 용도로 사용할 key들이 정렬된 리스트
 
-다음과 괕은 과정을 통해 캐싱을 적용하였다.<br/>
+다음과 괕은 과정을 통해 캐싱을 적용하였다.
 
 1. 의존성 설치로 인해 소요되는 시간을 줄일 것이기 때문에 `node_modules`의 파일을 캐싱해야 한다.
 2. `yarn.locks` 파일이 변하지 않는다면, 추가로 설치된 의존성이 없기 때문에 <u>해당 파일을 key에 사용한다.</u>
@@ -172,8 +172,8 @@ jobs:
 
 > 모든 파일을 다 확인할 필요가 있을까?
 
-라는 생각을 할 수도 있다. <br/>
-[뱅크샐러드의 개선 방법](https://blog.banksalad.com/tech/github-action-npm-cache/)에서는 변경 사항에 대해서만 테스트를 진행하는 방법이 담겨있다.<br/>
+라는 생각을 할 수도 있다.
+[뱅크샐러드의 개선 방법](https://blog.banksalad.com/tech/github-action-npm-cache/)에서는 변경 사항에 대해서만 테스트를 진행하는 방법이 담겨있다.
 추후 프로젝트가 커져 workflow가 진행되는 속도가 더 길어진다면 적용해...보자....
 
 <strike>아직은 길어야 2-3분이라 크게 불편함을 못느끼기 때문에...</strike>
