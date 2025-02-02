@@ -12,9 +12,9 @@ tags: ["cicd"]
 createdAt: "2023.10.02"
 updatedAt: ""
 */
-type Post = {
+export type Post = {
   slug: string;
-  tag: string;
+  tag: TagType;
   title: string;
   description: string;
   createdAt: string;
@@ -93,6 +93,5 @@ export function getAllPosts(tag?: TagType): Post[] {
   }
 
   const posts = getSortedPostsByCreatedAt(slugs);
-  console.log(posts);
   return posts;
 }
