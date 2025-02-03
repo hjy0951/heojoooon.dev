@@ -1,6 +1,6 @@
 type IconProps = { width?: number; height?: number; color?: string };
 
-const SourceIcon = ({
+export const SourceIcon = ({
   width = 24,
   height = 24,
   color = "black",
@@ -23,5 +23,3 @@ const SourceIcon = ({
     </svg>
   );
 };
-
-export default SourceIcon;
