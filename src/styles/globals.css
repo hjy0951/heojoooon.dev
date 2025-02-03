@@ -54,7 +54,7 @@ h2 {
   width: 100%;
 }
 
-.prose p:not(blockquote p, li p) {
+.prose p:not(blockquote p, li p, .callout-body p) {
   padding-bottom: 16px;
   color: #202125;
   line-height: 1.8;
@@ -71,10 +71,6 @@ ul {
 
 .prose strong {
   font-weight: 800;
-}
-
-.prose br {
-  height: 12px;
 }
 
 .prose ul {

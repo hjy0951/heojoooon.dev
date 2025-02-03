@@ -1,5 +1,5 @@
 import { css, cx } from "#/styled-system/css";
-import SourceIcon from "@/components/icons/source-icon";
+import { SourceIcon } from "@/components/icons";
 
 type ImageProps = {
   src: string;

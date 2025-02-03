@@ -12,7 +12,13 @@ import ProfileCard from "@/components/ProfileCard";
 import { yeongdeokSea, suite } from "@/styles/font";
 import { calculateTimeToRead, covertTagName } from "@/lib/utils";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
-import { Code, BlockQuote, CustomLink, Image } from "@/components/atom";
+import {
+  Code,
+  BlockQuote,
+  CustomLink,
+  Image,
+  CallOut,
+} from "@/components/atom";
 
 type PostParams = {
   params: Promise<{
@@ -67,6 +73,7 @@ const PostPage = (props: PostParams) => {
               blockquote: BlockQuote,
               img: Image,
               a: CustomLink,
+              CallOut,
             }}
             options={{
               mdxOptions: {
