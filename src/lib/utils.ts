@@ -14,7 +14,7 @@ export const covertTagName = (slug: TagType): string => {
   return tagMap[slug];
 };
 
-export const calculateReadingTime = (
+export const calculateTimeToRead = (
   text: string,
   wordsPerMinute: number = 120
 ): number => {
