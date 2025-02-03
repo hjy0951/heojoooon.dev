@@ -22,7 +22,9 @@ export const CallOut = ({
   const typeString = type || "undefined";
 
   return (
-    <div className={cx(colorReceipe({ variant: typeString }), containerStyle)}>
+    <div
+      className={cx(backgroundReceipe({ variant: typeString }), containerStyle)}
+    >
       <div className={css({ opacity: 1 })}>
         {type && <CallOutIcon type={type} />}
       </div>
@@ -44,7 +46,7 @@ const containerStyle = css({
   borderRadius: "8px",
 });
 
-const colorReceipe = cva({
+const backgroundReceipe = cva({
   base: {
     opacity: "90%",
   },
@@ -59,8 +61,7 @@ const colorReceipe = cva({
 });
 
 const textStyle = css({
-  fontSize: "18px",
-  fontWeight: 500,
-  lineHeight: 1.4,
-  color: "#030303",
+  fontSize: "16px",
+  lineHeight: 1.6,
+  color: "#000000",
 });
