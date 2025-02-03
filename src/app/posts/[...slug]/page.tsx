@@ -10,7 +10,9 @@ import rehypeSlug from "rehype-slug";
 import { css, cx } from "#/styled-system/css";
 import ProfileCard from "@/components/ProfileCard";
 import { yeongdeokSea, suite } from "@/styles/font";
-import { covertTagName } from "@/lib/utils";
+import { calculateTimeToRead, covertTagName } from "@/lib/utils";
+import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
+import { Code, BlockQuote, Link, Image } from "@/components/atom";
 
 type PostParams = {
   params: Promise<{
@@ -31,6 +33,8 @@ export const generateStaticParams = () => {
 const PostPage = (props: PostParams) => {
   const { slug } = use(props.params);
   const post = getPostBySlug(slug.join("/"));
+  const tag = covertTagName(post.tag);
+  const timeToRead = calculateTimeToRead(post.content);
 
   return (
     <div className={containerStyle}>
@@ -42,13 +46,28 @@ const PostPage = (props: PostParams) => {
 
           <div className={postInfoStyle}>
             <h3>{post.createdAt},</h3>
-            <h3>{covertTagName(post.tag)}</h3>
+            <h3>
+              <Link href={`/tag/${post.tag}`}>{tag},</Link>
+            </h3>
+            <h3>{timeToRead} min.</h3>
           </div>
         </section>
 
-        <section className={cx(`${suite.className}`, css({ fontWeight: 500 }))}>
+        <section
+          className={cx(
+            "prose",
+            `${suite.className}`,
+            css({ fontWeight: 500, width: "100%" })
+          )}
+        >
           <MDXRemote
             source={post.content}
+            components={{
+              code: Code,
+              blockquote: BlockQuote,
+              img: Image,
+              a: Link,
+            }}
             options={{
               mdxOptions: {
                 remarkPlugins: [remarkGfm, remarkA11yEmoji, remarkBreaks],
@@ -56,7 +75,7 @@ const PostPage = (props: PostParams) => {
                   [
                     rehypePrettyCode,
                     {
-                      theme: "github-dark-dimmed",
+                      theme: moonlightTheme,
                       keepBackground: true,
                     },
                   ],
@@ -84,7 +103,8 @@ const containerStyle = css({
 });
 
 const articleStyle = css({
-  py: "60px",
+  width: "100%",
+  p: "60px 20px",
   display: "flex",
   flexDir: "column",
   gap: "40px",
@@ -105,4 +125,5 @@ const postInfoStyle = css({
   display: "flex",
   gap: "12px",
   fontWeight: 500,
+  fontSize: "20px",
 });
