@@ -13,3 +13,12 @@ export type TagType = keyof typeof tagMap;
 export const covertTagName = (slug: TagType): string => {
   return tagMap[slug];
 };
+
+export const calculateReadingTime = (
+  text: string,
+  wordsPerMinute: number = 120
+): number => {
+  const wordCount = text.trim().split(/\s+/).length;
+  const readingTime = Math.round(wordCount / wordsPerMinute);
+  return readingTime;
+};
