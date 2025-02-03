@@ -2,7 +2,7 @@ import { css } from "#/styled-system/css";
 import { LinkProps } from "next/link";
 import { PropsWithChildren } from "react";
 
-export const Link = ({
+export const CustomLink = ({
   children,
   href,
   ...props

@@ -12,7 +12,7 @@ import ProfileCard from "@/components/ProfileCard";
 import { yeongdeokSea, suite } from "@/styles/font";
 import { calculateTimeToRead, covertTagName } from "@/lib/utils";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
-import { Code, BlockQuote, Link, Image } from "@/components/atom";
+import { Code, BlockQuote, CustomLink, Image } from "@/components/atom";
 
 type PostParams = {
   params: Promise<{
@@ -47,7 +47,7 @@ const PostPage = (props: PostParams) => {
           <div className={postInfoStyle}>
             <h3>{post.createdAt},</h3>
             <h3>
-              <Link href={`/tag/${post.tag}`}>{tag},</Link>
+              <CustomLink href={`/tag/${post.tag}`}>{tag},</CustomLink>
             </h3>
             <h3>{timeToRead} min.</h3>
           </div>
@@ -66,7 +66,7 @@ const PostPage = (props: PostParams) => {
               code: Code,
               blockquote: BlockQuote,
               img: Image,
-              a: Link,
+              a: CustomLink,
             }}
             options={{
               mdxOptions: {
