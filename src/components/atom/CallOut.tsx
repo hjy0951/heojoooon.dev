@@ -46,7 +46,7 @@ const containerStyle = css({
 
 const colorReceipe = cva({
   base: {
-    opacity: "80%",
+    opacity: "90%",
   },
   variants: {
     variant: {
@@ -60,7 +60,7 @@ const colorReceipe = cva({
 
 const textStyle = css({
   fontSize: "18px",
-  fontWeight: 600,
+  fontWeight: 500,
   lineHeight: 1.4,
-  color: "#060606",
+  color: "#030303",
 });
