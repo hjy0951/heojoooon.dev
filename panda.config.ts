@@ -1,3 +1,4 @@
+import { keyframes } from "@/styles/keyframes";
 import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
 
 const globalCss = defineGlobalStyles({
@@ -25,6 +26,7 @@ export default defineConfig({
       breakpoints: {
         sm: "760px",
       },
+      keyframes,
     },
   },
 
