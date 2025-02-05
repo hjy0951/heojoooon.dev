@@ -25,6 +25,7 @@ export default defineConfig({
     extend: {
       breakpoints: {
         sm: "760px",
+        md: "1024px",
       },
       keyframes,
     },
