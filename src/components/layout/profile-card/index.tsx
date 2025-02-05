@@ -7,9 +7,9 @@ import {
   RiInstagramLine,
 } from "react-icons/ri";
 import { MdOutlineEmail } from "react-icons/md";
-import SNSLink from "./SNSLink";
-import StarIcon from "../icons/star";
+import SNSLink from "./sns-link";
 import { pretendard } from "@/styles/font";
+import StarIcon from "@/components/icons/star";
 
 const SNSs = [
   {
@@ -34,7 +34,7 @@ const SNSs = [
   },
 ];
 
-const ProfileCard = () => {
+export const ProfileCard = () => {
   return (
     <div className={containerStyle}>
       <div className={imageWrapperStyle}>
@@ -100,8 +100,6 @@ const ProfileCard = () => {
     </div>
   );
 };
-
-export default ProfileCard;
 
 const containerStyle = css({
   padding: "24px 36px",

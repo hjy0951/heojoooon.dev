@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import { Header, Footer } from "@/components/layout";
 
 export const metadata: Metadata = {
-  title: "3 Stars Developer",
-  description: "프론트엔드 개발자 허준영입니다.",
+  title: "프론트엔드 개발자 허준영입니다.",
+  description: "별 세개짜리 개발자",
   icons: {
-    icon: "./favicon.ico",
+    icon: "/favicon.ico",
   },
 };
 

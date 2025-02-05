@@ -1,9 +1,9 @@
 import { css } from "#/styled-system/css";
-import ProfileCard from "@/components/ProfileCard";
 import Tags from "@/components/Tags";
 import { getAllPosts, getAllTagsWithCount } from "@/lib/api";
 import { TagType } from "@/lib/utils";
 import PostGridItem from "../PostGridItem";
+import { ProfileCard } from "../layout";
 
 type MainPageProps = {
   currentTag?: TagType;

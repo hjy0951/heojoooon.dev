@@ -8,7 +8,6 @@ import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { css, cx } from "#/styled-system/css";
-import ProfileCard from "@/components/ProfileCard";
 import { yeongdeokSea, suite } from "@/styles/font";
 import { calculateTimeToRead, covertTagName } from "@/lib/utils";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
@@ -19,6 +18,7 @@ import {
   Image,
   CallOut,
 } from "@/components/atom";
+import { ProfileCard } from "@/components/layout";
 
 type PostParams = {
   params: Promise<{

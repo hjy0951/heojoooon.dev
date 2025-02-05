@@ -1,7 +1,7 @@
 import { css } from "#/styled-system/css";
 import Link from "next/link";
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className={containerStyle}>
       <Link href="/">Heojoooon.</Link>
@@ -11,8 +11,6 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;
 
 const containerStyle = css({
   paddingX: "40px",
