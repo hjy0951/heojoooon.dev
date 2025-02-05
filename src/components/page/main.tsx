@@ -1,9 +1,8 @@
 import { css } from "#/styled-system/css";
-import Tags from "@/components/Tags";
 import { getAllPosts, getAllTagsWithCount } from "@/lib/api";
 import { TagType } from "@/lib/utils";
-import PostGridItem from "../PostGridItem";
 import { ProfileCard } from "../layout";
+import { Partition, PostListItem } from "../post";
 
 type MainPageProps = {
   currentTag?: TagType;
@@ -19,13 +18,21 @@ export const MainPage = ({ currentTag }: MainPageProps) => {
   return (
     <div className={containerStyle}>
       <main className={mainStyle}>
-        <Tags tagList={tagList} selectedTag={currentTag} />
+        <Partition name="DEVELOP">
+          <div className={postListStyle}>
+            {posts.map((post) => (
+              <PostListItem key={`${post.title}`} {...post} />
+            ))}
+          </div>
+        </Partition>
 
-        <div className={postsGridStyle}>
-          {posts.map((post) => (
-            <PostGridItem key={`${post.title}`} {...post} />
-          ))}
-        </div>
+        <Partition name="LIFE">
+          <div className={postListStyle}>
+            {posts.map((post) => (
+              <PostListItem key={`${post.title}`} {...post} />
+            ))}
+          </div>
+        </Partition>
       </main>
 
       <ProfileCard />
@@ -34,6 +41,7 @@ export const MainPage = ({ currentTag }: MainPageProps) => {
 };
 
 const containerStyle = css({
+  mt: "40px",
   display: "flex",
   flexDir: "column",
   alignItems: "center",
@@ -45,11 +53,16 @@ const mainStyle = css({
   px: "40px",
   maxWidth: "1000px",
   minWidth: "400px",
+  display: "grid",
+  gap: "60px",
+  gridTemplateColumns: "repeat(1, 1fr)",
+  md: { gridTemplateColumns: "repeat(2, 1fr)" },
 });
 
-const postsGridStyle = css({
+const postListStyle = css({
   width: "full",
-  display: "grid",
+  display: "flex",
+  flexDir: "column",
   gap: "32px",
   justifyItems: "center",
   gridTemplateColumns: "repeat(1, 1fr)",
