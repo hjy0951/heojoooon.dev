@@ -73,6 +73,11 @@ ul {
   font-weight: 800;
 }
 
+.prose hr {
+  margin: 20px 0;
+  color: #c0c0c0;
+}
+
 .prose ul {
   margin: 0;
   display: block;
