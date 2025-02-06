@@ -10,12 +10,14 @@ type PostListProps = {
   targetUrl?: string;
 };
 
+const viewCount = 4;
+
 export const PostList = ({
   posts,
   brief = false,
   targetUrl = "/",
 }: PostListProps) => {
-  const numOfBrief = 4;
+  const numOfBrief = Math.min(viewCount, posts.length);
 
   return (
     <>
@@ -29,7 +31,7 @@ export const PostList = ({
             ))}
       </div>
 
-      {brief && (
+      {brief && numOfBrief === viewCount && (
         <div className={linkWrapperStyle}>
           <Link href={targetUrl} className={linkStyle}>
             READ MORE
