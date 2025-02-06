@@ -6,7 +6,7 @@ import { CalendarIcon } from "../icons";
 
 type PostListItemProps = {
   title: string;
-  description: string;
+  description?: string;
   createdAt: string;
   slug: string;
 };
@@ -33,7 +33,7 @@ export const PostListItem = ({
       <div className={cx(postInfoStyle, pretendard.className)}>
         <div>
           <p className={titleStyle}>{title}</p>
-          <p className={descriptionStyle}>{description}</p>
+          {description && <p className={descriptionStyle}>{description}</p>}
         </div>
 
         <div className={dateWrapperStyle}>
