@@ -2,7 +2,7 @@ import { css } from "#/styled-system/css";
 import { getAllPosts, getAllTagsWithCount } from "@/lib/api";
 import { TagType } from "@/lib/utils";
 import { ProfileCard } from "../layout";
-import { Partition, PostListItem } from "../post";
+import { Partition, PostList } from "../post";
 
 type MainPageProps = {
   currentTag?: TagType;
@@ -19,19 +19,11 @@ export const MainPage = ({ currentTag }: MainPageProps) => {
     <div className={containerStyle}>
       <main className={mainStyle}>
         <Partition name="DEVELOP">
-          <div className={postListStyle}>
-            {posts.map((post) => (
-              <PostListItem key={`${post.title}`} {...post} />
-            ))}
-          </div>
+          <PostList posts={posts} brief />
         </Partition>
 
         <Partition name="LIFE">
-          <div className={postListStyle}>
-            {posts.map((post) => (
-              <PostListItem key={`${post.title}`} {...post} />
-            ))}
-          </div>
+          <PostList posts={posts} brief />
         </Partition>
       </main>
 
@@ -57,14 +49,4 @@ const mainStyle = css({
   gap: "60px",
   gridTemplateColumns: "repeat(1, 1fr)",
   md: { gridTemplateColumns: "repeat(2, 1fr)" },
-});
-
-const postListStyle = css({
-  width: "full",
-  display: "flex",
-  flexDir: "column",
-  gap: "32px",
-  justifyItems: "center",
-  gridTemplateColumns: "repeat(1, 1fr)",
-  sm: { gridTemplateColumns: "repeat(2, 1fr)" },
 });

@@ -27,4 +27,21 @@ export const keyframes = defineKeyframes({
       opacity: 0.3,
     },
   },
+  bounceRight: {
+    "0%": {
+      transform: "translateX(0)",
+    },
+    "30%": {
+      transform: "translateX(8px)",
+    },
+    "50%": {
+      transform: "translateX(4px)",
+    },
+    "70%": {
+      transform: "translateX(8px)",
+    },
+    "100%": {
+      transform: "translateX(0)",
+    },
+  },
 });
