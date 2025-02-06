@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### Heojoooon.
 
-## Getting Started
+> 개발 및 일상을 다루는 블로그
 
-First, run the development server:
+원하는 기능 및 디자인을 구현하고 애니메이션 등 다양한 실험들을 해보기 위해 직접 제작.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Tech
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> pnpm, TypeScript, Next app router, PandaCSS
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 목표 기능
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [x] 코드 블록 적용 (rehype-pretty-code)
+- [ ] 마크다운 컴포넌트 커스텀
+  - [x] 커스텀 링크
+  - [x] 콜아웃
+  - [x] 인용구
+  - [x] 코드 (백틱으로 감싼)
+  - [x] 이미지
+  - [ ] TOC
+- [ ] 레이아웃
+  - [x] 프로필 카드 만들기
+  - [x] 일상 / 개발 글 섹션 분리
+  - [ ] 키워드별 모아보기
+- [ ] 이력 페이지 (about)
+- [ ] 사진 일기 페이지
+- [ ] 다크모드
