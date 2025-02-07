@@ -4,7 +4,6 @@ title: "JavaScript의 Garbage Collection"
 description: "JavaScript의 메모리 청소부"
 tags: ["javascript"]
 createdAt: "2023.05.13"
-updatedAt: ""
 ---
 
 📌 Ref. [kakao FE 블로그](https://fe-developers.kakaoent.com/2022/220519-garbage-collection/)
@@ -107,7 +106,7 @@ updatedAt: ""
   - `gray` : 탐색은 했으나, 객체가 참조하고 있는 객체가 있는지 확인 안함
   - `black` : 해당 객체가 참조하고 있는 객체까지 확인
 
-![major-gc](/contents/javascript/Javascript-Garbage-Collection/1.gif)
+![major-gc](/post-images/javascript/Javascript-Garbage-Collection/1.gif)
 
 ### 동작 방식
 
@@ -144,17 +143,17 @@ updatedAt: ""
 - 이를 Helper Thread와 나누어 하도록 변경
 - Thread 간 동기화 문제가 발생하지만 `stop-the-world` 시간이 크게 감소
 
-![Parallel-gc](/contents/javascript/Javascript-Garbage-Collection/2.png)
+![Parallel-gc](/post-images/javascript/Javascript-Garbage-Collection/2.png)
 
 ### Incremental
 
 - Matin Thread에서 GC 작업을 작은 단위로 나누어 프로그램을 수행하며 중간중간 실행
 
-![Incremental-gc](/contents/javascript/Javascript-Garbage-Collection/3.png)
+![Incremental-gc](/post-images/javascript/Javascript-Garbage-Collection/3.png)
 
 ### Concurrent
 
 - Main Thread가 아닌 `Helper Thread`가 `GC`를 수행
 - `stop-the-world`가 사라진다는 장점
 
-![Concurrent-gc](/contents/javascript/Javascript-Garbage-Collection/4.png)
+![Concurrent-gc](/post-images/javascript/Javascript-Garbage-Collection/4.png)

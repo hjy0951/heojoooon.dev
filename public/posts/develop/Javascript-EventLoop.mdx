@@ -4,7 +4,6 @@ title: "Event Loop?"
 description: "비동기 처리를 위한 JavaScript의 장치"
 tags: ["javascript"]
 createdAt: "2023.04.27"
-updatedAt: ""
 ---
 
 ## JavaScript 병렬 처리
@@ -47,15 +46,15 @@ node.js의 core는 `v8 api, libuv api`로 구현되어 있다.
 - 비동기 작업이 들어오면, libuv는 kernel 단에서 비동기 함수들을 호출하거나 worker thread에게 작업을 넘겨준다.
 - 작업이 완료되면 system call을 libuv 내의 Event Loop에 callback으로 등록된다.
 
-![javascript-runtime](/contents/javascript/Javascript-EventLoop/1.png)
+![javascript-runtime](/post-images/javascript/Javascript-EventLoop/1.png)
 📌 [이미지 출처](https://velog.io/@tastestar/Node.js-libuv)
 
-![javascript-runtime](/contents/javascript/Javascript-EventLoop/2.png)
+![javascript-runtime](/post-images/javascript/Javascript-EventLoop/2.png)
 📌 [이미지 출처](https://sjh836.tistory.com/149)
 
 ### libuv의 Event Loop (in NodeJS)
 
-![javascript-runtime](/contents/javascript/Javascript-EventLoop/3.png)
+![javascript-runtime](/post-images/javascript/Javascript-EventLoop/3.png)
 
 - timers → pending callbacks → idle, prepare → poll → check → close callbacks 순으로 호출
 - 각 단계는 자신의 queue를 가지고 있다.
@@ -95,7 +94,7 @@ node.js의 core는 `v8 api, libuv api`로 구현되어 있다.
 
 - close, destroy와 같은 event 타입의 callback을 처리한다.
 
-![javascript-runtime](/contents/javascript/Javascript-EventLoop/4.png)
+![javascript-runtime](/post-images/javascript/Javascript-EventLoop/4.png)
 📌 [이미지 출처](https://www.korecmblog.com/node-js-event-loop/)
 
 ## Task Queue & Microtask Queue
