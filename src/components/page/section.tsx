@@ -1,29 +1,19 @@
 import { css } from "#/styled-system/css";
-import { getAllPosts, getAllTagsWithCount } from "@/lib/api";
-import { TagType } from "@/lib/utils";
+import { getPostsBySection } from "@/lib/apiv2";
 import { ProfileCard } from "../layout";
 import { Partition, PostList } from "../post";
 
-type MainPageProps = {
-  currentTag?: TagType;
+type SectionPageProps = {
+  section: string;
 };
 
-export const MainPage = ({ currentTag }: MainPageProps) => {
-  const tagList = getAllTagsWithCount();
-  const totalCount = tagList.reduce((acc, { count }) => acc + count, 0);
-  tagList.unshift({ tag: "all", count: totalCount });
-
-  const posts = getAllPosts(currentTag);
-
+export const SectionPage = ({ section }: SectionPageProps) => {
+  const { contents } = getPostsBySection(section);
   return (
     <div className={containerStyle}>
       <main className={mainStyle}>
-        <Partition name="DEVELOP">
-          <PostList posts={posts} brief />
-        </Partition>
-
-        <Partition name="LIFE">
-          <PostList posts={posts} brief />
+        <Partition key={section} name={section}>
+          <PostList posts={contents} targetUrl={`/${section}`} />
         </Partition>
       </main>
 
