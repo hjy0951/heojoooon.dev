@@ -22,7 +22,7 @@ export const PostListItem = ({
       <div className={cx(coverImageWrawpperStyle, coverImageStyle)}>
         <Image
           className={coverImageStyle}
-          src={`/contents/${slug}/cover.png`}
+          src={`/post-images/${slug}/cover.png`}
           alt={`"${title}" 커버 이미지`}
           fill
           priority
