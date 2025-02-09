@@ -1,25 +1,24 @@
 import { css, cva } from "#/styled-system/css";
-import { covertTagName, TagType } from "@/lib/utils";
 import Link from "next/link";
 
 type TagsProps = {
-  tagList: Array<{ tag: TagType; count: number }>;
-  selectedTag?: TagType;
+  tagList: { tagName: string; count: number }[];
+  selectedTag?: string;
 };
 
 const Tags = ({ tagList, selectedTag }: TagsProps) => {
   const currentTag = selectedTag || "all";
   return (
     <nav className={containerStyle}>
-      {tagList.map(({ tag, count }) => (
+      {tagList.map(({ tagName, count }) => (
         <Link
-          key={tag}
-          href={tag === "all" ? "/" : `/tag/${tag}`}
+          key={tagName}
+          href={tagName === "all" ? "/" : `/tag/${tagName}`}
           className={tagReceipe({
-            variant: currentTag === tag ? "selected" : "unselected",
+            variant: currentTag === tagName ? "selected" : "unselected",
           })}
         >
-          <p className={tagNameStyle}>{covertTagName(tag)}</p>
+          <p className={tagNameStyle}>{tagName}</p>
           <span className={postCountStyle}>({count})</span>
         </Link>
       ))}

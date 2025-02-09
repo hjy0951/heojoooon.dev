@@ -28,7 +28,7 @@ export type Post = {
   preview?: boolean;
 };
 
-const postsDirectory = join(process.cwd(), "posts");
+const postsDirectory = join(process.cwd(), "public/posts");
 
 function readDir(path: string) {
   return fs.readdirSync(path).filter((fileName) => fileName !== ".DS_Store");
