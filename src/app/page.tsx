@@ -33,7 +33,8 @@ const containerStyle = css({
 
 const mainStyle = css({
   margin: "auto",
-  px: "40px",
+  pt: "40px",
+  pb: "80px",
   maxWidth: "1000px",
   minWidth: "400px",
   display: "grid",

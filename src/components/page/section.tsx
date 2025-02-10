@@ -34,12 +34,13 @@ const containerStyle = css({
   display: "flex",
   flexDir: "column",
   alignItems: "center",
-  gap: "40px",
+  gap: "24px",
 });
 
 const mainStyle = css({
   margin: "auto",
-  px: "40px",
+  pt: "32px",
+  pb: "80px",
   maxWidth: "1000px",
   minWidth: "400px",
 });
