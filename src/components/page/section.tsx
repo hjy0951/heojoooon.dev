@@ -16,9 +16,7 @@ export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
 
   return (
     <div className={containerStyle}>
-      <div className={tagsContainerStyle}>
-        <Tags section={section} tagList={tagInfo} selectedTag={selectedTag} />
-      </div>
+      <Tags section={section} tagList={tagInfo} selectedTag={selectedTag} />
 
       <main className={mainStyle}>
         <Partition key={section} name={section}>
@@ -44,8 +42,4 @@ const mainStyle = css({
   px: "40px",
   maxWidth: "1000px",
   minWidth: "400px",
-});
-
-const tagsContainerStyle = css({
-  lg: { position: "fixed", top: "112px", right: "3%" },
 });

@@ -43,11 +43,6 @@ const containerStyle = css({
   flexWrap: "wrap",
   fontSize: "18px",
   fontWeight: "400",
-
-  lg: {
-    width: "220px",
-    flexDir: "column",
-  },
 });
 
 const tagReceipe = cva({
