@@ -49,6 +49,11 @@ const postListStyle = css({
   flexDir: "column",
   gap: "32px",
   justifyItems: "center",
+
+  md: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+  },
 });
 
 const linkWrapperStyle = css({

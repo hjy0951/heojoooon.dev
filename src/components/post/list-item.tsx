@@ -46,6 +46,7 @@ export const PostListItem = ({
 };
 
 const containerStyle = css({
+  width: "100%",
   display: "flex",
   gap: "12px",
   maxWidth: "440px",
@@ -59,6 +60,7 @@ const containerStyle = css({
 });
 
 const coverImageWrawpperStyle = css({
+  m: "8px",
   position: "relative",
   width: "180px",
   height: "180px",
