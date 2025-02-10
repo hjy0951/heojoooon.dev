@@ -6,21 +6,25 @@ import Tags from "../Tags";
 
 type SectionPageProps = {
   section: string;
+  selectedTag?: string;
 };
 
-export const SectionPage = ({ section }: SectionPageProps) => {
+export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
   const { posts, tagInfo } = getPostsAndTagsBySection(section);
+  const allPosts = selectedTag
+    ? posts.filter((post) => post.tags.includes(selectedTag))
+    : posts;
 
   return (
     <>
       <div className={css({ position: "sticky", top: 0, right: "20px" })}>
-        <Tags tagList={tagInfo} />
+        <Tags section={section} tagList={tagInfo} selectedTag={selectedTag} />
       </div>
 
       <div className={containerStyle}>
         <main className={mainStyle}>
           <Partition key={section} name={section}>
-            <PostList posts={posts} targetUrl={`/${section}`} />
+            <PostList posts={allPosts} targetUrl={`/${section}`} />
           </Partition>
         </main>
 

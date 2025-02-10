@@ -2,18 +2,19 @@ import { css, cva } from "#/styled-system/css";
 import Link from "next/link";
 
 type TagsProps = {
+  section: string;
   tagList: { tagName: string; count: number }[];
   selectedTag?: string;
 };
 
-const Tags = ({ tagList, selectedTag }: TagsProps) => {
+const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
   const currentTag = selectedTag || "all";
   return (
     <nav className={containerStyle}>
       {tagList.map(({ tagName, count }) => (
         <Link
           key={tagName}
-          href={tagName === "all" ? "/" : `/tag/${tagName}`}
+          href={tagName === "all" ? "/" : `/${section}/${tagName}`}
           className={tagReceipe({
             variant: currentTag === tagName ? "selected" : "unselected",
           })}
