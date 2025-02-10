@@ -22,8 +22,8 @@ Call Stack이 1개이므로 `Single Thread`이다.
 
 # JavaScript Runtime (실행 환경)
 
-![js-runtime-1](/post-images/javascript/Javascript-how-it-works/1.png)
-![js-runtime-2](/post-images/javascript/Javascript-how-it-works/2.png)
+![js-runtime-1](/post-images/develop/Javascript-how-it-works/1.png)
+![js-runtime-2](/post-images/develop/Javascript-how-it-works/2.png)
 
 `JavaScript Engine`을 구동하는 환경인 `브라우저`는 여러 개의 `thread`를 사용한다.
 
@@ -64,8 +64,8 @@ first();
 
 아래는 위 코드가 실행되면서 Call Stack에 context가 쌓이는 순서를 보여준다.
 
-![js-callstack-1](/post-images/javascript/Javascript-how-it-works/3.png)
-![js-callstack-2](/post-images/javascript/Javascript-how-it-works/4.png)
+![js-callstack-1](/post-images/develop/Javascript-how-it-works/3.png)
+![js-callstack-2](/post-images/develop/Javascript-how-it-works/4.png)
 
 ##
 
@@ -79,7 +79,7 @@ Event Loop는 Call Stack이 비어 실행시킬 Context가 없다면 이렇게 �
 이러한 작업을 `tick`이라고 하고 계속 반복한다.
 `Call Stack`이 비어있다는 것은 해당 `callback`이 불린 함수의 `Execution Context`의 위에 더이상 아무 `Context`가 쌓여있지 않고, 모두 실행 완료되어 `Call Stack`을 빠져나간 상태를 말하는 것 같다.
 
-![js-eventloop](/post-images/javascript/Javascript-how-it-works/5.png)
+![js-eventloop](/post-images/develop/Javascript-how-it-works/5.png)
 [이미지 출처](https://iamsjy17.github.io/javascript/2019/07/20/how-to-works-js.html)
 
 [Event Loop Simulation](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)에 들어가면 실제 Event Loop가 실행되는 과정을 시뮬레이션해볼 수 있다.
