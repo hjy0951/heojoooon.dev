@@ -51,7 +51,6 @@ const tagReceipe = cva({
     display: "flex",
     gap: "2px",
     borderRadius: "8px",
-    transition: "background-color 1s ease-in",
 
     _hover: {
       "& p": { textDecoration: "underline", textUnderlineOffset: "4px" },
