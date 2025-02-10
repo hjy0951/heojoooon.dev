@@ -2,15 +2,20 @@ import { css } from "#/styled-system/css";
 import { LinkProps } from "next/link";
 import { PropsWithChildren } from "react";
 
+type CustomLinkProps = {
+  currentWindow?: boolean;
+} & PropsWithChildren<LinkProps>;
+
 export const CustomLink = ({
   children,
   href,
+  currentWindow,
   ...props
-}: PropsWithChildren<LinkProps>) => {
+}: CustomLinkProps) => {
   return (
     <a
       {...props}
-      target="_blank"
+      target={currentWindow ? "" : "_blank"}
       href={href.toString() || ""}
       className={linkStyle}
     >

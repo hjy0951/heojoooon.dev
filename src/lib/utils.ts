@@ -10,6 +10,7 @@ const tagMap = {
   recoil: "Recoil",
   tanstackQuery: "Tanstack-Query",
   retrospect: "회고",
+  "github-actions": "GitHub-Actions",
 } as const;
 
 export type TagType = keyof typeof tagMap;

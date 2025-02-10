@@ -9,7 +9,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { css, cx } from "#/styled-system/css";
 import { yeongdeokSea, suite } from "@/styles/font";
-import { calculateTimeToRead } from "@/lib/utils";
+import { calculateTimeToRead, covertTagName, TagType } from "@/lib/utils";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
 import {
   Code,
@@ -56,11 +56,15 @@ const PostPage = (props: PostParams) => {
             <h3>{timeToRead} min.</h3>
           </div>
 
-          {post.tags.map((tag) => (
-            <h3 key={`${tag}-tag`}>
-              <CustomLink href={`/${section}/${tag}`}>{tag},</CustomLink>
-            </h3>
-          ))}
+          <div className={postTagsStyle}>
+            {post.tags.map((tag) => (
+              <h3 key={`${tag}-tag`}>
+                <CustomLink href={`/${section}/${tag}`} currentWindow>
+                  {covertTagName(tag as TagType)},
+                </CustomLink>
+              </h3>
+            ))}
+          </div>
         </section>
 
         <section
@@ -138,3 +142,5 @@ const postInfoStyle = css({
   fontWeight: 500,
   fontSize: "20px",
 });
+
+const postTagsStyle = css({ display: "flex", gap: "6px" });
