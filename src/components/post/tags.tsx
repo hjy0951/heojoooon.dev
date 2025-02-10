@@ -8,7 +8,7 @@ type TagsProps = {
   selectedTag?: string;
 };
 
-const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
+export const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
   const currentTag = selectedTag || "all";
   const allpostsTag = {
     tagName: "all",
@@ -34,17 +34,20 @@ const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
   );
 };
 
-export default Tags;
-
 const containerStyle = css({
   margin: "auto",
-  padding: "32px",
+  padding: "24px",
   maxWidth: "600px",
   display: "flex",
   justifyContent: "center",
   flexWrap: "wrap",
   fontSize: "18px",
   fontWeight: "400",
+
+  lg: {
+    width: "220px",
+    flexDir: "column",
+  },
 });
 
 const tagReceipe = cva({
@@ -52,6 +55,9 @@ const tagReceipe = cva({
     p: "6px",
     display: "flex",
     gap: "2px",
+    borderRadius: "8px",
+    transition: "background-color 1s ease-in",
+
     _hover: {
       "& p": { textDecoration: "underline", textUnderlineOffset: "4px" },
     },
@@ -59,7 +65,7 @@ const tagReceipe = cva({
   variants: {
     variant: {
       unselected: { fontWeight: 400 },
-      selected: { fontWeight: 700 },
+      selected: { fontWeight: 700, backgroundColor: "#C8ECFF" },
     },
   },
 });

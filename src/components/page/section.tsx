@@ -1,8 +1,7 @@
 import { css } from "#/styled-system/css";
 import { getPostsAndTagsBySection } from "@/lib/apiv2";
 import { ProfileCard } from "../layout";
-import { Partition, PostList } from "../post";
-import Tags from "../Tags";
+import { Partition, PostList, Tags } from "../post";
 
 type SectionPageProps = {
   section: string;
@@ -16,21 +15,19 @@ export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
     : posts;
 
   return (
-    <>
-      <div className={css({ position: "sticky", top: 0, right: "20px" })}>
+    <div className={containerStyle}>
+      <div className={tagsContainerStyle}>
         <Tags section={section} tagList={tagInfo} selectedTag={selectedTag} />
       </div>
 
-      <div className={containerStyle}>
-        <main className={mainStyle}>
-          <Partition key={section} name={section}>
-            <PostList posts={allPosts} targetUrl={`/${section}`} wide />
-          </Partition>
-        </main>
+      <main className={mainStyle}>
+        <Partition key={section} name={section}>
+          <PostList posts={allPosts} targetUrl={`/${section}`} wide />
+        </Partition>
+      </main>
 
-        <ProfileCard />
-      </div>
-    </>
+      <ProfileCard />
+    </div>
   );
 };
 
@@ -47,4 +44,8 @@ const mainStyle = css({
   px: "40px",
   maxWidth: "1000px",
   minWidth: "400px",
+});
+
+const tagsContainerStyle = css({
+  lg: { position: "fixed", top: "112px", right: "3%" },
 });

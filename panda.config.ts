@@ -24,8 +24,10 @@ export default defineConfig({
   theme: {
     extend: {
       breakpoints: {
+        xs: "660px",
         sm: "760px",
         md: "1024px",
+        lg: "1400px",
       },
       keyframes,
     },
