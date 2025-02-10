@@ -24,7 +24,7 @@ export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
       <div className={containerStyle}>
         <main className={mainStyle}>
           <Partition key={section} name={section}>
-            <PostList posts={allPosts} targetUrl={`/${section}`} />
+            <PostList posts={allPosts} targetUrl={`/${section}`} wide />
           </Partition>
         </main>
 

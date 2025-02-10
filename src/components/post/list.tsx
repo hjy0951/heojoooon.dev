@@ -1,6 +1,6 @@
 import { Post } from "@/lib/apiv2";
 import { PostListItem } from "./list-item";
-import { css } from "#/styled-system/css";
+import { css, cx } from "#/styled-system/css";
 import Link from "next/link";
 import { RightArrowIcon } from "../icons";
 
@@ -8,6 +8,7 @@ type PostListProps = {
   posts: Post[];
   brief?: boolean;
   targetUrl?: string;
+  wide?: boolean;
 };
 
 const viewCount = 4;
@@ -16,12 +17,13 @@ export const PostList = ({
   posts,
   brief = false,
   targetUrl = "/",
+  wide,
 }: PostListProps) => {
   const numOfBrief = Math.min(viewCount, posts.length);
 
   return (
     <>
-      <div className={postListStyle}>
+      <div className={cx(postListStyle, wide ? postGridListStyle : "")}>
         {brief
           ? posts
               .slice(0, numOfBrief)
@@ -49,7 +51,9 @@ const postListStyle = css({
   flexDir: "column",
   gap: "32px",
   justifyItems: "center",
+});
 
+const postGridListStyle = css({
   md: {
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",
