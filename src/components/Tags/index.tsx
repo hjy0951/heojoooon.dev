@@ -1,4 +1,5 @@
 import { css, cva } from "#/styled-system/css";
+import { covertTagName, TagType } from "@/lib/utils";
 import Link from "next/link";
 
 type TagsProps = {
@@ -9,17 +10,23 @@ type TagsProps = {
 
 const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
   const currentTag = selectedTag || "all";
+  const allpostsTag = {
+    tagName: "all",
+    count: tagList.reduce((acc, cur) => acc + cur.count, 0),
+  };
+  tagList.unshift(allpostsTag);
+
   return (
     <nav className={containerStyle}>
       {tagList.map(({ tagName, count }) => (
         <Link
           key={tagName}
-          href={tagName === "all" ? "/" : `/${section}/${tagName}`}
+          href={`/${section}${tagName === "all" ? "" : `/${tagName}`}`}
           className={tagReceipe({
             variant: currentTag === tagName ? "selected" : "unselected",
           })}
         >
-          <p className={tagNameStyle}>{tagName}</p>
+          <p className={tagNameStyle}>{covertTagName(tagName as TagType)}</p>
           <span className={postCountStyle}>({count})</span>
         </Link>
       ))}
