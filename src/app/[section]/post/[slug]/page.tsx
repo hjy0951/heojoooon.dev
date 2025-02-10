@@ -143,4 +143,4 @@ const postInfoStyle = css({
   fontSize: "20px",
 });
 
-const postTagsStyle = css({ display: "flex", gap: "6px" });
+const postTagsStyle = css({ display: "flex", gap: "6px", flexWrap: "wrap" });
