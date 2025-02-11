@@ -13,6 +13,7 @@ pre {
 /* pretty-code (shiki) recommend */
 .prose pre > code {
   display: grid;
+  font-size: 13px;
 }
 
 /* Fenced Code block - hide horizontal scrollbar: webkit */
