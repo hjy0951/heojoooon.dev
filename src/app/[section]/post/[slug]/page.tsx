@@ -9,7 +9,12 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import { css, cx } from "#/styled-system/css";
 import { yeongdeokSea, suite } from "@/styles/font";
-import { calculateTimeToRead, covertTagName, TagType } from "@/lib/utils";
+import {
+  calculateTimeToRead,
+  covertTagName,
+  createTOCInfo,
+  TagType,
+} from "@/lib/utils";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
 import {
   Code,
@@ -20,6 +25,7 @@ import {
 } from "@/components/atom";
 import { ProfileCard } from "@/components/layout";
 import { getPostTags, getPostSlugsByTag } from "@/lib/api";
+import { TOC } from "@/components/post/toc";
 
 type PostParams = {
   params: Promise<{
@@ -42,83 +48,100 @@ const PostPage = (props: PostParams) => {
   const { section, slug } = use(props.params);
   const post = getPostBySlug(`${section}/${slug}`);
   const timeToRead = calculateTimeToRead(post.content);
+  const tocInfo = createTOCInfo(post.content);
 
   return (
-    <div className={containerStyle}>
-      <article className={articleStyle}>
-        <section
-          className={cx(postDescriptionStyle, `${yeongdeokSea.className}`)}
-        >
-          <h1 className={postTitleStyle}>{post.title}</h1>
+    <div className={wrapperStyle}>
+      <div className={containerStyle}>
+        <article className={articleStyle}>
+          <header
+            className={cx(postDescriptionStyle, `${yeongdeokSea.className}`)}
+          >
+            <h1 className={postTitleStyle}>{post.title}</h1>
 
-          <div className={postInfoStyle}>
-            <h3>{post.createdAt},</h3>
-            <h3>{timeToRead} min.</h3>
-          </div>
+            <div className={postInfoStyle}>
+              <h3>{post.createdAt},</h3>
+              <h3>{timeToRead} min.</h3>
+            </div>
 
-          <div className={postTagsStyle}>
-            {post.tags.map((tag) => (
-              <h3 key={`${tag}-tag`}>
-                <CustomLink href={`/${section}/${tag}`} currentWindow>
-                  {covertTagName(tag as TagType)},
-                </CustomLink>
-              </h3>
-            ))}
-          </div>
-        </section>
+            <div className={postTagsStyle}>
+              {post.tags.map((tag) => (
+                <h3 key={`${tag}-tag`}>
+                  <CustomLink href={`/${section}/${tag}`} currentWindow>
+                    {covertTagName(tag as TagType)},
+                  </CustomLink>
+                </h3>
+              ))}
+            </div>
+          </header>
 
-        <section
-          className={cx(
-            "prose",
-            `${suite.className}`,
-            css({ fontWeight: 500, width: "100%" })
-          )}
-        >
-          <MDXRemote
-            source={post.content}
-            components={{
-              code: Code,
-              blockquote: BlockQuote,
-              img: Image,
-              a: CustomLink,
-              CallOut,
-            }}
-            options={{
-              mdxOptions: {
-                remarkPlugins: [remarkGfm, remarkA11yEmoji, remarkBreaks],
-                rehypePlugins: [
-                  [
-                    rehypePrettyCode,
-                    {
-                      theme: moonlightTheme,
-                      keepBackground: true,
-                    },
+          <section
+            className={cx(
+              "prose",
+              `${suite.className}`,
+              css({
+                position: "relative",
+                width: "100%",
+                fontWeight: 500,
+              })
+            )}
+          >
+            <MDXRemote
+              source={post.content}
+              components={{
+                code: Code,
+                blockquote: BlockQuote,
+                img: Image,
+                a: CustomLink,
+                CallOut,
+              }}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkGfm, remarkA11yEmoji, remarkBreaks],
+                  rehypePlugins: [
+                    [
+                      rehypePrettyCode,
+                      {
+                        theme: moonlightTheme,
+                        keepBackground: true,
+                      },
+                    ],
+                    rehypeSlug,
                   ],
-                  rehypeSlug,
-                ],
-              },
-            }}
-          />
-        </section>
-      </article>
+                },
+              }}
+            />
+          </section>
+        </article>
 
-      <ProfileCard />
+        <ProfileCard />
+      </div>
+
+      <TOC data={tocInfo} />
     </div>
   );
 };
 
 export default PostPage;
 
-const containerStyle = css({
+const wrapperStyle = css({
   margin: "auto",
   maxWidth: "800px",
+  width: "100%",
+  display: "flex",
+  justifyContent: "space-evenly",
+
+  md: { maxWidth: "1200px" },
+});
+
+const containerStyle = css({
   display: "flex",
   flexDir: "column",
   alignItems: "center",
 });
 
 const articleStyle = css({
-  width: "100%",
+  maxWidth: "800px",
   p: "60px 20px",
   display: "flex",
   flexDir: "column",
