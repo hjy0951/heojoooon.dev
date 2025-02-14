@@ -6,7 +6,7 @@ import rehypeSlug from "rehype-slug";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import remarkA11yEmoji from "@fec/remark-a11y-emoji";
-import { Code, BlockQuote, CustomLink, CallOut } from "../atom";
+import { Code, BlockQuote, CustomLink, CallOut, Image } from "../atom";
 import { Post } from "@/lib/apiv2";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
 
