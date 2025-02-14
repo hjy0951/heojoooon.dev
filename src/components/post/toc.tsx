@@ -1,6 +1,7 @@
 "use client";
 
-import { css } from "#/styled-system/css";
+import { css, cx } from "#/styled-system/css";
+import { suite } from "@/styles/font";
 import Link from "next/link";
 
 interface Props {
@@ -15,8 +16,8 @@ export const TOC = ({ data }: Props) => {
   return (
     <aside className={layoutStyle}>
       <div className={wrapperStyle}>
-        <div className={titleStyle}>On this page</div>
-        <ul className={contentListStyle}>
+        <p className={cx(suite.className, titleStyle)}>On this page</p>
+        <ul className={cx(suite.className, contentListStyle)}>
           {data.map((item) => {
             return (
               <li key={item.link} className={contentStyle}>
@@ -44,7 +45,7 @@ const wrapperStyle = css({
   width: "260px",
 });
 
-const titleStyle = css({ fontWeight: 600, fontSize: "20px" });
+const titleStyle = css({ fontWeight: 700, fontSize: "20px", color: "#404040" });
 
 const contentListStyle = css({
   fontSize: "13px",
@@ -53,5 +54,6 @@ const contentListStyle = css({
 
 const contentStyle = css({
   mt: "4px",
+
   _hover: { textDecoration: "underline", textUnderlineOffset: "4px" },
 });
