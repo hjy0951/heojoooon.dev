@@ -1,31 +1,17 @@
 import { getPostBySlug } from "@/lib/apiv2";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { use } from "react";
-
-import remarkA11yEmoji from "@fec/remark-a11y-emoji";
-import remarkBreaks from "remark-breaks";
-import remarkGfm from "remark-gfm";
-import rehypePrettyCode from "rehype-pretty-code";
-import rehypeSlug from "rehype-slug";
 import { css, cx } from "#/styled-system/css";
-import { yeongdeokSea, suite } from "@/styles/font";
+import { yeongdeokSea } from "@/styles/font";
 import {
   calculateTimeToRead,
   covertTagName,
   createTOCInfo,
   TagType,
 } from "@/lib/utils";
-import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
-import {
-  Code,
-  BlockQuote,
-  CustomLink,
-  Image,
-  CallOut,
-} from "@/components/atom";
+import { CustomLink } from "@/components/atom";
 import { ProfileCard } from "@/components/layout";
 import { getPostTags, getPostSlugsByTag } from "@/lib/api";
-import { TOC } from "@/components/post/toc";
+import { Body, TOC } from "@/components/post";
 
 type PostParams = {
   params: Promise<{
@@ -75,43 +61,7 @@ const PostPage = (props: PostParams) => {
             </div>
           </header>
 
-          <section
-            className={cx(
-              "prose",
-              `${suite.className}`,
-              css({
-                position: "relative",
-                width: "100%",
-                fontWeight: 500,
-              })
-            )}
-          >
-            <MDXRemote
-              source={post.content}
-              components={{
-                code: Code,
-                blockquote: BlockQuote,
-                img: Image,
-                a: CustomLink,
-                CallOut,
-              }}
-              options={{
-                mdxOptions: {
-                  remarkPlugins: [remarkGfm, remarkA11yEmoji, remarkBreaks],
-                  rehypePlugins: [
-                    [
-                      rehypePrettyCode,
-                      {
-                        theme: moonlightTheme,
-                        keepBackground: true,
-                      },
-                    ],
-                    rehypeSlug,
-                  ],
-                },
-              }}
-            />
-          </section>
+          <Body post={post} />
         </article>
 
         <ProfileCard />
