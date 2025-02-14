@@ -4,3 +4,4 @@ export * from "./list";
 export * from "./tags";
 export * from "./toc";
 export * from "./body";
+export * from "./header";
