@@ -15,7 +15,6 @@ interface Props {
 
 export const TOC = ({ data }: Props) => {
   const activeHeadingId = useGetActiveHeading();
-  console.log(activeHeadingId);
 
   if (data.length === 0) return null;
 
