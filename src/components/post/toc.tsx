@@ -1,6 +1,7 @@
 "use client";
 
-import { css, cx } from "#/styled-system/css";
+import { css, cva, cx } from "#/styled-system/css";
+import { useGetActiveHeading } from "@/hooks/use-get-active-heading";
 import { suite } from "@/styles/font";
 import Link from "next/link";
 
@@ -13,6 +14,9 @@ interface Props {
 }
 
 export const TOC = ({ data }: Props) => {
+  const activeHeadingId = useGetActiveHeading();
+  console.log(activeHeadingId);
+
   if (data.length === 0) return null;
 
   return (
@@ -22,7 +26,13 @@ export const TOC = ({ data }: Props) => {
         <ul className={cx(suite.className, contentListStyle)}>
           {data.map((item) => {
             return (
-              <li key={item.link} className={contentStyle}>
+              <li
+                key={item.link}
+                className={contentRecipe({
+                  variant:
+                    activeHeadingId === item.link ? "active" : "inactive",
+                })}
+              >
                 <Link href={item.link}>{item.text}</Link>
               </li>
             );
@@ -54,8 +64,16 @@ const contentListStyle = css({
   color: "#606060",
 });
 
-const contentStyle = css({
-  mt: "4px",
+const contentRecipe = cva({
+  base: {
+    mt: "4px",
 
-  _hover: { textDecoration: "underline", textUnderlineOffset: "4px" },
+    _hover: { textDecoration: "underline", textUnderlineOffset: "4px" },
+  },
+  variants: {
+    variant: {
+      inactive: {},
+      active: { color: "#DE645B", fontWeight: 700, fontSize: "14px" },
+    },
+  },
 });
