@@ -13,6 +13,8 @@ interface Props {
 }
 
 export const TOC = ({ data }: Props) => {
+  if (data.length === 0) return null;
+
   return (
     <aside className={layoutStyle}>
       <div className={wrapperStyle}>
