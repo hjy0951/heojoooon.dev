@@ -15,6 +15,7 @@ interface Props {
 
 export const TOC = ({ data }: Props) => {
   const activeHeadingId = useGetActiveHeading();
+  const validIndents = ["0", "1", "2"] as const;
 
   if (data.length === 0) return null;
 
@@ -32,7 +33,14 @@ export const TOC = ({ data }: Props) => {
                     activeHeadingId === item.link ? "active" : "inactive",
                 })}
               >
-                <Link href={item.link}>{item.text}</Link>
+                <Link
+                  href={item.link}
+                  className={indentRecipe({
+                    count: validIndents[item.indentCount],
+                  })}
+                >
+                  {item.text}
+                </Link>
               </li>
             );
           })}
@@ -73,6 +81,17 @@ const contentRecipe = cva({
     variant: {
       inactive: {},
       active: { color: "#DE645B", fontWeight: 700, fontSize: "14px" },
+    },
+  },
+});
+
+const indentRecipe = cva({
+  base: {},
+  variants: {
+    count: {
+      "0": {},
+      "1": { ml: "16px" },
+      "2": { ml: "32px" },
     },
   },
 });
