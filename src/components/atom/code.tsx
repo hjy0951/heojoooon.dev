@@ -22,8 +22,9 @@ export const Code = ({
 };
 
 const codeStyle = css({
-  padding: "2px 4px",
+  padding: "3px 6px",
   borderRadius: "4px",
   fontWeight: 600,
-  background: "linear-gradient(transparent 50%, #99CEFF 70%)",
+  color: "#DE645B",
+  backgroundColor: "#dedede",
 });
