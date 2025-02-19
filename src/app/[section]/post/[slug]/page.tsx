@@ -4,7 +4,7 @@ import { css } from "#/styled-system/css";
 import { createTOCInfo } from "@/lib/utils";
 import { ProfileCard } from "@/components/layout";
 import { getPostTags, getPostSlugsByTag } from "@/lib/api";
-import { Body, Header, TOC } from "@/components/post";
+import { Body, Giscus, Header, TOC } from "@/components/post";
 
 type PostParams = {
   params: Promise<{
@@ -38,6 +38,8 @@ const PostPage = (props: PostParams) => {
         </article>
 
         <ProfileCard />
+
+        <Giscus />
       </div>
 
       <TOC data={tocInfo} />
