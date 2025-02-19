@@ -15,9 +15,10 @@ type PostParams = {
 
 export const generateStaticParams = () => {
   const params = getPostTags()
-    .map((tag) => getPostSlugsByTag(tag))
-    .map((slug) => ({
-      slug,
+    .flatMap((tag) => getPostSlugsByTag(tag))
+    .map((slug) => slug.split("/")[1].replace(/\.mdx$/, ""))
+    .map((realSlug) => ({
+      slug: realSlug,
     }));
 
   return params;
