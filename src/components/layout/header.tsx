@@ -6,7 +6,9 @@ export const Header = () => {
     <header className={containerStyle}>
       <Link href="/">Heojoooon.</Link>
       <div>
-        <Link href="/about">About.</Link>
+        <Link href="/about">
+          <s>About.</s>
+        </Link>
       </div>
     </header>
   );
