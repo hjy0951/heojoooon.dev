@@ -23,6 +23,19 @@ export function getSections() {
   return readDir(postsDirectory);
 }
 
+export function getPostSlugsBySection(section: string) {
+  const dirPath = join(postsDirectory, section);
+  const slugs = readDir(dirPath).map((slug) => `${section}/${slug}`);
+  console.log(slugs);
+  return slugs;
+}
+
+export function getAllPostPathList() {
+  return getSections()
+    .flatMap((section) => getPostSlugsBySection(section))
+    .map((slug) => slug.replace(/\.mdx$/, ""));
+}
+
 export function getPostBySlug(slug: string) {
   const realSlug = slug.replace(/\.mdx$/, "");
   const fullPath = join(postsDirectory, `${realSlug}.mdx`);
