@@ -66,6 +66,7 @@ const containerStyle = css({
 });
 
 const articleStyle = css({
+  minWidth: "100%",
   maxWidth: "800px",
   p: "60px 20px",
 });

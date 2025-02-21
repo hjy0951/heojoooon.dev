@@ -17,34 +17,36 @@ export const TOC = ({ data }: Props) => {
   const activeHeadingId = useGetActiveHeading();
   const validIndents = ["0", "1", "2"] as const;
 
-  if (data.length === 0) return null;
-
   return (
     <aside className={layoutStyle}>
       <div className={wrapperStyle}>
-        <p className={cx(suite.className, titleStyle)}>On this page</p>
-        <ul className={cx(suite.className, contentListStyle)}>
-          {data.map((item) => {
-            return (
-              <li
-                key={item.link}
-                className={contentRecipe({
-                  variant:
-                    activeHeadingId === item.link ? "active" : "inactive",
-                })}
-              >
-                <Link
-                  href={item.link}
-                  className={indentRecipe({
-                    count: validIndents[item.indentCount],
-                  })}
-                >
-                  {item.text}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        {data.length > 0 && (
+          <>
+            <p className={cx(suite.className, titleStyle)}>On this page</p>
+            <ul className={cx(suite.className, contentListStyle)}>
+              {data.map((item) => {
+                return (
+                  <li
+                    key={item.link}
+                    className={contentRecipe({
+                      variant:
+                        activeHeadingId === item.link ? "active" : "inactive",
+                    })}
+                  >
+                    <Link
+                      href={item.link}
+                      className={indentRecipe({
+                        count: validIndents[item.indentCount],
+                      })}
+                    >
+                      {item.text}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </div>
     </aside>
   );
