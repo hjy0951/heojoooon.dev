@@ -20,7 +20,7 @@ export const PostListItem = ({
   const [section, realSlug] = slug.split("/");
 
   return (
-    <Link href={`/${section}/post/${realSlug}`} className={containerStyle}>
+    <Link href={`/${section}/${realSlug}`} className={containerStyle}>
       <div className={cx(coverImageWrawpperStyle, coverImageStyle)}>
         <Image
           className={coverImageStyle}

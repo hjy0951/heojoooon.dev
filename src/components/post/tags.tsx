@@ -21,7 +21,7 @@ export const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
       {tagList.map(({ tagName, count }) => (
         <Link
           key={tagName}
-          href={`/${section}${tagName === "all" ? "" : `/${tagName}`}`}
+          href={`/${section}${tagName === "all" ? "" : `/tag/${tagName}`}`}
           className={tagReceipe({
             variant: currentTag === tagName ? "selected" : "unselected",
           })}

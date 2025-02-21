@@ -23,7 +23,7 @@ export const Header = ({ section, post }: HeaderProps) => {
       <div className={postTagsStyle}>
         {post.tags.map((tag) => (
           <h3 key={`${tag}-tag`}>
-            <CustomLink href={`/${section}/${tag}`} currentWindow>
+            <CustomLink href={`/${section}/tag/${tag}`} currentWindow>
               #{covertTagName(tag as TagType)}
             </CustomLink>
           </h3>
