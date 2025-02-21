@@ -26,7 +26,6 @@ export function getSections() {
 export function getPostSlugsBySection(section: string) {
   const dirPath = join(postsDirectory, section);
   const slugs = readDir(dirPath).map((slug) => `${section}/${slug}`);
-  console.log(slugs);
   return slugs;
 }
 
