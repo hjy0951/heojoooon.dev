@@ -36,7 +36,7 @@ const mainStyle = css({
   pt: "40px",
   pb: "80px",
   maxWidth: "1000px",
-  minWidth: "400px",
+  minWidth: "320px",
   display: "grid",
   gap: "60px",
   gridTemplateColumns: "repeat(1, 1fr)",

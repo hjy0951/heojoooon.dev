@@ -42,5 +42,5 @@ const mainStyle = css({
   pt: "32px",
   pb: "80px",
   maxWidth: "1000px",
-  minWidth: "400px",
+  minWidth: "320px",
 });

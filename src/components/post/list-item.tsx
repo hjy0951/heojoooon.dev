@@ -50,6 +50,8 @@ export const PostListItem = ({
 const containerStyle = css({
   width: "100%",
   display: "flex",
+  flexDir: "column",
+  alignItems: "center",
   gap: "12px",
   maxWidth: "440px",
   borderRadius: "12px",
@@ -59,6 +61,8 @@ const containerStyle = css({
     boxShadow: "0 4px 6px rgba(0,0,0,0.40), 0 2px 4px rgba(0,0,0,0.32)",
     transform: "translateY(-4px)",
   },
+
+  sm: { flexDir: "row" },
 });
 
 const coverImageWrawpperStyle = css({
@@ -74,6 +78,7 @@ const coverImageStyle = css({
 });
 
 const postInfoStyle = css({
+  width: "100%",
   flex: 1,
   p: "12px",
   display: "flex",
@@ -86,6 +91,7 @@ const titleStyle = css({ fontWeight: 600 });
 const descriptionStyle = css({ fontSize: "14px" });
 
 const dateWrapperStyle = css({
+  mt: "8px",
   display: "flex",
   gap: "4px",
   alignItems: "center",
