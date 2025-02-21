@@ -62,7 +62,7 @@ const containerStyle = css({
     transform: "translateY(-4px)",
   },
 
-  sm: { flexDir: "row" },
+  sm: { flexDir: "row", alignItems: "normal" },
 });
 
 const coverImageWrawpperStyle = css({
