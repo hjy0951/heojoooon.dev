@@ -42,5 +42,5 @@ export const Giscus = () => {
 
 const containerStyle = css({
   mt: "60px",
-  width: "95%",
+  mx: "20px",
 });

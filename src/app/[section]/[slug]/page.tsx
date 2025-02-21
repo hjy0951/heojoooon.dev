@@ -61,15 +61,11 @@ const wrapperStyle = css({
 });
 
 const containerStyle = css({
-  display: "flex",
-  flexDir: "column",
-  alignItems: "center",
+  flexGrow: 1,
+  overflow: "auto",
 });
 
 const articleStyle = css({
   maxWidth: "800px",
   p: "60px 20px",
-  display: "flex",
-  flexDir: "column",
-  gap: "40px",
 });

@@ -22,6 +22,7 @@ export const Body = ({ post }: BodyProps) => {
         `${suite.className}`,
         css({
           position: "relative",
+          mt: "48px",
           width: "100%",
           fontWeight: 500,
         })

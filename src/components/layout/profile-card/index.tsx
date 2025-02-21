@@ -105,6 +105,7 @@ const containerStyle = css({
   padding: "24px 36px",
   display: "flex",
   gap: "20px",
+  justifyContent: "center",
   borderRadius: "12px",
 });
 
