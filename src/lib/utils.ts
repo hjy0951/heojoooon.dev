@@ -12,6 +12,7 @@ const tagMap = {
   recoil: "Recoil",
   tanstackQuery: "Tanstack-Query",
   retrospect: "회고",
+  essay: "에세이",
   "github-actions": "GitHub-Actions",
 } as const;
 
