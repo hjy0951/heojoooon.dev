@@ -4,10 +4,10 @@ import { calculateTimeToRead, covertTagName, TagType } from "@/lib/utils";
 import { yeongdeokSea } from "@/styles/font";
 import { CustomLink } from "../atom";
 
-type HeaderProps = {
+interface HeaderProps {
   section: string;
   post: Post;
-};
+}
 
 export const Header = ({ section, post }: HeaderProps) => {
   const timeToRead = calculateTimeToRead(post.content);

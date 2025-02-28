@@ -1,10 +1,10 @@
 import { css, cx } from "#/styled-system/css";
 import { SourceIcon } from "@/components/icons";
 
-type ImageProps = {
+interface ImageProps {
   src: string;
   alt: string;
-};
+}
 
 export const Image = ({ src, alt }: ImageProps) => {
   const match = alt.match(/link::(https?:\/\/[^\s]+)/);

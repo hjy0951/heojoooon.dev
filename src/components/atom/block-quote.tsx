@@ -1,12 +1,10 @@
 import { css } from "#/styled-system/css";
 import { HTMLAttributes, PropsWithChildren } from "react";
 
-type BlockQuoteProps = {} & HTMLAttributes<HTMLElement>;
-
 export const BlockQuote = ({
   children,
   ...props
-}: PropsWithChildren<BlockQuoteProps>) => {
+}: PropsWithChildren<HTMLAttributes<HTMLElement>>) => {
   return (
     <blockquote className={blockquoteStyle} {...props}>
       {children}

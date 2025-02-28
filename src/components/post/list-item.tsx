@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarIcon } from "../icons";
 
-type PostListItemProps = {
+interface PostListItemProps {
   title: string;
   description?: string;
   createdAt: string;
   slug: string;
-};
+}
 
 export const PostListItem = ({
   title,

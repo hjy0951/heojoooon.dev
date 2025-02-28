@@ -1,10 +1,10 @@
 import { SVGProps } from "react";
 
-type IconProps = {
+interface IconProps extends SVGProps<SVGSVGElement> {
   width?: number;
   height?: number;
   color?: string;
-} & SVGProps<SVGSVGElement>;
+}
 
 const StarIcon = ({ width = 18, height = 18, ...props }: IconProps) => {
   return (

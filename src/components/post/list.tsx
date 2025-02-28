@@ -4,12 +4,12 @@ import { css, cx } from "#/styled-system/css";
 import Link from "next/link";
 import { RightArrowIcon } from "../icons";
 
-type PostListProps = {
+interface PostListProps {
   posts: Post[];
   brief?: boolean;
   targetUrl?: string;
   wide?: boolean;
-};
+}
 
 const viewCount = 4;
 

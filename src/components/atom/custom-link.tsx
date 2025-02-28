@@ -2,9 +2,9 @@ import { css } from "#/styled-system/css";
 import { LinkProps } from "next/link";
 import { PropsWithChildren } from "react";
 
-type CustomLinkProps = {
+interface CustomLinkProps extends PropsWithChildren<LinkProps> {
   currentWindow?: boolean;
-} & PropsWithChildren<LinkProps>;
+}
 
 export const CustomLink = ({
   children,

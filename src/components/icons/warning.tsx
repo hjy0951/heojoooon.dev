@@ -1,4 +1,8 @@
-type IconProps = { width?: number; height?: number; color?: string };
+interface IconProps {
+  width?: number;
+  height?: number;
+  color?: string;
+}
 
 export const WarningIcon = ({ width = 18, height = 18 }: IconProps) => {
   return (

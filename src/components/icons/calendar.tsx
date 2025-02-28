@@ -1,4 +1,8 @@
-type IconProps = { width?: number; height?: number; color?: string };
+interface IconProps {
+  width?: number;
+  height?: number;
+  color?: string;
+}
 
 export const CalendarIcon = ({ width = 16, height = 16 }: IconProps) => {
   return (

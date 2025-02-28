@@ -1,10 +1,10 @@
 import { SVGProps } from "react";
 
-type IconProps = {
+interface IconProps extends SVGProps<SVGSVGElement> {
   width?: number;
   height?: number;
   color?: string;
-} & SVGProps<SVGSVGElement>;
+}
 
 export const RightArrowIcon = ({
   width = 16,

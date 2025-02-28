@@ -2,10 +2,10 @@ import { css } from "#/styled-system/css";
 import Link from "next/link";
 import { ReactNode } from "react";
 
-type SNSButtonProps = {
+interface SNSButtonProps {
   icon: ReactNode;
   url: string;
-};
+}
 
 const SNSLink = ({ icon, url }: SNSButtonProps) => {
   return (

@@ -1,4 +1,8 @@
-type IconProps = { width?: number; height?: number; color?: string };
+interface IconProps {
+  width?: number;
+  height?: number;
+  color?: string;
+}
 
 export const SourceIcon = ({
   width = 24,

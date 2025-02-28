@@ -3,10 +3,10 @@ import { getPostsAndTagsBySection } from "@/lib/apiv2";
 import { ProfileCard } from "../layout";
 import { Partition, PostList, Tags } from "../post";
 
-type SectionPageProps = {
+interface SectionPageProps {
   section: string;
   selectedTag?: string;
-};
+}
 
 export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
   const { posts, tagInfo } = getPostsAndTagsBySection(section);

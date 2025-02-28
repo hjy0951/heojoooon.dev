@@ -10,9 +10,9 @@ import { Code, BlockQuote, CustomLink, CallOut, Image } from "../atom";
 import { Post } from "@/lib/apiv2";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
 
-type BodyProps = {
+interface BodyProps {
   post: Post;
-};
+}
 
 export const Body = ({ post }: BodyProps) => {
   return (

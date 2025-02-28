@@ -5,9 +5,9 @@ import { pretendard } from "@/styles/font";
 
 type IconType = "warn" | "check" | "light";
 
-type CallOutProps = {
+interface CallOutProps {
   type?: IconType;
-};
+}
 
 const CallOutIcon = ({ type }: { type: IconType }) => {
   if (type === "check") return <CheckBoxIcon />;

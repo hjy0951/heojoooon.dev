@@ -2,10 +2,10 @@ import { css, cx } from "#/styled-system/css";
 import { pretendard } from "@/styles/font";
 import { HTMLAttributes, PropsWithChildren } from "react";
 
-type CodeProps = {
+interface CodeProps extends HTMLAttributes<HTMLElement> {
   // codeText: string;
   "data-theme"?: string;
-} & HTMLAttributes<HTMLElement>;
+}
 
 export const Code = ({
   children,

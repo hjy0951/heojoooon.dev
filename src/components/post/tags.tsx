@@ -2,11 +2,11 @@ import { css, cva } from "#/styled-system/css";
 import { covertTagName, TagType } from "@/lib/utils";
 import Link from "next/link";
 
-type TagsProps = {
+interface TagsProps {
   section: string;
   tagList: { tagName: string; count: number }[];
   selectedTag?: string;
-};
+}
 
 export const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
   const currentTag = selectedTag || "all";
