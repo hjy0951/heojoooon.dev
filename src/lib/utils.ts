@@ -19,7 +19,7 @@ const tagMap = {
 export type TagType = keyof typeof tagMap;
 
 export const covertTagName = (slug: TagType): string => {
-  return tagMap[slug];
+  return tagMap[slug] ?? slug;
 };
 
 export const calculateTimeToRead = (
