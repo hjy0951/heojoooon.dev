@@ -6,13 +6,19 @@ interface TagsProps {
   section: string;
   tagList: { tagName: string; count: number }[];
   selectedTag?: string;
+  totalCount: number;
 }
 
-export const Tags = ({ section, tagList, selectedTag }: TagsProps) => {
+export const Tags = ({
+  section,
+  tagList,
+  selectedTag,
+  totalCount,
+}: TagsProps) => {
   const currentTag = selectedTag || "all";
   const allpostsTag = {
     tagName: "all",
-    count: tagList.reduce((acc, cur) => acc + cur.count, 0),
+    count: totalCount,
   };
   tagList.unshift(allpostsTag);
 

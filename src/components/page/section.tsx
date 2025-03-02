@@ -16,7 +16,12 @@ export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
 
   return (
     <div className={containerStyle}>
-      <Tags section={section} tagList={tagInfo} selectedTag={selectedTag} />
+      <Tags
+        section={section}
+        tagList={tagInfo}
+        selectedTag={selectedTag}
+        totalCount={posts.length}
+      />
 
       <main className={mainStyle}>
         <Partition key={section} name={section}>
