@@ -45,7 +45,7 @@ export const ProfileCard = () => {
               zIndex: 100,
               position: "absolute",
               top: "8%",
-              left: "27%",
+              left: "33%",
               display: "flex",
               color: "#fdfdfd",
               flexDir: "column",
@@ -60,7 +60,6 @@ export const ProfileCard = () => {
               alignItems: "center",
             })}
           >
-            <p>Lv.</p>
             <div
               className={css({
                 p: "1px 4px",
