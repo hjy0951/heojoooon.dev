@@ -1,16 +1,48 @@
-import { getPostBySlug } from "@/lib/apiv2";
+import { getPostBySlug, getPostDetail } from "@/lib/apiv2";
 import { use } from "react";
 import { css } from "#/styled-system/css";
 import { createTOCInfo } from "@/lib/utils";
 import { ProfileCard } from "@/components/layout";
 import { getPostTags, getPostSlugsByTag } from "@/lib/api";
 import { Body, Giscus, Header, TOC } from "@/components/post";
+import { Metadata } from "next";
 
 type PostParams = {
   params: Promise<{
     section: string;
     slug: string;
   }>;
+};
+
+export const generateMetadata = async ({
+  params,
+}: PostParams): Promise<Metadata> => {
+  const { section, slug } = await params;
+  const post = getPostDetail({ section, slug });
+
+  const baseUrl = "https://heojooon.vercel.app";
+  const title = `${post.title} | Heojoooon.`;
+  const imageUrl = `${baseUrl}/post-images/${section}/${slug}/cover.png`;
+  const publishedTime = new Date(post.createdAt).toISOString();
+
+  return {
+    title,
+    description: post.description,
+
+    openGraph: {
+      title,
+      description: post.description,
+      publishedTime,
+      type: "article",
+      url: `${baseUrl}/${section}/${slug}`,
+      images: [imageUrl],
+    },
+    twitter: {
+      title,
+      description: post.description,
+      images: [imageUrl],
+    },
+  };
 };
 
 export const generateStaticParams = () => {

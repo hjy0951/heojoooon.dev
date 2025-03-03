@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import { Header, Footer } from "@/components/layout";
 
 export const metadata: Metadata = {
-  title: "별 세 개짜리 개발자",
+  title: "별 세 개짜리 개발자 | Heojoooon.",
   description: "프론트엔드 개발자 허준영입니다.",
 };
 

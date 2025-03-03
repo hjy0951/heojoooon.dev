@@ -44,6 +44,20 @@ export function getPostBySlug(slug: string) {
   return { ...data, slug: realSlug, content } as Post;
 }
 
+export function getPostDetail({
+  section,
+  slug,
+}: {
+  section: string;
+  slug: string;
+}) {
+  const fullPath = join(postsDirectory, `${section}/${slug}.mdx`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  return { ...data, slug, content } as Post;
+}
+
 function getSortedPostsByCreatedAt(slugs: string[]) {
   const posts = slugs
     .map((slug) => getPostBySlug(slug))
