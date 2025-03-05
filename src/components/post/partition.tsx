@@ -1,6 +1,5 @@
 import { css, cx } from "#/styled-system/css";
 import { pretendard } from "@/styles/font";
-import Link from "next/link";
 import { PropsWithChildren } from "react";
 
 type PartitionProps = { name: string };
@@ -11,9 +10,9 @@ export const Partition = ({
 }: PropsWithChildren<PartitionProps>) => {
   return (
     <section className={containerStyle}>
-      <Link href={`/${name}`} className={cx(nameStyle, pretendard.className)}>
-        {name}
-      </Link>
+      <div className={cx(nameStyle, pretendard.className)}>
+        <p className={linkTextStyle}>{name}</p>
+      </div>
 
       {children}
     </section>
@@ -26,10 +25,17 @@ const containerStyle = css({
 });
 
 const nameStyle = css({
-  pb: "20px",
+  mb: "20px",
   fontSize: "18px",
   fontWeight: 400,
-  textDecoration: "underline",
-  textDecorationThickness: "1px",
-  textUnderlineOffset: "6px",
+  borderBottom: "3px solid #303030",
+});
+
+const linkTextStyle = css({
+  width: "92px",
+  fontWeight: "500",
+  textAlign: "center",
+  color: "white",
+  backgroundColor: "#303030",
+  borderRadius: "8px 8px 0 0",
 });
