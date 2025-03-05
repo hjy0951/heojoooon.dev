@@ -1,25 +1,22 @@
 import { css } from "#/styled-system/css";
 import { getSections } from "@/lib/apiv2";
-import Link from "next/link";
+import { NavButton } from "./nav-button";
 
 export const Header = () => {
   const sections = getSections();
 
   return (
     <header className={containerStyle}>
-      <div className={css({ display: "flex", gap: "20px" })}>
-        <Link href="/">home.</Link>
+      <div className={css({ display: "flex", gap: "12px" })}>
+        <NavButton href="/" text="home" />
         {sections.map((section) => (
-          <Link key={`link-${section}`} href={`/${section}`}>
-            {section}.
-          </Link>
+          <NavButton
+            key={`link-${section}`}
+            href={`/${section}`}
+            text={section}
+          />
         ))}
-      </div>
-
-      <div>
-        <Link href="/about">
-          <s>about.</s>
-        </Link>
+        <NavButton href="/about" text="about" />
       </div>
     </header>
   );
