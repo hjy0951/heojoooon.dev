@@ -1,7 +1,7 @@
 import { css } from "#/styled-system/css";
 import { getPostsAndTagsBySection } from "@/lib/apiv2";
 import { ProfileCard } from "../layout";
-import { Partition, PostList, Tags } from "../post";
+import { PostList, Tags } from "../post";
 
 interface SectionPageProps {
   section: string;
@@ -24,9 +24,9 @@ export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
       />
 
       <main className={mainStyle}>
-        <Partition key={section} name={section}>
-          <PostList posts={allPosts} targetUrl={`/${section}`} wide />
-        </Partition>
+        {/* <Partition key={section} name={section}> */}
+        <PostList posts={allPosts} targetUrl={`/${section}`} wide />
+        {/* </Partition> */}
       </main>
 
       <ProfileCard />
