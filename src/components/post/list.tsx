@@ -11,7 +11,7 @@ interface PostListProps {
   wide?: boolean;
 }
 
-const viewCount = 4;
+const viewCount = 3;
 
 export const PostList = ({
   posts,
