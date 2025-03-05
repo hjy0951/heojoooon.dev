@@ -1,15 +1,16 @@
-import { css } from "#/styled-system/css";
+import { css, cva } from "#/styled-system/css";
 import Link, { LinkProps } from "next/link";
 
 interface NavButtonProps extends LinkProps {
   text: string;
+  selected: boolean;
 }
 
-export const NavButton = ({ text, ...props }: NavButtonProps) => {
+export const NavButton = ({ text, selected, ...props }: NavButtonProps) => {
   const capitalizedText = capitalize(text);
   return (
     <Link {...props} className={linkStyle}>
-      <p className={linkTextStyle}>{capitalizedText}</p>
+      <p className={linkTextRecipe({ selected })}>{capitalizedText}</p>
     </Link>
   );
 };
@@ -24,22 +25,32 @@ const linkStyle = css({
   borderRadius: "12px",
 });
 
-const linkTextStyle = css({
-  boxSizing: "border-box",
-  border: "2px solid black",
-  borderRadius: "12px",
-  padding: "4px 12px",
-  background: "#fdfdfd",
-  color: "black",
-  fontWeight: 600,
-  transform: "translateY(-0.2em)",
-  transition: "transform 0.1s ease",
-
-  _hover: {
-    transform: "translateY(-0.33em)",
+const linkTextRecipe = cva({
+  base: {
+    boxSizing: "border-box",
+    border: "2px solid black",
+    borderRadius: "12px",
+    padding: "4px 12px",
+    background: "#fdfdfd",
+    color: "black",
+    fontWeight: 600,
+    transition: "transform 0.1s ease",
   },
 
-  _active: {
-    transform: "translateY(0)",
+  variants: {
+    selected: {
+      true: { transform: "translateY(-2px)" },
+      false: {
+        transform: "translateY(-4px)",
+
+        _active: {
+          transform: "translateY(-2px)",
+        },
+
+        _hover: {
+          transform: "translateY(-6px)",
+        },
+      },
+    },
   },
 });

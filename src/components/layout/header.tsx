@@ -1,29 +1,41 @@
+"use client";
+
 import { css } from "#/styled-system/css";
-import { getSections } from "@/lib/apiv2";
+import { usePathname } from "next/navigation";
 import { NavButton } from "./nav-button";
 
+const navs = [
+  { href: "/", text: "home" },
+  { href: "/develop", text: "develop" },
+  { href: "/life", text: "life" },
+  { href: "/about", text: "about" },
+];
+
 export const Header = () => {
-  const sections = getSections();
+  const pathname = usePathname();
+  const isCurrentPath = (current: string) => {
+    return current === "home"
+      ? pathname === "/"
+      : pathname.startsWith(`/${current}`);
+  };
 
   return (
     <header className={containerStyle}>
       <div className={css({ display: "flex", gap: "12px" })}>
-        <NavButton href="/" text="home" />
-        {sections.map((section) => (
+        {navs.map((navProps) => (
           <NavButton
-            key={`link-${section}`}
-            href={`/${section}`}
-            text={section}
+            key={`link-${navProps.text}`}
+            {...navProps}
+            selected={isCurrentPath(navProps.text)}
           />
         ))}
-        <NavButton href="/about" text="about" />
       </div>
     </header>
   );
 };
 
 const containerStyle = css({
-  paddingX: "10%",
+  paddingX: "6%",
   width: "full",
   height: "80px",
   boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
