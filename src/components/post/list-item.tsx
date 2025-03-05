@@ -88,7 +88,11 @@ const postInfoStyle = css({
 
 const titleStyle = css({ fontWeight: 600 });
 
-const descriptionStyle = css({ fontSize: "14px" });
+const descriptionStyle = css({
+  fontSize: "14px",
+  fontWeight: 500,
+  color: "#4B4B4B",
+});
 
 const dateWrapperStyle = css({
   mt: "8px",
@@ -100,4 +104,5 @@ const dateWrapperStyle = css({
 
 const dateStyle = css({
   fontSize: "14px",
+  fontWeight: 500,
 });
