@@ -3,12 +3,15 @@ import { pretendard } from "@/styles/font";
 import Image from "next/image";
 import Link from "next/link";
 import { CalendarIcon } from "../icons";
+import { Badge } from "./badge";
+import { covertTagName, TagType } from "@/lib/utils";
 
 interface PostListItemProps {
   title: string;
   description?: string;
   createdAt: string;
   slug: string;
+  tags: string[];
 }
 
 export const PostListItem = ({
@@ -16,6 +19,7 @@ export const PostListItem = ({
   description,
   createdAt,
   slug,
+  tags,
 }: PostListItemProps) => {
   const [section, realSlug] = slug.split("/");
 
@@ -38,9 +42,17 @@ export const PostListItem = ({
           {description && <p className={descriptionStyle}>{description}</p>}
         </div>
 
-        <div className={dateWrapperStyle}>
-          <CalendarIcon />
-          <p className={dateStyle}>{createdAt}</p>
+        <div>
+          <div className={postTagsStyle}>
+            {tags.map((tag) => (
+              <Badge key={tag}>{covertTagName(tag as TagType)}</Badge>
+            ))}
+          </div>
+
+          <div className={dateWrapperStyle}>
+            <CalendarIcon />
+            <p className={dateStyle}>{createdAt}</p>
+          </div>
         </div>
       </div>
     </Link>
@@ -92,6 +104,12 @@ const descriptionStyle = css({
   fontSize: "14px",
   fontWeight: 500,
   color: "#4B4B4B",
+});
+
+const postTagsStyle = css({
+  display: "flex",
+  gap: "4px",
+  justifyContent: "end",
 });
 
 const dateWrapperStyle = css({
