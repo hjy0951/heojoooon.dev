@@ -1,0 +1,201 @@
+---
+slug: blog-1
+title: "블로그 제작기 1: NextJS blog-starter"
+description: "블로그를 만든 이유, 개발 환경 등등"
+tags: ["blog"]
+createdAt: "2025.03.23"
+---
+
+[NextJS 공식 문서](https://nextjs.org/)에는 NextJS를 활용해서 만든 [여러 예시](https://github.com/vercel/next.js/tree/canary/examples)들을 제공한다.
+그중에서 [blog-starter](https://next-blog-starter.vercel.app/)는 NextJS로 만든 간단한 블로그 예시이다. ([GitHub](https://github.com/vercel/next.js/tree/canary/examples/blog-starter))
+따라서 이를 참고하여 내 블로그를 직접 만들어보고자 한다.
+
+### 왜 만들까?
+
+velog나 tstory와 같이 템플릿을 제공하는 여러 플랫폼이 존재하지만, 내가 마음대로 블로그를 만들어보고 싶었다.
+
+또 매번 이슈나 개발 기록을 글로 남기지 않고 노션에 기록을 하다보니, 여러가지 기록들이 쌓이면서 필요한 자료를 찾을때 시간이 오래 걸리게 되었다.
+
+그리고, 나 혼자만 알 수 있게 간단하게 혹은 정리하지 않고 기록을 하다보니 면접이나 다른 사람들에게 설명을 할 때 아는 내용이지만 논리적으로 말하지 못하는 경우가 많이 발생하였다.
+
+따라서 이번 기회를 통해 지속적으로 블로그를 관리하며 원하는 기술도 사용해보고 기능들도 추가해보며 나만의 토이 프로젝트로서 진행해보고자 직접 만드는 것을 계획하게 되었다.
+
+### 개발 환경
+
+토이프로젝트로 활용하는 만큼 최신 기술을 사용해보고자 했다.
+
+언어는 `TypeScript`, 그리고 프레임워크는  `Next 15` 기반으로 구현하였다. Metadata를 통해 쉽게 SEO를 적용할 수 있기도 하고, SSR, SSG, ISR 등 다양한 렌더링 방식을 적용할 수 있다. 또 폴더 구조로 페이지 라우팅을 확인할 수 있는 것도 직관적인 방법이라 생각해 선호하는 편이다. 이외에도 이미지 최적화와 같은 여러 기능들을 제공하기 때문에 선택하게 되었다.
+
+추가로 `React 19`에 등장한 **React Compiler** 를 사용해보면서 성능 최적화를 확인해 보려고 한다.
+
+스타일링은 이전 디프만 15기에서 사용했던 zero-runtime css인 `Panda CSS`를 선택했다. 디자이너분들께서 정의해주신 디자인 시스템을 Token이나 Text Style 등으로 편하게 정의해서 활용하기 좋았고, 스타일 병합 함수인 cx를 제공하는 등 개인적으로 편리하게 사용했었기 때문이다. 또한 스타일 코드를 분리하여 관리하는 것을 선호하여 Tailwind CSS는 후보에서 제외하였었다.
+
+구현에 급급해 아직 도구들을 제대로 활용하고 있는 것 같진 않은데, 이후 코드를 정리하고 새 기능들을 추가하며 점차 게시글로 리뷰를 늘려갈 생각이다.
+
+### NextJS blog-starter
+
+이제 베이스가 될 예시 소스 코드를 분석해보았다.
+라우팅 구조는 다음과 같이 매우 간단하다.
+
+- /
+- /posts/[slug]
+
+`/posts/[slug]` 에서 slug에 해당하는 게시글을 가져와 마크다운을 파싱하여 화면에 보여준다.
+
+그럼 게시글은 어떻게 가져올까?
+
+**src** 외부의 **public** 폴더에 정적 파일들을 담아두는 것과 마찬가지로 `posts` 폴더에 작성한 게시글들이 **md** 파일로 존재하고, 이를 lib/api 내에서 `fs`를 활용하여 게시글을 가져오게 된다.
+
+아래는 실질적으로 md 파일을 통해 게시글을 가져오는 `lib` 내부의 `api.ts`의 함수들이다.
+
+```tsx
+export function getPostSlugs() {
+  return fs.readdirSync(postsDirectory);
+}
+
+export function getPostBySlug(slug: string) {
+  const realSlug = slug.replace(/\.md$/, "");
+  const fullPath = join(postsDirectory, `${realSlug}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  return { ...data, slug: realSlug, content } as Post;
+}
+
+export function getAllPosts(): Post[] {
+  const slugs = getPostSlugs();
+  const posts = slugs
+    .map((slug) => getPostBySlug(slug))
+    // sort posts by date in descending order
+    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+  return posts;
+}
+```
+
+함수들의 동작은 다음과 같다.
+
+`getPostsSlugs` 함수를 통해 `posts` 폴더에 존재하는 모든 게시글들의 파일 이름을 불러온다.
+
+`getPostBySlug` 함수에서는 slug를 파라미터로 받아 해당 slug와 일치하는 md 파일을 불러오고, md 파일을 파싱하는 작업이 진행된다. 이때 파싱은 `gray-matter`를 통해 진행된다.
+
+마지막으로 `getAllPosts` 함수는 위의 두 함수를 호출하여 모든 게시글들의 정보를 가져와 날짜순으로 정렬하는 작업이 진행된다.
+
+### 어떻게 활용될까?
+
+먼저, `getAllPosts`를 통해 메인 페이지에서 모든 글들의 썸네일과 날짜, 제목 등의 간단한 정보들을 보여준다.
+
+![blog-starter 1](/post-images/develop/blog-1/1.png)
+
+그리고 위의 게시글들 중 하나를 클릭했을때, `getPostBySlug` 함수를 통해 /posts/[slug]의 경로에서 해당 게시글의 대한 정보를 파싱하여 게시글 정보와 본문을 보여준다.
+
+![blog-starter 2](/post-images/develop/blog-1/2.png)
+
+### 이렇게 만들어보자.
+
+일반적으로 블로그들을 돌아다니면서 **태그나 카테고리**에 대한 사용성이 좋다고 느껴졌다. 모든 글이 뭉탱이로 있는 것보다 내가 원하는 정보를 빠르게 찾는데 용이하였기 때문이다.
+
+그리고 각 태그 별로 **글이 몇개 존재하는지** 함께 보여주면 블로그 주인분께서 어디에 관심이 많고 또 집중하고 계신지 먼저 은근히 파악이 되어 좋았던 것 같다.
+
+그럼 두 기능을 위해 커스텀을 진행해보자.
+
+`blog-starter`와 달리, posts 폴더 내부에 글들이 바로 존재하는 것이 아니라 **섹션**으로 구분하고, 그 하위에 게시글 파일들이 존재하도록 하였다. 그리고 이후 키워드 태그를 통해 게시글을 종류별로 나누어 볼 수 있도록 하려고 한다.
+
+따라서 먼저, section을 `fs`의 readdir을 통해 간단히 불러올 수 있도록 구현하고, `getPostSlugsBySection` 함수를 통해 간단히 섹션 내의 모든 게시글들을 불러올 수 있다.
+
+```tsx
+function readDir(path: string) {
+  return fs.readdirSync(path).filter((fileName) => fileName !== ".DS_Store");
+}
+
+export function getSections() {
+  return readDir(postsDirectory);
+}
+
+export function getPostSlugsBySection(section: string) {
+  const dirPath = join(postsDirectory, section);
+  const slugs = readDir(dirPath).map((slug) => `${section}/${slug}`);
+  return slugs;
+}
+```
+
+그리고 이후 게시글의 `slug`, 즉, 파일 이름을 파라미터로 해당 mdx 파일을 파싱하여 게시글 정보를 가져오는 함수를 작성하였다.
+
+```tsx
+export function getPostBySlug(slug: string) {
+  const realSlug = slug.replace(/\.mdx$/, "");
+  const fullPath = join(postsDirectory, `${realSlug}.mdx`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  return { ...data, slug: realSlug, content } as Post;
+}
+```
+
+`matter` 함수로 mdx 파일을 분석하여 게시글 데이터를 생성한 후, 리턴해준다.
+
+```text
+/* Before */
+---
+slug: Blog-Start
+title: "블로그 시작!"
+description: "이제 글쓰기를 곁들인..."
+tags: ["life", "essay"]
+createdAt: "2025.02.22"
+---
+...
+
+/* After */
+{
+	slug: "Blog-Start",
+	title: "블로그 시작!",
+	description: "이제 글쓰기를 곁들인...",
+  tags: ["life", "essay"],
+  createdAt: "2025.02.22",
+  content: 본문 내용
+}
+```
+
+그 다음, 파싱된 데이터의 **tags** 속성으로 각 태그들의 게시물 개수를 카운트하는 기능을 구현하였다.
+
+<CallOut type="warn">Mac의 경우 `.DS_Store` 파일로 인해 에러가 발생할 수 있으니 유의하자</CallOut>
+
+마찬가지로 위에서 파싱된 데이터를 가지고 게시글 페이지를 구현하였다.
+
+본문은  `next-mdx-remote` 라이브러리를 활용하여 본문이 마크다운 형식으로 나타나게 하였다. 이 라이브러리가 좋았던 것이 components에 원하는 컴포넌트를 추가하여 mdx 파일 내에서 사용할 수 있고, 변환되는 컴포넌트도 커스텀이 가능하였다.
+
+```tsx
+const PostBody = ({ post }) => {
+  /* ... */
+  return (
+      <MDXRemote
+        source={post.content}
+        components={{
+          code: Code,
+          blockquote: BlockQuote,
+          img: Image,
+          a: CustomLink,
+          CallOut,
+        }}
+        options={mdxOptions}
+      />
+  )
+}
+```
+
+mdxOptions로는 아래와 같은 라이브러리들을 사용하였다.
+
+- remark
+    - remarkGfm :  Github Flavored Markdown로 GitHub 맛 마크다운 사용
+    - remarkA11yEmoji : 마크다운을 HTML으로 변환할 떄 이모티콘 최적화 적용
+    - remarkBreaks : new line 한번으로 줄바꿈이 가능
+- rehype
+    - rehypeSlug : h1 ~ h6, heading에 id를 추가
+    - rehypePrettyCode : 코드 블록 커스텀
+
+<br/>
+
+`rehypeSlug`는 TOC 구현에 유용하게 사용되어 다음 **블로그 제작기 2편**에서 등장할 예정이다.
+그리고 `rehypePrettyCode`… 이 친구 커스텀하다 시간을 다 쓴 것 같다. 이 친구도 글로 기록해볼 예정이다…
+
+이렇게 간단하게 첫 구현을 끝냈었고, 이후 TOC, Giscus를 통한 댓글 기능, 마크다운 컴포넌트 추가 등 여러 기능을 추가하였다.
+이 또한 글로 남기고 주기적으로 계속 유지보수, 새로운 기능을 추가를 하면서 기록해보려고 한다.
