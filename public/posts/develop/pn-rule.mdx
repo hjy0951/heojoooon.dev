@@ -1,0 +1,141 @@
+---
+slug: pn-rule
+title: "Pn룰 도입기"
+description: "뱅크샐러드의 코드 리뷰 문화인 Pn룰을 도입해보았습니다."
+tags: ["code-review", "github-actions"]
+createdAt: "2025.03.29"
+---
+
+디프만 16기 2주차에 “디프콘”이라는 이름으로 디프만 첫 컨퍼런스가 열렸었다.
+링크드인이나 유튜브 등에서만 뵙던 하조은님, 인프랩 CTO 향로님 등등 유명하신 분들이 참여해주시기도 하였고, 운영진분들 뿐만 아니라 연사님들께서도 정말 준비를 많이 해오셔서 더욱 유익한 세션이 되었다.
+
+이때 하조은님께서 뱅크샐러드의 개발 문화를 간단히 소개해주셨는데, 그중 인상 깊었던 것이 바로 코드 리뷰에 적용된 [“Pn룰”](https://blog.banksalad.com/tech/banksalad-code-review-culture/)이였다.
+
+### Pn룰이란 🤔
+
+일반적으로 상대방과 대화를 할 때 ‘말’이라는 언어적인 요소 뿐만 아니라 ‘몸짓’, ‘표정’과 같은 **비언어적 요소**도 함께 활용된다.
+
+하지만 코드 리뷰에서는 글로만 의견을 전달하기 때문에 전달력이 부족하고 의도를 잘못 파악하는 오해 등이 생길 수 있다.
+따라서 뱅크샐러드에서는 이러한 **커뮤니케이션 비용**을 줄이기 위해 해당 룰을 적용하였다고 한다.
+
+따라서 Pn룰은 코드 리뷰에서 원활한 소통을 돕기 위해 비언어적 요소를 대신하여 **“의견의 강도를 표현하는 장치”** 라고 할 수 있다.
+
+뱅크샐러드에서는 Pn을 **5가지 케이스**로 정리하여 활용하고 있다.
+
+- `P1`: 꼭 반영해주세요 (Request changes)
+- `P2`: 적극적으로 고려해주세요 (Request changes)
+- `P3`: 웬만하면 반영해 주세요 (Comment)
+- `P4`: 반영해도 좋고 넘어가도 좋습니다 (Approve)
+- `P5`: 그냥 사소한 의견입니다 (Approve)
+
+<br/>
+이 외에도 뱅크샐러드는 매일 생겨나는 PR들 속에서 리뷰 우선 순위를 판단하기 위한 **“D-n 룰”** 도 함께 사용하고 있다.
+
+### 프로젝트 적용기
+
+디프콘 이후, 프로젝트 환경 설정을 하면서 팀원들과 여러가지 그라운드룰을 정하기 시작하였다.
+
+코딩 컨벤션, PR 컨벤션 등을 정하고 코드 리뷰에 대해 이야기하던 중, 프론트엔드 파트장인 은식님께서 먼저 Pn룰을 적용해보면 어떨까 제안해주셨다.
+
+나 또한 Pn 룰에 대해 인상 깊게 보았기 때문에 동의하였고, 다른 팀원 분들도 동의하여 Pn룰을 코드 리뷰룰로서 정하였다.
+
+뱅크샐러드는 5가지로 단계를 나누었지만, 사이드 프로젝트를 진행하는 만큼 약간의 간소화를 진행하여 3가지로 단계를 나누어 암묵적으로 다음과 같은 의미로 적용하였다.
+
+- `P1`: 적극적으로 고려해주세요 (Request changes)
+- `P2`: 웬만하면 반영해 주세요 (Comment)
+- `P3`: 반영해도 좋고 넘어가도 좋습니다 (Approve)
+
+<br/>
+아래는 코드 리뷰에 반영된 모습이다.
+
+![](/post-images/develop/pn-rule/1.png)
+![](/post-images/develop/pn-rule/2.png)
+
+### 느낀 점 💡
+
+먼저, 과장하자면 JavaScript를 사용하다 TypeScript를 사용한 느낌 정도로 좋았다.
+
+기본적으로 `P3`에 대해서는 그냥 넘어가도 되어, 가볍게 보고 의견을 남기거나 그냥 넘어가도 상처(?)를 받지 않았다.
+
+그리고 `P1`, `P2`에 대해서는 리뷰 작성자의 의견 강도가 어느 정도 반영되어 있어서 PR 작성자가 코드를 작성한 의도를 말하고 이에 대한 토론으로 이루어지는 경우가 많아 의견을 좀더 편하고 수월하게 남길 수 있었던 것 같다.
+
+또 이전 프로젝트들을 진행하면서 팀원들이 코드 리뷰를 남겨주시면 바로 반영해달라는 것인지 헷갈리는 리뷰들도 종종 존재했었다.
+
+이번 Pn룰을 적용하고 나서는 “이런 방법도 있습니다~”와 같이 더 좋은 방안을 제시한 것인지, 아니면 잘못을 바로 잡아준 것인지 등 상대방이 어떤 의도로 코드 리뷰를 작성했는지 **의도 파악**에 도움이 되었던 것 같다.
+
+마지막으로는 Pn룰이 **리뷰 우선 순위**로서 작용하여 팀원들과 더욱 빠르고 원활하게 소통할 수 있었다고 생각한다.
+
+### 라벨로 한눈에 보면 좋지 않을까?
+
+리뷰 우선 순위로도 작용하는 Pn룰을 GitHub PR 리스트 화면에서 **“라벨”로 어떤 리뷰가 달렸는지 한눈에 파악**하면 더 좋지 않을까 생각하였다.
+
+이전 디프만 15기에서 [Swimie 프로젝트](https://github.com/depromeet/Swimie-Web/actions)를 진행하며 GitHub Actions를 이용해 PR 작성자, 라벨링, 빌드 테스트 등을 자동화했던 경험을 되살려 라벨링 자동화를 작성해보기로 하였다.
+
+`actions/github-script@v6` 라이브러리를 활용하여 JavaScript로 작성하였다.
+
+그리고 PR 자체에 코멘트를 남기는 것은 `issue_comment`로, File changed에서 코드에 리뷰를 남기는 것은 `pull_request_review_comment`로 분류되어 이 2개에 대해 모두 Pn룰을 활용한 리뷰가 있는지 확인하도록 하였다.
+
+```yaml
+name: Label PR Based on Comments
+
+on:
+  issue_comment:
+    types: [created, edited]
+  pull_request_review_comment:
+    types: [created, edited]
+
+jobs:
+  label-pr:
+    name: PR Comment Label
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add labels based on comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.ACTIONS_TOKEN }}
+          script: |
+            const comment = context.payload.comment.body;
+            const issueNumber = context.payload.issue?.number || context.payload.pull_request.number;
+            const repo = context.repo;
+
+            const keywords = ["p1", "p2", "p3"];
+            let labelsToAdd = [];
+
+            keywords.forEach(keyword => {
+              if (comment.includes(keyword)) {
+                labelsToAdd.push(keyword);
+              }
+            });
+
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: repo.owner,
+                repo: repo.repo,
+                issue_number: issueNumber,
+                labels: labelsToAdd
+              });
+            }
+```
+
+아쉽게도 코멘트 수정에 대한 대응은 처리하지 못하였다.
+수정이 발생하면 코멘트 전체를 다시 보는 것이 아닌, 수정이 발생한 코멘트만을 다시 검증하기 때문이다.
+그래도 의견 강도가 변화할 케이스는 크지 않다고 판단하여 더이상의 대응은 처리하지 않기로 하였다.
+
+![](/post-images/develop/pn-rule/3.png)
+
+workflow를 적용한 결과, 위처럼 PR에 코멘트를 남기면 아래와 같이 라벨링이 자동으로 달리게 되었다.
+이를 통해 리뷰를 확인하기 전, 어떤 종류의 의견들이 달렸는지 미리 파악이 가능하였다.
+
+### 마무리
+
+사실 우리팀의 진척도가 상대적으로 낮아서 그런지 중반부터는 게더타운이나 카카오톡에서 바로 문의를 하고 대응하여 리뷰를 많이 남기지는 못하여 라벨이 많이 달리지는 못하였다.
+
+하지만 최대한 리뷰를 남기려고 하고 있고, 사용할 때에는 정말 만족도가 컸어서 안정화가 된다면 계속해서 활용하고 싶은 룰이였다.
+
+처음 디프만에 들어왔을 때에는 정말 주어진 롤에 대해 개발하기만 급급했다.
+
+그런데 요즘에는 팀원들이 불편해하는 부분에 대해서도 고민하고 개발하며 실제로 개선되는 모습을 보면서 뿌듯함을 느끼는 것 같다.
+
+디프만 16기가 얼마 안남았는데, 팀원들과 함께 성공적으로 잘 마무리했으면 좋겠다!
+
+<CallOut type="check">썸네일은 요즘 유행하는 ChatGPT를 통해 지브리 스타일로 만들어달라한 이미지입니다 :)</CallOut>
