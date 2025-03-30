@@ -1,5 +1,5 @@
 import { css, cva } from "#/styled-system/css";
-import { covertTagName, TagType } from "@/lib/utils";
+import { convertTagName, TagType } from "@/lib/utils";
 import Link from "next/link";
 
 interface TagsProps {
@@ -32,7 +32,7 @@ export const Tags = ({
             variant: currentTag === tagName ? "selected" : "unselected",
           })}
         >
-          <p className={tagNameStyle}>{covertTagName(tagName as TagType)}</p>
+          <p className={tagNameStyle}>{convertTagName(tagName as TagType)}</p>
           <span className={postCountStyle}>({count})</span>
         </Link>
       ))}

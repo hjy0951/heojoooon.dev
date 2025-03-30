@@ -19,7 +19,7 @@ const tagMap = {
 
 export type TagType = keyof typeof tagMap;
 
-export const covertTagName = (slug: TagType): string => {
+export const convertTagName = (slug: TagType): string => {
   return tagMap[slug] ?? slug;
 };
 

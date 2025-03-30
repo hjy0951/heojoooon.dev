@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarIcon } from "../icons";
 import { Badge } from "./badge";
-import { covertTagName, TagType } from "@/lib/utils";
+import { convertTagName, TagType } from "@/lib/utils";
 
 interface PostListItemProps {
   title: string;
@@ -45,7 +45,7 @@ export const PostListItem = ({
         <div>
           <div className={postTagsStyle}>
             {tags.map((tag) => (
-              <Badge key={tag}>{covertTagName(tag as TagType)}</Badge>
+              <Badge key={tag}>{convertTagName(tag as TagType)}</Badge>
             ))}
           </div>
 

@@ -1,6 +1,6 @@
 import { css, cx } from "#/styled-system/css";
 import { Post } from "@/lib/apiv2";
-import { calculateTimeToRead, covertTagName, TagType } from "@/lib/utils";
+import { calculateTimeToRead, convertTagName, TagType } from "@/lib/utils";
 import { yeongdeokSea } from "@/styles/font";
 import { CustomLink } from "../atom";
 
@@ -24,7 +24,7 @@ export const Header = ({ section, post }: HeaderProps) => {
         {post.tags.map((tag) => (
           <h3 key={`${tag}-tag`}>
             <CustomLink href={`/${section}/tag/${tag}`} currentWindow>
-              #{covertTagName(tag as TagType)}
+              #{convertTagName(tag as TagType)}
             </CustomLink>
           </h3>
         ))}
