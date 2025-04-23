@@ -1,0 +1,337 @@
+---
+slug: common-components
+title: "공통 컴포넌트 제작기 (with. vanilla-extract)"
+description: "디자인 시안을 바탕으로 공통 컴포넌트를 만들어보았어요."
+tags: ["react"]
+createdAt: "2025.04.23"
+---
+
+디프만 16기를 진행하며 처음으로 프로젝트에 monorepo를 도입해보았다.
+이때 **디자인 시스템이 적용된 공통 컴포넌트를 하나의 패키지로 정의**하고, 관리하면 어떨까라는 생각이 들었다.
+따라서  `turborepo`를 통해 프로젝트를 생성했을때, 기본 패키지로 생성되는 UI 패키지를 활용하기로 하였다.
+
+우리 팀은 monorepo 뿐만 아니라 NextJS 공식 문서에서 추천하는 스타일링 도구중 하나인 vanilla-extract를 채택하였다.
+
+zero-runtime CSS-in-JS이기 때문에 빌드 타임에 css 파일을 생성하여 번들 크기를 줄일 수 있다.
+또한 `recipe` 함수를 통해 CVA와 같은 형태로 정해진 스타일을 정의하기 편리하다.
+
+하나의 장점이자 단점은 꼭 `[filename].css.ts` 파일을 만들어 스타일 코드를 작성해야 한다는 점이다.
+스타일링 파일을 명확하게 분리할 수 있다는 장점이 있지만, 간단한 스타일 코드의 경우에는 새로운 파일을 만들어 스타일을 적용하기 보다는 인라인 css 코드에 손이 더 많이 간다는 단점이 있다.
+
+## vanilla-extract
+
+간단히 vanilla-extract의 사용법을 살펴보자면 다음과 같다.
+
+먼저, vanilla-extract는 아래와 같이 `style` 함수를 통해 간단히 스타일링이 가능하다.
+그리고 `style` 함수 내에 배열을 사용하여 여러 스타일들을 병합하는 것 또한 가능하다.
+
+```tsx
+export const container = style({
+  width: "100%",
+  height: "100%",
+  backgroundColor: "#ffffff",
+});
+
+export const mergedContainer = style([container, ...]);
+```
+
+그리고 `recipe` 함수를 통해 다양한 속성을 주입한 스타일링 정의가 가능하다.
+
+```tsx
+export const wrapperRecipe = recipe({
+  base: {
+    borderRadius: "100px",
+    color: "white",
+  },
+  variants: {
+    size: {
+      sm: {
+        padding: "2px 6px",
+        minWidth: "20px",
+        minHeight: "20px",
+      },
+      md: {
+        padding: "4px 12px",
+        minWidth: "40px",
+        minHeight: "40px",
+      },
+    },
+  },
+  defaultVariants: {
+    size: "sm",
+  },
+});
+```
+
+또한 `recipe`의 속성들을 전달하기 위해서 사용하는 곳에서 어떤 속성들이 존재하고, 이에 대한 속성을 props나 함수를 통해 전달받는 경우가 발생할 것이다.
+
+vailla-extract는 이러한 경우를 대비한 것인지 `RecipeVariants` type을 제공한다.
+RecipeVariants의 제네릭으로 recipe로 생성한 스타일 객체의 모양을 넣어주면 variants만 추출하여 타입으로 정의할 수 있다.
+
+```tsx
+export type ButtonVariants = RecipeVariants<typeof buttonReceipe>;
+```
+
+## 공통 컴포넌트 만들기
+
+위 내용을 숙지하고 본격적인 서비스 개발 전, 개발 환경을 세팅하며 팀원들과 공통 컴포넌트들을 미리 정의해두기로 하였다.
+
+하지만 그 전에 앞서, 아래와 같이 Figma에 디자이너분들께서 작성해주신 기본적인 **색상**과 **텍스트 스타일**에 대한 정의가 이루어지면 좋을 것 같다고 판단하였다.
+
+![스크린샷 2025-04-17 오후 4.19.54.png](attachment:39b3a8ef-d038-4928-bbf8-719f017cdfee:스크린샷_2025-04-17_오후_4.19.54.png)
+
+![스크린샷 2025-04-17 오후 3.38.23.png](attachment:fc58b7c3-6e18-4fc5-899e-95fcd240ead6:373f9a8c-c06f-45a3-a7bb-31da247102b2.png)
+
+따라서 이 또한 UI 패키지 내에서 한곳에 모아 관리하면 좋을 것 같다는 생각에 디자인 테마로 정의하여 제공하도록 구현하였다.
+
+색상의 경우, 아래와 같이 사용 용도에 따라 객체로 분류하고, 이를 병합하여 한번에 내보내 이후 유지 보수에 용이하도록 정의해두었다
+
+```tsx
+const scale = {
+  /* ... */
+};
+
+const token = {
+  /* ... */
+}
+
+const semantic = {
+  /* ... */
+}
+
+export const colors = { ...scale, ...token, ...semantic };.
+```
+
+그리고 텍스트 스타일의 경우, 즉시 가져다 적용이 되어야 했기에 아래와 같이 `recipe`로 정의하여 내보내도록 하였다.
+
+```tsx
+export const textRecipe = recipe({
+  base: {},
+  variants: {
+    variant: {
+      heading1: {
+        fontFamily: "NanumSquareRoundOTF",
+        fontSize: "32px",
+        fontStyle: "normal",
+        fontWeight: 800,
+        lineHeight: "100%",
+        letterSpacing: "-0.16px",
+      },
+      heading2: {
+        fontFamily: "NanumSquareRoundOTF",
+        fontSize: "26px",
+        fontStyle: "normal",
+        fontWeight: 800,
+        lineHeight: "100%",
+        letterSpacing: "-0.13px",
+      },
+      /* ... */
+    },
+  },
+});
+```
+
+### 버튼 컴포넌트
+
+컴포넌트를 구현하며 radix UI나 shadcn UI와 같은 라이브러리를 살펴보았다.
+
+해당 라이브러리들에서는 일반적으로 버튼의 스타일 타입인 `variant`, 그리고  `size`,  `radius`와 같은 속성들을 제공하고 있었다.
+
+우리 팀의 버튼들은 타입(variant) 내에 따라 색상이 달라졌고, radius 값과 높이는 고정이었기에 `variant`과 `width`, `padding` 정도만 속성으로 전달하였다.
+
+그리고 혹시나 사용할 일이 있을 수 있는 `ref` 또한 React 19에서 forwardRef가 deprecated 되었기 때문에 그대로 전달해주었다.
+
+```tsx
+import { ButtonHTMLAttributes, PropsWithChildren, RefObject } from "react";
+import { buttonReceipe, ButtonVariants } from "./style.css";
+
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+  ButtonVariants & { ref?: RefObject<HTMLButtonElement | null> };
+
+export const Button = ({
+  variant,
+  width,
+  padding,
+  ref,
+  children,
+  ...props
+}: PropsWithChildren<ButtonProps>) => {
+  return (
+    <button
+      className={buttonReceipe({
+        variant,
+        width,
+        padding,
+      })}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+```tsx
+import { recipe, RecipeVariants } from "@vanilla-extract/recipes";
+import { style } from "@vanilla-extract/css";
+import { theme } from "../../tokens";
+
+export type ButtonVariants = RecipeVariants<typeof buttonReceipe>;
+
+const buttonReset = style({
+  cursor: "pointer",
+  fontFamily: "inherit",
+  border: 0,
+});
+
+export const buttonReceipe = recipe({
+  base: [
+    buttonReset,
+    {
+      color: "white",
+      borderRadius: "100px",
+      boxSizing: "border-box",
+
+      ":disabled": {
+        backgroundColor: theme.colors.gray20,
+        cursor: "not-allowed",
+      },
+    },
+  ],
+
+  variants: {
+    variant: {
+      primary: {
+        backgroundColor: theme.colors.gray95,
+      },
+      secondary: {
+        backgroundColor: theme.colors.orange40,
+      },
+    },
+
+    width: {
+      full: { width: "100%" },
+      fit: { width: "fit-content" },
+      auto: { width: "auto" },
+    },
+
+    padding: {
+      none: { padding: 0 },
+      sm: { padding: "16px" },
+      md: { padding: "18px" },
+    },
+  },
+
+  defaultVariants: {
+    variant: "primary",
+    width: "full",
+    padding: "md",
+  },
+});
+```
+
+### 텍스트 컴포넌트
+
+가장 많은 고민을 한 컴포넌트가 텍스트 컴포넌트였던 것 같다.
+
+텍스트를 나타내기 위해 span과 p 태그를 사용하는데 용도에 따라 다르게 사용하고 있었기에 하나의 컴포넌트에 이 둘에 대한 대응을 하고 싶었다.
+
+두개의 컴포넌트를 만들까도 싶었지만, 내부 코드가 정말 비슷할 것이기 때문에 비효율적이라 생각하였고, Radix UI Text 컴포넌트의 내부 코드를 살펴보며 해답을 찾을 수 있었다.
+
+아래는 Radix UI Text 컴포넌트의 내부 코드이다.
+
+```tsx
+const Text = React.forwardRef<TextElement, TextProps>((props, forwardedRef) => {
+  const {
+    children,
+    className,
+    asChild,
+    as: Tag = 'span',
+    color,
+    ...textProps
+  } = extractProps(props, textPropDefs, marginPropDefs);
+  return (
+    <Slot.Root
+      data-accent-color={color}
+      {...textProps}
+      ref={forwardedRef}
+      className={classNames('rt-Text', className)}
+    >
+      {asChild ? children : <Tag>{children}</Tag>}
+    </Slot.Root>
+  );
+});
+```
+
+`as` 속성을 통해 어떤 태그로 활용할지 전달 받아 이를 통해 `HTML`을 구성하는 처음 보는 방식이였다.
+
+따라서 이와 동일하게 활용하여 텍스트 컴포넌트를 구현할 수 있었다.
+
+일반적으로 문단을 의미하는 `p`보다는 `span`이 활용도가 높을 것 같다는 생각에 기본 태그로 `span`을 지정하였다.
+
+```tsx
+import { HTMLAttributes, PropsWithChildren, Ref } from "react";
+import { textRecipe } from "./style.css";
+import { classMerge } from "../../utils";
+
+type TextElement = "span" | "p";
+
+type TextProps = HTMLAttributes<HTMLParagraphElement> &
+  TextVariants & {
+    color?: string;
+    as?: TextElement;
+    ref?: Ref<HTMLParagraphElement>;
+  };
+
+export const Text = ({
+  as: Tag = "span",
+  children,
+  ref,
+  className,
+  variant,
+  color,
+  style,
+  ...props
+}: PropsWithChildren<TextProps>) => {
+  return (
+    <Tag
+      className={textRecipe({ variant })}
+      ref={ref}
+      style={{ color, ...style }}
+      {...props}
+    >
+      {children}
+    </Tag>
+  );
+};
+
+```
+
+## 외부에서 스타일을 병합할 수는 없을까?
+
+PandaCSS를 활요할 때 좋았던 기능중 하나가 cx 함수를 통해 스타일 병합 기능을 제공했던 것이다.
+
+vanilla-extract에서도 `style` 함수의 파라미터로 배열을 전달해 들어있는 스타일들을 병합할 수 있지만, 이는 `css.ts` 파일 내부에서만 가능한 일이다.
+
+따라서 개발을 진행하며 외부에서도 병합할 수 있으면 좋겠다는 생각에 `classMerge` 함수를 만들었다.
+
+기본적으로 vanilla-extract는 빌드타임에 css.ts 파일을 통해 특정 키를 이름으로 갖는 css 파일을 생성한다.
+그리고 파일 이름에 포함된 키와 HTML 태그 내의 class 속성 내의 클래스 이름과 매칭하여 스타일을 적용한다.
+
+그렇다면 단순히 class 속성에 다른 스타일의 키 값만을 포함시켜주면 해당 태그에도 스타일이 적용되는 것이기 떄문에 아래와 같이 간단하게 스타일 병합 함수를 구현할 수 있었다.
+
+```tsx
+export const classMerge = (...args: (string | undefined)[]) =>
+  args.filter(Boolean).join(" ");
+```
+
+## 마무리
+
+이후 나머지 공통 컴포넌트들도 이러한 틀을 기반으로 제작되었다.
+
+이전까지는 다른 UI 라이브러리들을 찾아볼 생각을 못했었는데, 이미 잘만들어둔 라이브러리들이다보니 공통 컴포넌트들을 구현하며 얻을 수 있는 인사이트들이 있었던 것 같다.
+
+위에서 말한 `as` 속성을 통한 HTML 태그 활용 패턴 뿐만 아니라, variants 내부 속성들이나 컴포넌트의 네이밍이 어려울 때, 찾아보면 적절한 네이밍도 존재했다.
+
+따라서 앞으로도 마크업을 진행할 일이 생긴다면 자주 찾아보며 어떻게 사용성 있는 라이브러리를 만들려고 노력했는지 철학을 이해하려고 하며 보게 될 것 같다.
