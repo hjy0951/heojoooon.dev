@@ -15,6 +15,7 @@ const tagMap = {
   essay: "에세이",
   "github-actions": "GitHub-Actions",
   "code-review": "코드 리뷰",
+  blog: "블로그 제작기",
 } as const;
 
 export type TagType = keyof typeof tagMap;
