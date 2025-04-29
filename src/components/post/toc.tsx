@@ -24,14 +24,20 @@ export const TOC = ({ data }: Props) => {
           <>
             <p className={cx(suite.className, titleStyle)}>On this page</p>
             <ul className={cx(suite.className, contentListStyle)}>
-              {data.map((item) => {
+              {data.map((item, index) => {
                 return (
                   <li
                     key={item.link}
-                    className={contentRecipe({
-                      variant:
-                        activeHeadingId === item.link ? "active" : "inactive",
-                    })}
+                    className={cx(
+                      contentRecipe({
+                        variant:
+                          activeHeadingId === item.link ? "active" : "inactive",
+                      }),
+                      liAnimation
+                    )}
+                    style={{
+                      animationDelay: `${index * (1 + item.indentCount) * 0.02}s`,
+                    }}
                   >
                     <Link
                       href={item.link}
@@ -77,7 +83,10 @@ const contentRecipe = cva({
   base: {
     mt: "4px",
 
-    _hover: { textDecoration: "underline", textUnderlineOffset: "4px" },
+    _hover: {
+      textDecoration: "underline",
+      textUnderlineOffset: "4px",
+    },
   },
   variants: {
     variant: {
@@ -96,4 +105,9 @@ const indentRecipe = cva({
       "2": { ml: "32px" },
     },
   },
+});
+
+const liAnimation = css({
+  animation: "slideInFromRight 0.1s ease-out forwards",
+  opacity: 0,
 });
