@@ -1,8 +1,8 @@
 import { css, cx } from "#/styled-system/css";
 import { Post } from "@/lib/apiv2";
 import { calculateTimeToRead, convertTagName, TagType } from "@/lib/utils";
-import { yeongdeokSea } from "@/styles/font";
-import { CustomLink } from "../atom";
+import { suite, yeongdeokSea } from "@/styles/font";
+import { CustomLink } from "../mdx-components";
 
 interface HeaderProps {
   section: string;
@@ -12,10 +12,10 @@ interface HeaderProps {
 export const Header = ({ section, post }: HeaderProps) => {
   const timeToRead = calculateTimeToRead(post.content);
   return (
-    <header className={cx(postDescriptionStyle, `${yeongdeokSea.className}`)}>
+    <header className={cx(postDescriptionStyle, `${suite.className}`)}>
       <h1 className={postTitleStyle}>{post.title}</h1>
 
-      <div className={postInfoStyle}>
+      <div className={cx(postInfoStyle, `${yeongdeokSea.className}`)}>
         <h3>{post.createdAt},</h3>
         <h3>{timeToRead} min.</h3>
       </div>
@@ -41,7 +41,7 @@ const postDescriptionStyle = css({
 
 const postTitleStyle = css({
   fontSize: "40px",
-  fontWeight: "600",
+  fontWeight: "800",
 });
 
 const postInfoStyle = css({
