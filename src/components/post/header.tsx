@@ -2,7 +2,7 @@ import { css, cx } from "#/styled-system/css";
 import { Post } from "@/lib/apiv2";
 import { calculateTimeToRead, convertTagName, TagType } from "@/lib/utils";
 import { yeongdeokSea } from "@/styles/font";
-import { CustomLink } from "../atom";
+import { CustomLink } from "../mdx-components";
 
 interface HeaderProps {
   section: string;
