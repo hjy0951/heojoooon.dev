@@ -1,6 +1,6 @@
 import { css } from "#/styled-system/css";
 import { ProfileCard } from "@/components/layout";
-import { Partition, PostList } from "@/components/post";
+import { Partition, PostList } from "@/components/post-list";
 import { getAllPosts } from "@/lib/apiv2";
 
 const MainPage = () => {

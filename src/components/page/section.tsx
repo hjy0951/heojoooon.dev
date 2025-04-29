@@ -1,7 +1,7 @@
 import { css } from "#/styled-system/css";
 import { getPostsAndTagsBySection } from "@/lib/apiv2";
 import { ProfileCard } from "../layout";
-import { PostList, Tags } from "../post";
+import { PostList, Tags } from "../post-list";
 
 interface SectionPageProps {
   section: string;
