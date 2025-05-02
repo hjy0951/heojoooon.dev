@@ -34,53 +34,59 @@ const SNSs = [
   },
 ];
 
-export const ProfileCard = () => {
+interface ProfileCardProps {
+  isViewName?: boolean;
+}
+
+export const ProfileCard = ({ isViewName = true }: ProfileCardProps) => {
   return (
     <div className={containerStyle}>
       <div className={imageWrapperStyle}>
-        <div
-          className={cx(
-            pretendard.className,
-            css({
-              zIndex: 100,
-              position: "absolute",
-              top: "8%",
-              left: "33%",
-              display: "flex",
-              color: "#fdfdfd",
-              flexDir: "column",
-              fontSize: "14px",
-            })
-          )}
-        >
+        {isViewName && (
           <div
-            className={css({
-              display: "flex",
-              gap: "4px",
-              alignItems: "center",
-            })}
+            className={cx(
+              pretendard.className,
+              css({
+                zIndex: 100,
+                position: "absolute",
+                top: "8%",
+                left: "33%",
+                display: "flex",
+                color: "#fdfdfd",
+                flexDir: "column",
+                fontSize: "14px",
+              })
+            )}
           >
             <div
               className={css({
-                p: "1px 4px",
                 display: "flex",
-                gap: "2px",
+                gap: "4px",
+                alignItems: "center",
               })}
             >
-              <StarIcon />
-              <StarIcon />
-              <StarIcon className={flickerAnimation} />
+              <div
+                className={css({
+                  p: "1px 4px",
+                  display: "flex",
+                  gap: "2px",
+                })}
+              >
+                <StarIcon />
+                <StarIcon />
+                <StarIcon className={flickerAnimation} />
+              </div>
             </div>
-          </div>
 
-          <p
-            className={css({
-              textAlign: "center",
-            })}
-          >
-            허준영.
-          </p>
-        </div>
+            <p
+              className={css({
+                textAlign: "center",
+              })}
+            >
+              허준영.
+            </p>
+          </div>
+        )}
 
         <Image
           className={profileImageStyle}
