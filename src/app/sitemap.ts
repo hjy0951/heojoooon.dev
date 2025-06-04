@@ -1,4 +1,4 @@
-import { getAllPostPathList, getSections } from "@/lib/apiv2";
+import { getAllPosts, getAllTags } from "@/lib/api";
 import type { MetadataRoute } from "next";
 
 /*
@@ -12,13 +12,13 @@ import type { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
   const todayDate = new Date();
   const baseUrl = "https://heojooon.vercel.app";
-  const sections = getSections();
-  const postList = getAllPostPathList();
+  const tagList = getAllTags();
+  const postList = getAllPosts();
 
   return [
     { url: baseUrl, lastModified: todayDate },
-    ...sections.map((section) => ({
-      url: `${baseUrl}/${section}`,
+    ...tagList.map(({ tagName }) => ({
+      url: `${baseUrl}/tag/${tagName}`,
       lastModified: todayDate,
     })),
     ...postList.map((slug) => ({
