@@ -26,7 +26,7 @@ export const MainPage = ({ selectedTag }: MainPageProps) => {
         <PostList posts={allPosts} wide />
       </main>
 
-      <ProfileCard />
+      <ProfileCard isViewName={false} />
     </div>
   );
 };
