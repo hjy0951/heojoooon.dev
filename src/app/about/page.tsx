@@ -33,7 +33,8 @@ const AboutPage = () => {
 export default AboutPage;
 
 const containerStyle = css({
-  margin: "auto",
+  marginX: "auto",
+  marginTop: "96px",
   padding: "32px",
   maxWidth: "800px",
   width: "100%",

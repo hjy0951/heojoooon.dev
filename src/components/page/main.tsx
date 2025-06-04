@@ -1,15 +1,15 @@
 import { css } from "#/styled-system/css";
-import { getPostsAndTagsBySection } from "@/lib/apiv2";
+import { getAllPosts, getAllTags } from "@/lib/api";
 import { ProfileCard } from "../layout";
 import { PostList, Tags } from "../post-list";
 
-interface SectionPageProps {
-  section: string;
+interface MainPageProps {
   selectedTag?: string;
 }
 
-export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
-  const { posts, tagInfo } = getPostsAndTagsBySection(section);
+export const MainPage = ({ selectedTag }: MainPageProps) => {
+  const posts = getAllPosts();
+  const tagInfo = getAllTags();
   const allPosts = selectedTag
     ? posts.filter((post) => post.tags.includes(selectedTag))
     : posts;
@@ -17,25 +17,22 @@ export const SectionPage = ({ section, selectedTag }: SectionPageProps) => {
   return (
     <div className={containerStyle}>
       <Tags
-        section={section}
         tagList={tagInfo}
         selectedTag={selectedTag}
         totalCount={posts.length}
       />
 
       <main className={mainStyle}>
-        {/* <Partition key={section} name={section}> */}
-        <PostList posts={allPosts} targetUrl={`/${section}`} wide />
-        {/* </Partition> */}
+        <PostList posts={allPosts} wide />
       </main>
 
-      <ProfileCard />
+      <ProfileCard isViewName={false} />
     </div>
   );
 };
 
 const containerStyle = css({
-  mt: "40px",
+  mt: "112px",
   display: "flex",
   flexDir: "column",
   alignItems: "center",

@@ -13,7 +13,7 @@ import {
   CallOut,
   Image,
 } from "../mdx-components";
-import { Post } from "@/lib/apiv2";
+import { Post } from "@/lib/api";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
 
 interface BodyProps {

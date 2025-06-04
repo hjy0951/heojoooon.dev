@@ -1,15 +1,14 @@
 import { css, cx } from "#/styled-system/css";
-import { Post } from "@/lib/apiv2";
+import { Post } from "@/lib/api";
 import { calculateTimeToRead, convertTagName, TagType } from "@/lib/utils";
 import { suite, yeongdeokSea } from "@/styles/font";
 import { CustomLink } from "../mdx-components";
 
 interface HeaderProps {
-  section: string;
   post: Post;
 }
 
-export const Header = ({ section, post }: HeaderProps) => {
+export const Header = ({ post }: HeaderProps) => {
   const timeToRead = calculateTimeToRead(post.content);
   return (
     <header className={cx(postDescriptionStyle, `${suite.className}`)}>
@@ -23,7 +22,7 @@ export const Header = ({ section, post }: HeaderProps) => {
       <div className={postTagsStyle}>
         {post.tags.map((tag) => (
           <h3 key={`${tag}-tag`}>
-            <CustomLink href={`/${section}/tag/${tag}`} currentWindow>
+            <CustomLink href={`/tag/${tag}`} currentWindow>
               #{convertTagName(tag as TagType)}
             </CustomLink>
           </h3>

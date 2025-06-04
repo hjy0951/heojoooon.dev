@@ -1,4 +1,4 @@
-import { Post } from "@/lib/apiv2";
+import { Post } from "@/lib/api";
 import { PostListItem } from "./list-item";
 import { css, cx } from "#/styled-system/css";
 import Link from "next/link";

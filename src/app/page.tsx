@@ -1,44 +1,7 @@
-import { css } from "#/styled-system/css";
-import { ProfileCard } from "@/components/layout";
-import { Partition, PostList } from "@/components/post-list";
-import { getAllPosts } from "@/lib/apiv2";
+import { MainPage } from "@/components/page";
 
-const MainPage = () => {
-  const postSections = getAllPosts();
-
-  return (
-    <div className={containerStyle}>
-      <main className={mainStyle}>
-        {postSections.map(({ section, contents }) => (
-          <Partition key={section} name={section}>
-            <PostList posts={contents} targetUrl={`/${section}`} brief />
-          </Partition>
-        ))}
-      </main>
-
-      <ProfileCard />
-    </div>
-  );
+const MainWithTag = () => {
+  return <MainPage />;
 };
 
-export default MainPage;
-
-const containerStyle = css({
-  mt: "40px",
-  display: "flex",
-  flexDir: "column",
-  alignItems: "center",
-  gap: "40px",
-});
-
-const mainStyle = css({
-  margin: "auto",
-  pt: "40px",
-  pb: "80px",
-  maxWidth: "1000px",
-  minWidth: "320px",
-  display: "grid",
-  gap: "60px",
-  gridTemplateColumns: "repeat(1, 1fr)",
-  md: { gridTemplateColumns: "repeat(2, 1fr)" },
-});
+export default MainWithTag;
