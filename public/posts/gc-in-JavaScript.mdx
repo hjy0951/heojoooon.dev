@@ -21,7 +21,7 @@ createdAt: "2024.07.12"
 그럼 **방**에 해당하는 메모리 구조를 살펴보자.
 다음은 JavaScript가 실행되는 엔진중, NodeJS와 크롬에서 사용하는 `V8 Engine`의 메모리 구조이다.
 
-![V8 Engine의 메모리 구조](/post-images/develop/gc-in-JavaScript/1.png)
+![V8 Engine의 메모리 구조](/post-images/gc-in-JavaScript/1.png)
 
 우선, JavaScript는 Call Stack이 하나인 **Single-Thread** 언어이기 때문에 하나의 `Stack`이 보인다.
 
@@ -62,7 +62,7 @@ number, string 등과 같은 **Primitive Type**의 경우, `Stack` 영역에 저
 
 우선, Heap의 구조를 다시 가져와 보자.
 
-![Heap의 구조](/post-images/develop/gc-in-JavaScript/2.png)
+![Heap의 구조](/post-images/gc-in-JavaScript/2.png)
 
 우선, 이렇게 나뉘게 된 배경은 [The Generational Hypothesis](https://www.memorymanagement.org/glossary/g.html#term-generational-hypothesis)라는 가설이다.
 (GPT피셜 **John McCarthy**라는 분이 주장했다고 함!)
@@ -102,11 +102,11 @@ Minor GC에서 살아남은 객체들은 수거 대상들과 분류를 위해 �
 
 이때, To-Space로 옮겨지는 객체들은 포인터가 바뀌며 **연속된 메모리로 이동**되며, 이를 통해 `메모리 단편화`를 방지할 수 있다.
 
-![Minor GC](/post-images/develop/gc-in-JavaScript/3.png)
+![Minor GC](/post-images/gc-in-JavaScript/3.png)
 
 이후, To-Space가 가득차게 되면 Semi Space는 아래 그림과 같이 다음 Minor GC를 실행할 때, 현재 <u>From-Space는 To-Space로, To-Space는 From-Space로 스위칭</u>된다.
 
-![Minor GC](/post-images/develop/gc-in-JavaScript/4.png)
+![Minor GC](/post-images/gc-in-JavaScript/4.png)
 
 만약 New Space에 존재하는 객체가 2번 생존할 경우, 해당 객체들은 Old Space로 옮겨져 `Major GC`의 대상이 된다.
 ([Minor GC를 설명한 자료](https://speakerdeck.com/deepu105/v8-minor-gc))
@@ -140,7 +140,7 @@ Major GC는 `Mark-Sweep-Compact` 알고리즘과 `Tri-Color` 알고리즘을 사
 
 <br/>
 
-![mark-sweep-compact](/post-images/develop/gc-in-JavaScript/8.gif)
+![mark-sweep-compact](/post-images/gc-in-JavaScript/8.gif)
 
 ### Tri-Color 알고리즘
 
@@ -164,9 +164,9 @@ GC Root라는 실행 스택과 전역 객체를 담고 있는 객체의 set부�
 6. 위 과정을 deque이 빌 때까지 반복
 7. `black`과 `white`로 marking된 객체들만 남게 됨
 
-![tri-color](/post-images/develop/gc-in-JavaScript/5.png)
-![tri-color](/post-images/develop/gc-in-JavaScript/6.png)
-![tri-color](/post-images/develop/gc-in-JavaScript/7.png)
+![tri-color](/post-images/gc-in-JavaScript/5.png)
+![tri-color](/post-images/gc-in-JavaScript/6.png)
+![tri-color](/post-images/gc-in-JavaScript/7.png)
 
 - [📌 출처](https://v8.dev/blog/concurrent-marking)
 
@@ -185,7 +185,7 @@ Major GC가 실행될 때, 프로그램 자체가 멈추게 되는데 이를 `st
 기존 GC는 Main Thread 혼자 수행했지만, 이를 Helper Thread들과 나누어 수행하도록 변경하였다.
 Thread 간 동기화 문제를 처리하는 오버헤드가 발생하지만, STW 시간을 크게 줄였다.
 
-![Parallel GC](/post-images/develop/gc-in-JavaScript/9.png)
+![Parallel GC](/post-images/gc-in-JavaScript/9.png)
 
 ### Incremental
 
@@ -193,14 +193,14 @@ Main Thread에서 GC 작업을 작은 단위로 나누어 프로세스 실행과
 
 GC를 수행하는 시간이 분산되어 좋은 UX를 제공할 수 있다고 하지만, 작업을 나누는 기준을 정하거나 할 때 문제가 발생할 수 있을 것 같다.
 
-![Incremental GC](/post-images/develop/gc-in-JavaScript/10.png)
+![Incremental GC](/post-images/gc-in-JavaScript/10.png)
 
 ### Concurrent
 
 Main Thread에서는 GC를 수행하지 않고, 온전히 Helper Thread들이 GC를 수행한다.
 STW가 사라지는 큰 장점이 있지만, 기술적으로 구현이 어렵다.
 
-![Concurrent GC](/post-images/develop/gc-in-JavaScript/11.png)
+![Concurrent GC](/post-images/gc-in-JavaScript/11.png)
 
 이 외에도 크롬 프로그램이 쉬는 idle time 중간중간 GC를 실행하는 `Idle-time GC` 등이 있다.
 
