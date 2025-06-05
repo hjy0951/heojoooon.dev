@@ -35,6 +35,7 @@ export const Header = ({ post }: HeaderProps) => {
 const postDescriptionStyle = css({
   display: "flex",
   flexDir: "column",
+  gap: "16px",
   alignItems: "center",
 });
 
