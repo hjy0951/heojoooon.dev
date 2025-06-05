@@ -40,6 +40,7 @@ const containerStyle = css({
   width: "100%",
   display: "flex",
   flexDir: "column",
+  backgroundColor: "background.primary",
 });
 
 const textStyle = css({

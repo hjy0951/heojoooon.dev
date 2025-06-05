@@ -85,6 +85,7 @@ const wrapperStyle = css({
   width: "100%",
   display: "flex",
   justifyContent: "space-evenly",
+  backgroundColor: "background.primary",
 
   md: { maxWidth: "1200px" },
 });
