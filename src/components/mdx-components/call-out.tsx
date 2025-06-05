@@ -52,10 +52,10 @@ const backgroundReceipe = cva({
   },
   variants: {
     variant: {
-      undefined: { backgroundColor: "#9F9F9F" },
-      warn: { backgroundColor: "#FFC0B1" },
-      check: { backgroundColor: "#9BDAB9" },
-      light: { backgroundColor: "#FFF0BE" },
+      undefined: { backgroundColor: "callout.undefined" },
+      warn: { backgroundColor: "callout.warn" },
+      check: { backgroundColor: "callout.check" },
+      light: { backgroundColor: "callout.light" },
     },
   },
 });
@@ -63,5 +63,5 @@ const backgroundReceipe = cva({
 const textStyle = css({
   fontSize: "16px",
   lineHeight: 1.6,
-  color: "#000000",
+  color: "prose.normal",
 });

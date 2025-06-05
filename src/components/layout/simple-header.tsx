@@ -34,7 +34,7 @@ const wrapperStyle = css({
   paddingX: "6%",
   width: "full",
   height: "72px",
-  backgroundColor: "white",
+  backgroundColor: "background.header",
   boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
   display: "flex",
   alignItems: "center",

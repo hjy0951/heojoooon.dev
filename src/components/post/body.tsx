@@ -15,6 +15,7 @@ import {
 } from "../mdx-components";
 import { Post } from "@/lib/api";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
+import { CodeBlock } from "../mdx-components/code-block";
 
 interface BodyProps {
   post: Post;
@@ -25,6 +26,7 @@ export const Body = ({ post }: BodyProps) => {
     <section
       className={cx(
         "prose",
+        proseStyle,
         `${suite.className}`,
         css({
           position: "relative",
@@ -42,6 +44,7 @@ export const Body = ({ post }: BodyProps) => {
           img: Image,
           a: CustomLink,
           CallOut,
+          pre: CodeBlock,
         }}
         options={{
           mdxOptions: {
@@ -62,3 +65,104 @@ export const Body = ({ post }: BodyProps) => {
     </section>
   );
 };
+
+export const proseStyle = css({
+  // Typography
+  "& h1, & h2, & h3": {
+    paddingTop: "prose.heading",
+    paddingBottom: "prose.text",
+  },
+  "& h1": {
+    textStyle: "prose.h1",
+  },
+  "& h2": {
+    textStyle: "prose.h2",
+  },
+  "& h3": {
+    textStyle: "prose.h3",
+  },
+
+  "& p": {
+    width: "100%",
+    paddingBottom: "prose.text",
+    color: "prose.text",
+    textStyle: "prose.p",
+  },
+  "& blockquote p, & li p, & .callout-body p": {
+    paddingBottom: "inherit",
+    color: "inherit",
+    textStyle: "inherit",
+  },
+  "& blockquote": {
+    "& ol, & ul": {
+      paddingBottom: "0",
+    },
+  },
+
+  "& u": {
+    textUnderlineOffset: "4px",
+  },
+  "& strong": {
+    fontWeight: "800",
+  },
+  "& hr": {
+    margin: "prose.block 0",
+    color: "prose.border",
+  },
+
+  // Lists
+  "& ul": {
+    margin: "0",
+    display: "block",
+    listStyleType: "disc",
+    marginBlockEnd: "0.5em",
+    marginInlineStart: "0px",
+    marginInlineEnd: "0px",
+    paddingInlineStart: "20px",
+    "& li p": {
+      padding: "0",
+    },
+    "& li::marker": {
+      fontSize: "0.85em",
+    },
+  },
+  "& li": {
+    marginBottom: "prose.small",
+    "&::marker": {
+      color: "prose.secondary",
+    },
+  },
+  "& ol": {
+    listStyleType: "decimal",
+    padding: "0 12px prose.text 12px",
+    paddingInlineStart: "1.5em",
+    "& li::marker": {
+      fontWeight: "800",
+    },
+  },
+
+  "& code[data-line-numbers]": {
+    counterReset: "line",
+
+    "& > [data-line]::before": {
+      counterIncrement: "line",
+      content: "counter(line)",
+
+      marginLeft: "6px",
+      display: "inline-block",
+      width: "0.75rem",
+      marginRight: "2rem",
+      textAlign: "right",
+      color: "prose.lineNumber",
+    },
+  },
+  '& code[data-line-numbers-max-digits="2"] > [data-line]::before': {
+    width: "1.25rem",
+  },
+  '& code[data-line-numbers-max-digits="3"] > [data-line]::before': {
+    width: "1.75rem",
+  },
+  '& code[data-line-numbers-max-digits="4"] > [data-line]::before': {
+    width: "2.25rem",
+  },
+});

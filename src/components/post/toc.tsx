@@ -36,7 +36,7 @@ export const TOC = ({ data }: Props) => {
                       liAnimation
                     )}
                     style={{
-                      animationDelay: `${index * (1 + item.indentCount) * 0.02}s`,
+                      animationDelay: `${index * (2 + item.indentCount) * 0.02}s`,
                     }}
                   >
                     <Link
@@ -72,11 +72,15 @@ const wrapperStyle = css({
   width: "260px",
 });
 
-const titleStyle = css({ fontWeight: 700, fontSize: "20px", color: "#404040" });
+const titleStyle = css({
+  fontWeight: 700,
+  fontSize: "20px",
+  color: "prose.toc.title",
+});
 
 const contentListStyle = css({
   fontSize: "13px",
-  color: "#606060",
+  color: "prose.toc.inactive",
 });
 
 const contentRecipe = cva({
@@ -91,7 +95,7 @@ const contentRecipe = cva({
   variants: {
     variant: {
       inactive: {},
-      active: { color: "#DE645B", fontWeight: 700, fontSize: "14px" },
+      active: { color: "prose.toc.active", fontWeight: 700, fontSize: "14px" },
     },
   },
 });

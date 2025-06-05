@@ -52,7 +52,7 @@ export const ProfileCard = ({ isViewName = true }: ProfileCardProps) => {
                 top: "8%",
                 left: "33%",
                 display: "flex",
-                color: "#fdfdfd",
+                color: "prose.reverse",
                 flexDir: "column",
                 fontSize: "14px",
               })

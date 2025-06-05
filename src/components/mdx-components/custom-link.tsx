@@ -56,15 +56,15 @@ const linkRecipe = cva({
   variants: {
     color: {
       primary: {
-        color: "#ff6a00",
+        color: "prose.customLink.primary",
         "&::after": {
-          backgroundColor: "#ff6a00",
+          backgroundColor: "background.customLink.primary",
         },
       },
       secondary: {
-        color: "#303030",
+        color: "prose.customLink.secondary",
         "&::after": {
-          backgroundColor: "#303030",
+          backgroundColor: "prose.customLink.secondary",
         },
       },
     },

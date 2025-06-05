@@ -101,7 +101,7 @@ const titleStyle = css({ fontWeight: 600 });
 const descriptionStyle = css({
   fontSize: "14px",
   fontWeight: 500,
-  color: "#4B4B4B",
+  color: "prose.description",
 });
 
 const postTagsStyle = css({

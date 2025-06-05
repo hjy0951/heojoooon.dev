@@ -59,7 +59,11 @@ const tagReceipe = cva({
   variants: {
     variant: {
       unselected: { fontWeight: 400 },
-      selected: { fontWeight: 700, backgroundColor: "#303030", color: "white" },
+      selected: {
+        fontWeight: 700,
+        backgroundColor: "background.badge",
+        color: "prose.reverse",
+      },
     },
   },
 });
