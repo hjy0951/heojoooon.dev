@@ -20,6 +20,11 @@ export default defineConfig({
   // Files to exclude
   exclude: [],
 
+  conditions: {
+    light: "[data-color-mode=light] &",
+    dark: "[data-color-mode=dark] &",
+  },
+
   // Useful for theme customization
   theme: {
     extend: {
@@ -62,48 +67,57 @@ export default defineConfig({
         },
       },
 
-      tokens: {
+      semanticTokens: {
         colors: {
           callout: {
-            undefined: { value: "#9F9F9F" },
-            warn: { value: "#FFC0B1" },
-            check: { value: "#9BDAB9" },
-            light: { value: "#FFF0BE" },
+            bg: {
+              undefined: { value: "#9F9F9F" },
+              warn: { value: { base: "#FFC0B1", _dark: "#F24822" } },
+              check: { value: { base: "#9BDAB9", _dark: "#14AE5C" } },
+              light: { value: { base: "#FFF0BE", _dark: "#ddaa11" } },
+            },
+            icon: {
+              undefined: { value: "#9F9F9F" },
+              warn: { value: { base: "#F24822", _dark: "#FFC0B1" } },
+              check: { value: { base: "#14AE5C", _dark: "#9BDAB9" } },
+              light: { value: { base: "#FFCD29", _dark: "#FFF0BE" } },
+            },
           },
           background: {
-            primary: { value: "#fdfdfd" },
-            blockquote: { value: "#1C212B" },
+            primary: { value: { base: "#fdfdfd", _dark: "#121212" } },
+            reverse: { value: { base: "#303030", _dark: "#fdfdfd" } },
+            blockquote: { value: { base: "#1C212B", _dark: "#B7C3FF" } },
             divider: { value: "#000000" },
-            header: { value: "#fdfdfd" },
-            code: { value: "#dedede" },
+            code: { value: { base: "#dedede", _dark: "#292927" } },
             customLink: {
               primary: { value: "#ff6a00" },
               secondary: { value: "#303030" },
             },
-            badge: { value: "#303030" },
+            badge: { value: { base: "#303030", _dark: "#cc97FC" } },
           },
           border: {
-            blockquote: { value: "#194D7C" },
+            blockquote: { value: { base: "#194D7C", _dark: "#546EFF" } },
           },
           prose: {
-            text: { value: "#202125" },
-            secondary: { value: "#585858" },
+            text: { value: { base: "#202125", _dark: "#fdfdfd" } },
+            secondary: { value: { base: "#585858", _dark: "#a5a5a5" } },
             border: { value: "#c0c0c0" },
             highlight: { value: "#c8c8ff1a" },
-            normal: { value: "#000000" },
-            reverse: { value: "#fdfdfd" },
+            normal: { value: { base: "#000000", _dark: "#fdfdfd" } },
+            reverse: { value: { base: "#fdfdfd", _dark: "#000000" } },
             code: { value: "#de645b" },
             customLink: {
               primary: { value: "#ff6a00" },
-              secondary: { value: "#303030" },
+              secondary: { value: { base: "#303030", _dark: "#dedede" } },
             },
-            caption: { value: "#868686" },
-            description: { value: "#4B4B4B" },
+            caption: { value: { base: "#868686" } },
+            title: { value: { base: "#121212", _dark: "#F1F1F1" } },
+            description: { value: { base: "#4B4B4B", _dark: "#a5a5a5" } },
             lineNumber: { value: "gray" },
             toc: {
-              title: { value: "#404040" },
-              inactive: { value: "#606060" },
-              active: { value: "#DE645B" },
+              title: { value: { base: "#404040", _dark: "#ededed" } },
+              inactive: { value: { base: "#606060", _dark: "#b0b0b0" } },
+              active: { value: { base: "#DE645B" } },
             },
           },
         },
