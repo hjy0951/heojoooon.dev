@@ -15,6 +15,7 @@ const CallOutIcon = ({ type }: { type: IconType }) => {
   else if (type === "warn") return <WarningIcon />;
   return null;
 };
+
 export const CallOut = ({
   type,
   children,
@@ -52,10 +53,10 @@ const backgroundReceipe = cva({
   },
   variants: {
     variant: {
-      undefined: { backgroundColor: "callout.undefined" },
-      warn: { backgroundColor: "callout.warn" },
-      check: { backgroundColor: "callout.check" },
-      light: { backgroundColor: "callout.light" },
+      undefined: { backgroundColor: "callout.bg.undefined" },
+      warn: { backgroundColor: "callout.bg.warn" },
+      check: { backgroundColor: "callout.bg.check" },
+      light: { backgroundColor: "callout.bg.light" },
     },
   },
 });

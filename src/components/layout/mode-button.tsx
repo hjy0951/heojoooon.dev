@@ -17,6 +17,15 @@ export const ModeButton = () => {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.setAttribute("data-color-mode", "dark");
+    } else {
+      root.setAttribute("data-color-mode", "light");
+    }
+  }, [isDark]);
+
   if (!isMounted)
     return (
       <div className={layoutStyle}>
@@ -53,7 +62,8 @@ export const ModeButton = () => {
 const layoutStyle = css({
   rounded: "100px",
   padding: "8px",
-  border: "2px solid #fdfdfd",
+  border: "2px solid",
+  borderColor: "background.reverse",
 });
 
 const buttonRecipe = cva({

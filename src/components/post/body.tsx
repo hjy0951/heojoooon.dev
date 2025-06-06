@@ -67,10 +67,14 @@ export const Body = ({ post }: BodyProps) => {
 };
 
 export const proseStyle = css({
+  "& figure": {
+    marginBottom: "prose.block",
+  },
   // Typography
   "& h1, & h2, & h3": {
     paddingTop: "prose.heading",
     paddingBottom: "prose.text",
+    color: "prose.text",
   },
   "& h1": {
     textStyle: "prose.h1",
@@ -119,11 +123,14 @@ export const proseStyle = css({
     marginInlineStart: "0px",
     marginInlineEnd: "0px",
     paddingInlineStart: "20px",
+    color: "prose.text",
+
     "& li p": {
       padding: "0",
     },
     "& li::marker": {
       fontSize: "0.85em",
+      color: "prose.secondary",
     },
   },
   "& li": {
@@ -134,8 +141,10 @@ export const proseStyle = css({
   },
   "& ol": {
     listStyleType: "decimal",
-    padding: "0 12px prose.text 12px",
+    paddingY: "12px",
     paddingInlineStart: "1.5em",
+    color: "prose.text",
+
     "& li::marker": {
       fontWeight: "800",
     },

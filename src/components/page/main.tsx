@@ -32,7 +32,6 @@ export const MainPage = ({ selectedTag }: MainPageProps) => {
 };
 
 const containerStyle = css({
-  backgroundColor: "background.primary",
   pt: "112px",
   display: "flex",
   flexDir: "column",

@@ -96,7 +96,7 @@ const postInfoStyle = css({
   justifyContent: "space-between",
 });
 
-const titleStyle = css({ fontWeight: 600 });
+const titleStyle = css({ fontWeight: 600, color: "prose.title" });
 
 const descriptionStyle = css({
   fontSize: "14px",
@@ -121,4 +121,5 @@ const dateWrapperStyle = css({
 const dateStyle = css({
   fontSize: "14px",
   fontWeight: 500,
+  color: "prose.title",
 });

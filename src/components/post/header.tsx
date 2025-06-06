@@ -42,6 +42,7 @@ const postDescriptionStyle = css({
 const postTitleStyle = css({
   fontSize: "40px",
   fontWeight: "800",
+  color: "prose.title",
 });
 
 const postInfoStyle = css({
@@ -49,6 +50,7 @@ const postInfoStyle = css({
   gap: "12px",
   fontWeight: 500,
   fontSize: "20px",
+  color: "prose.description",
 });
 
 const postTagsStyle = css({ display: "flex", gap: "6px", flexWrap: "wrap" });

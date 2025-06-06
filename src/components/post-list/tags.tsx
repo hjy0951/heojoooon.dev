@@ -58,7 +58,7 @@ const tagReceipe = cva({
   },
   variants: {
     variant: {
-      unselected: { fontWeight: 400 },
+      unselected: { color: "prose.normal", fontWeight: 400 },
       selected: {
         fontWeight: 700,
         backgroundColor: "background.badge",

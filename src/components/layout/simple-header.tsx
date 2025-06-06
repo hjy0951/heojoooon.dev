@@ -1,5 +1,6 @@
 import { css } from "#/styled-system/css";
 import { CustomLink } from "../mdx-components";
+import { ModeButton } from "./mode-button";
 
 const navs = [
   { href: "/", text: "Home." },
@@ -21,6 +22,8 @@ const SimpleHeader = () => {
           </CustomLink>
         ))}
       </div>
+
+      <ModeButton />
     </header>
   );
 };
@@ -34,7 +37,7 @@ const wrapperStyle = css({
   paddingX: "6%",
   width: "full",
   height: "72px",
-  backgroundColor: "background.header",
+  backgroundColor: "background.primary",
   boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
   display: "flex",
   alignItems: "center",
