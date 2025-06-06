@@ -11,8 +11,8 @@ export const Badge = ({ children }: BadgeProps) => {
 
 const badgeStyle = css({
   p: "4px 8px",
-  bgColor: "#303030",
-  color: "white",
+  bgColor: "background.badge",
+  color: "prose.reverse",
   rounded: "8px",
   fontWeight: 600,
   fontSize: "12px",

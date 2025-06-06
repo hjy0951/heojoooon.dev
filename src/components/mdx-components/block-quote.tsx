@@ -15,9 +15,10 @@ export const BlockQuote = ({
 const blockquoteStyle = css({
   mb: "12px",
   padding: "4px 8px",
-  backgroundColor: "#1C212B",
+  color: "prose.reverse",
+  backgroundColor: "background.blockquote",
   opacity: "90%",
-  borderLeft: "6px solid #194D7C",
+  borderLeft: "6px solid",
+  borderColor: "border.blockquote",
   borderRadius: "4px",
-  color: "#fdfdfd",
 });

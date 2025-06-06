@@ -45,5 +45,5 @@ const containerStyle = css({
 const textStyle = css({
   fontSize: "15px",
   fontWeight: 400,
-  color: "#202125",
+  color: "prose.text",
 });

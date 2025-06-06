@@ -35,7 +35,7 @@ const imageStyle = css({
 
 const textStyle = css({
   px: "16px",
-  color: "#868686",
+  color: "prose.caption",
   fontSize: "14px",
 });
 
