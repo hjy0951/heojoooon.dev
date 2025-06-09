@@ -1,11 +1,12 @@
 "use client";
 
 import { css } from "#/styled-system/css";
+import { useColorMode } from "@/hooks/use-color-mode";
 import { useEffect, useRef } from "react";
 
 export const Giscus = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const theme = "catppuccin_latte";
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     if (!ref.current || ref.current.hasChildNodes()) return;
@@ -22,20 +23,29 @@ export const Giscus = () => {
     scriptElem.setAttribute("data-reactions-enabled", "1");
     scriptElem.setAttribute("data-emit-metadata", "0");
     scriptElem.setAttribute("data-input-position", "bottom");
-    scriptElem.setAttribute("data-theme", theme);
+    scriptElem.setAttribute(
+      "data-theme",
+      colorMode === "light" ? "noborder_light" : "noborder_dark"
+    );
     scriptElem.setAttribute("data-lang", "ko");
     ref.current.appendChild(scriptElem);
-  }, []);
+  }, [colorMode]);
 
   useEffect(() => {
     const iframe = document.querySelector<HTMLIFrameElement>(
       "iframe.giscus-frame"
     );
     iframe?.contentWindow?.postMessage(
-      { giscus: { setConfig: { theme } } },
+      {
+        giscus: {
+          setConfig: {
+            theme: colorMode === "light" ? "noborder_light" : "noborder_dark",
+          },
+        },
+      },
       "https://giscus.app"
     );
-  }, [theme]);
+  }, [colorMode]);
 
   return <section className={containerStyle} ref={ref} />;
 };
