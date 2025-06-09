@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout";
 import SimpleHeader from "@/components/layout/simple-header";
 import { css } from "#/styled-system/css";
 import { cookies } from "next/headers";
+import { ColorModeProvider, ColorModeType } from "@/contexts/color-mode";
 
 export const metadata: Metadata = {
   title: "Heojoooon.",
@@ -16,7 +17,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const currentColorMode = cookieStore.get("color-mode")?.value || "light";
+  const currentColorMode = (cookieStore.get("color-mode")?.value ||
+    "light") as ColorModeType;
 
   return (
     <html lang="ko" data-color-mode={currentColorMode}>
@@ -32,11 +34,13 @@ export default async function RootLayout({
       </head>
 
       <body className={bodyStyle}>
-        <SimpleHeader />
+        <ColorModeProvider initialMode={currentColorMode}>
+          <SimpleHeader />
 
-        {children}
+          {children}
 
-        <Footer />
+          <Footer />
+        </ColorModeProvider>
       </body>
     </html>
   );
