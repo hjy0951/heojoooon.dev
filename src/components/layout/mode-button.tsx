@@ -62,8 +62,7 @@ export const ModeButton = () => {
 const layoutStyle = css({
   rounded: "100px",
   padding: "8px",
-  border: "2px solid",
-  borderColor: "background.reverse",
+  border: "2px solid #fdfdfd",
 });
 
 const buttonRecipe = cva({
