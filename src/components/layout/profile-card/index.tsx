@@ -11,25 +11,29 @@ import SNSLink from "./sns-link";
 import { pretendard } from "@/styles/font";
 import StarIcon from "@/components/icons/star";
 
+const iconStyle = css({
+  fill: "background.reverse",
+});
+
 const SNSs = [
   {
     name: "GitHub",
-    icon: <RiGithubFill size={28} />,
+    icon: <RiGithubFill className={iconStyle} size={28} />,
     url: "https://github.com/hjy0951",
   },
   {
     name: "LinkedIn",
-    icon: <RiLinkedinBoxFill size={28} />,
+    icon: <RiLinkedinBoxFill className={iconStyle} size={28} />,
     url: "https://www.linkedin.com/in/%EC%A4%80%EC%98%81-%ED%97%88-159288250/",
   },
   {
     name: "Instagram",
-    icon: <RiInstagramLine size={28} />,
+    icon: <RiInstagramLine className={iconStyle} size={28} />,
     url: "https://www.instagram.com/heojoooon/",
   },
   {
     name: "hjy0951@gmail.com",
-    icon: <MdOutlineEmail size={28} />,
+    icon: <MdOutlineEmail className={iconStyle} size={28} />,
     url: "mailto:hjy0951@gmail.com",
   },
 ];
