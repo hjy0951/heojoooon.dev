@@ -2,7 +2,7 @@ import { css, cx } from "#/styled-system/css";
 import { pretendard } from "@/styles/font";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarIcon } from "../icons";
+import { PaperPlaneIcon } from "../icons";
 import { Badge } from "./badge";
 import { convertTagName, TagType } from "@/lib/utils";
 
@@ -48,7 +48,7 @@ export const PostListItem = ({
           </div>
 
           <div className={dateWrapperStyle}>
-            <CalendarIcon />
+            <PaperPlaneIcon />
             <p className={dateStyle}>{createdAt}</p>
           </div>
         </div>
@@ -96,12 +96,12 @@ const postInfoStyle = css({
   justifyContent: "space-between",
 });
 
-const titleStyle = css({ fontWeight: 600 });
+const titleStyle = css({ fontWeight: 600, color: "prose.title" });
 
 const descriptionStyle = css({
   fontSize: "14px",
   fontWeight: 500,
-  color: "#4B4B4B",
+  color: "prose.description",
 });
 
 const postTagsStyle = css({
@@ -121,4 +121,5 @@ const dateWrapperStyle = css({
 const dateStyle = css({
   fontSize: "14px",
   fontWeight: 500,
+  color: "prose.title",
 });

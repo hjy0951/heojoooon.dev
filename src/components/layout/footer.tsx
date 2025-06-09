@@ -18,4 +18,5 @@ const containerStyle = css({
   alignItems: "center",
   fontSize: "12px",
   fontWeight: "500",
+  color: "prose.text",
 });

@@ -35,7 +35,7 @@ const linkTextStyle = css({
   width: "92px",
   fontWeight: "500",
   textAlign: "center",
-  color: "white",
+  color: "prose.reverse",
   backgroundColor: "#303030",
   borderRadius: "8px 8px 0 0",
 });

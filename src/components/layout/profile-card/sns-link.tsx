@@ -24,5 +24,5 @@ const iconWrapperStyle = css({
   justifyContent: "center",
   alignItems: "center",
   borderRadius: "50",
-  _hover: { bg: "gray.300" },
+  _hover: { bg: "background.sns" },
 });

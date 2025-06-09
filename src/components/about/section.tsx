@@ -32,10 +32,11 @@ const containerStyle = css({
 const dividerStyle = css({
   width: "80px",
   height: "4px",
-  backgroundColor: "black",
+  backgroundColor: "background.badge",
 });
 
 const titleStyle = css({
   fontSize: 24,
   fontWeight: 700,
+  color: "background.badge",
 });
