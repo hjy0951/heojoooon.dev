@@ -3,19 +3,23 @@ import "@/styles/globals.css";
 import { Footer } from "@/components/layout";
 import SimpleHeader from "@/components/layout/simple-header";
 import { css } from "#/styled-system/css";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "별 세 개짜리 개발자 | Heojoooon.",
+  title: "Heojoooon.",
   description: "프론트엔드 개발자 허준영입니다.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const currentColorMode = cookieStore.get("color-mode")?.value || "light";
+
   return (
-    <html lang="ko">
+    <html lang="ko" data-color-mode={currentColorMode}>
       <head>
         <meta
           name="google-site-verification"
