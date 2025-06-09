@@ -1,30 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { RiMoonFill, RiQuestionMark, RiSunFill } from "react-icons/ri";
 import { css, cva, cx } from "#/styled-system/css";
+import { useIsMounted } from "@/hooks/use-is-mounted";
+import { useColorMode } from "@/hooks/use-color-mode";
 
 export const ModeButton = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [isDark, setIsDark] = useState<boolean>(false);
+  const isMounted = useIsMounted();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const handleClickButton = () => {
-    setIsDark((prev) => !prev);
+    toggleColorMode();
   };
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) {
-      root.setAttribute("data-color-mode", "dark");
-    } else {
-      root.setAttribute("data-color-mode", "light");
-    }
-  }, [isDark]);
 
   if (!isMounted)
     return (
@@ -35,10 +23,7 @@ export const ModeButton = () => {
 
   return (
     <motion.button
-      className={cx(
-        layoutStyle,
-        buttonRecipe({ theme: isDark ? "dark" : "light" })
-      )}
+      className={cx(layoutStyle, buttonRecipe({ theme: colorMode }))}
       type="button"
       onClick={handleClickButton}
       whileTap={{ scale: 0.95, rotate: 25 }}
@@ -50,7 +35,7 @@ export const ModeButton = () => {
         rotate: 360,
       }}
     >
-      {isDark ? (
+      {colorMode === "dark" ? (
         <RiMoonFill size={22} color="#FFE400" />
       ) : (
         <RiSunFill size={22} color="#FF0000" />
