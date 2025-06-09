@@ -86,17 +86,17 @@ export default defineConfig({
           background: {
             primary: { value: { base: "#fdfdfd", _dark: "#121212" } },
             reverse: { value: { base: "#303030", _dark: "#fdfdfd" } },
-            blockquote: { value: { base: "#1C212B", _dark: "#B7C3FF" } },
+            blockquote: { value: { base: "#1C212B", _dark: "#D6E4FF" } },
             divider: { value: "#000000" },
             code: { value: { base: "#dedede", _dark: "#292927" } },
             customLink: {
               primary: { value: "#ff6a00" },
               secondary: { value: "#303030" },
             },
-            badge: { value: { base: "#303030", _dark: "#cc97FC" } },
+            badge: { value: { base: "#303030", _dark: "#D6E4FF" } },
           },
           border: {
-            blockquote: { value: { base: "#194D7C", _dark: "#546EFF" } },
+            blockquote: { value: { base: "#194D7C", _dark: "#5B8DF6" } },
           },
           prose: {
             text: { value: { base: "#202125", _dark: "#fdfdfd" } },
