@@ -8,7 +8,7 @@ export const useGetActiveHeading = () => {
   useEffect(() => {
     const opitions = {
       root: null,
-      rootMargin: "-0px 0px -60% 0px",
+      rootMargin: "0px 0px -60% 0px",
       threshold: 1.0,
     };
 
