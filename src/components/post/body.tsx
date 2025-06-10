@@ -75,6 +75,7 @@ export const proseStyle = css({
     paddingTop: "prose.heading",
     paddingBottom: "prose.text",
     color: "prose.text",
+    scrollMarginTop: "80px",
   },
   "& h1": {
     textStyle: "prose.h1",
