@@ -1,5 +1,5 @@
 import { cva, RecipeVariantProps } from "#/styled-system/css";
-import { LinkProps } from "next/link";
+import Link, { LinkProps } from "next/link";
 import { PropsWithChildren } from "react";
 
 type CustomLinkProps = LinkProps &
@@ -13,14 +13,14 @@ export const CustomLink = ({
   ...props
 }: PropsWithChildren<CustomLinkProps>) => {
   return (
-    <a
+    <Link
       {...props}
       target={currentWindow ? "" : "_blank"}
       href={href.toString() || ""}
       className={linkRecipe({ color })}
     >
       {children}
-    </a>
+    </Link>
   );
 };
 
