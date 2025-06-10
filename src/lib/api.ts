@@ -23,7 +23,7 @@ export function getAllPostSlugs() {
   return readDir(postsDirectory).map((slug) => slug.replace(/\.mdx$/, ""));
 }
 
-export function getPostDetail(slug: string) {
+export function getPostBySlug(slug: string) {
   const fullPath = join(postsDirectory, `${slug}.mdx`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
@@ -32,7 +32,7 @@ export function getPostDetail(slug: string) {
 }
 
 function getPostsBySlugs(slugs: string[]) {
-  const posts = slugs.map((slug) => getPostDetail(slug));
+  const posts = slugs.map((slug) => getPostBySlug(slug));
   return posts;
 }
 
