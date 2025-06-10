@@ -5,22 +5,20 @@ import Link from "next/link";
 import { PaperPlaneIcon } from "../icons";
 import { Badge } from "./badge";
 import { convertTagName, TagType } from "@/lib/utils";
+import { Post } from "@/lib/api";
 
-interface PostListItemProps {
-  title: string;
-  description?: string;
-  createdAt: string;
-  slug: string;
-  tags: string[];
-}
+type PostListItemProps = Omit<Post, "content">;
 
 export const PostListItem = ({
   title,
   description,
   createdAt,
+  updatedAt,
   slug,
   tags,
 }: PostListItemProps) => {
+  const displayDate = updatedAt ? `${updatedAt} (updated)` : createdAt;
+
   return (
     <Link href={`/${slug}`} className={containerStyle}>
       <div className={cx(coverImageWrawpperStyle, coverImageStyle)}>
@@ -49,7 +47,7 @@ export const PostListItem = ({
 
           <div className={dateWrapperStyle}>
             <PaperPlaneIcon />
-            <p className={dateStyle}>{createdAt}</p>
+            <p className={dateStyle}>{displayDate}</p>
           </div>
         </div>
       </div>

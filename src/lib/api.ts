@@ -9,7 +9,7 @@ export type Post = {
   tags: string[];
   description: string;
   createdAt: string;
-  excerpt: string;
+  updatedAt?: string;
   content: string;
 };
 
@@ -23,7 +23,7 @@ export function getAllPostSlugs() {
   return readDir(postsDirectory).map((slug) => slug.replace(/\.mdx$/, ""));
 }
 
-export function getPostDetail(slug: string) {
+export function getPostBySlug(slug: string) {
   const fullPath = join(postsDirectory, `${slug}.mdx`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
@@ -32,15 +32,17 @@ export function getPostDetail(slug: string) {
 }
 
 function getPostsBySlugs(slugs: string[]) {
-  const posts = slugs.map((slug) => getPostDetail(slug));
+  const posts = slugs.map((slug) => getPostBySlug(slug));
   return posts;
 }
 
-function sortPostsByCreatedAt(posts: Post[]) {
+function sortPostsByLatest(posts: Post[]) {
   // sort posts by date in descending order
-  return posts.sort((post1, post2) =>
-    post1.createdAt > post2.createdAt ? -1 : 1
-  );
+  return posts.sort((post1, post2) => {
+    const date1 = post1.updatedAt || post1.createdAt;
+    const date2 = post2.updatedAt || post2.createdAt;
+    return date1 > date2 ? -1 : 1;
+  });
 }
 
 export function extractTagsInPosts(posts: Post[]) {
@@ -63,6 +65,6 @@ export function getAllTags() {
 
 export function getAllPosts() {
   const slugs = getAllPostSlugs();
-  const posts = sortPostsByCreatedAt(getPostsBySlugs(slugs));
+  const posts = sortPostsByLatest(getPostsBySlugs(slugs));
   return posts;
 }
