@@ -1,3 +1,4 @@
+import { HeadingInfo } from "@/components/post";
 import { slug } from "github-slugger";
 
 const tagMap = {
@@ -38,13 +39,7 @@ const removeLink = (text: string) => {
   return text.replace(/\[([^\]]+)]\s*\(.*?\)/g, "$1");
 };
 
-export const createTOCInfo = (
-  content: string
-): {
-  text: string;
-  link: string;
-  indentCount: number;
-}[] => {
+export const createTOCInfo = (content: string): HeadingInfo[] => {
   const regex = /^(#|##|###) (.*$)/gim;
   const headingList = content.match(regex);
 

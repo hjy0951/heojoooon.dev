@@ -5,12 +5,14 @@ import { useGetActiveHeading } from "@/hooks/use-get-active-heading";
 import { suite } from "@/styles/font";
 import Link from "next/link";
 
+export interface HeadingInfo {
+  text: string;
+  link: string;
+  indentCount: number;
+}
+
 interface Props {
-  data: {
-    text: string;
-    link: string;
-    indentCount: number;
-  }[];
+  data: HeadingInfo[];
 }
 
 export const TOC = ({ data }: Props) => {
