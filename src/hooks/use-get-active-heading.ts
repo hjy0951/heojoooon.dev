@@ -23,10 +23,10 @@ export const useGetActiveHeading = () => {
     observer.current = new IntersectionObserver(onIntersect, opitions);
 
     const elements = document.querySelectorAll(headingQuery);
-    elements.forEach((elem) => observer.current?.observe(elem));
+    elements.forEach((element) => observer.current?.observe(element));
 
     return () => observer.current?.disconnect();
-  }, [headingQuery]);
+  }, []);
 
   return `#${activeHeadingId}`;
 };
