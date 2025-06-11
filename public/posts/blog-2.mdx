@@ -1,0 +1,252 @@
+---
+slug: blog-2
+title: "블로그 제작기 2: 목차(TOC)"
+description: "with. rehype-slug"
+tags: ["blog"]
+createdAt: "2025.06.11"
+---
+
+목차(TOC - Table Of Contents)는 글을 읽을 때 전반적인 내용이나 흐름을 유추할 수 있어 선호하는 기능입니다.
+따라서 블로그를 만들기로 생각한 순간부터 구상하고 있던 기능이기도 해서 직접 구현한 내용을 작성해보고자 합니다.
+
+# 어떻게 구현할까?
+
+일반적으로 구현된 TOC 기능을 생각했을때 가장 먼저 떠오르는 것들은 다음과 같습니다.
+
+1. 게시글 내 모든 헤딩 **모음**
+2. 헤딩 클릭 시 해당 내용으로 **이동**
+3. 스크롤 시 현재 화면에 보여지고 있는 파트의 헤딩 **활성화**
+
+따라서 해당 기능들을 우선적으로 계획하고 구현하였습니다.
+
+## 목차 수집
+
+가장 먼저, 단순히 게시글(content)을 탐색하며 글에 포함된 헤딩들을 추출하였습니다.
+아래와 같이 정규 표현식을 통해 간단히 구현할 수 있었어요.
+저는 **h1, h2, h3**만 스타일을 적용해두고 사용하고 있기 때문에 이 3개의 태그만을 탐색하도록 설정하였습니다.
+
+```ts
+  const regex = /^(#|##|###) (.*$)/gim;
+  const headingList = content.match(regex);
+
+  /* h1 ~ h6까지 고려한다면 아래와 같이 수정할 수 있습니다 */
+  const regex = /^(#{1,6}) (.*)$/gim;
+```
+
+## 클릭한 헤딩으로 이동
+
+해당 기능을 구현하기 위해 저는 `rehype-slug`라는 플러그인을 활용하였습니다.
+
+### rehype-slug
+
+구현 초반, 게시글 페이지에서 마크다운을 HTML로 변환하기 위해 `remark`와 `rehype`의 플러그인들을 살펴보았습니다.
+
+- [remark](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)
+- [rehype](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md)
+
+이때 목차를 처음부터 구현할 생각이었기에 [rehype-slug](https://github.com/rehypejs/rehype-slug)라는 플러그인이 눈에 띄었습니다.
+
+> plugin to add `id` attributes to headings
+
+GitHub에 적힌 설명처럼, `rehype-slug`는 마크다운에 작성된 헤딩 태그(h1~h6)에 자동으로 `id` 속성을 추가해주는 플러그인입니다.
+
+![해당 단락의 헤딩에 자동으로 id가 추가된 모습입니다.](/post-images/blog-2/1.png)
+
+TOC 기능의 핵심 중 하나는, 항목을 클릭했을 때 [URL fragment (해시)](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Fragment)를 통해 해당 위치로 스크롤 이동하는 것입니다.
+이런 동작을 위해서는 각 헤딩에 고유한 `id`가 필요하며, 이를 수동으로 넣는 것은 번거롭기 때문에 `rehype-slug`는 매우 유용할 것이라 생각하였습니다.
+
+이 플러그인을 활용하면 별다른 추가 작업 없이 TOC 항목에서 `#heading-id` 형태의 링크를 통해 자연스럽게 연결할 수 있어, 해당 플러그인을 채택하게 되었습니다.
+
+### github-slugger
+
+윗 단계에서 `rehype-slug` 플러그인을 통해 각 헤딩에 id를 설정했기 때문에 수집한 헤딩을 클릭하였을때 해시를 통해 이동할 수 있습니다.
+아래는 TOC를 구성하는 헤딩 아이템 코드로, Link를 통해 클릭 시 바로 이동이 가능합니다.
+
+```tsx
+  <li>
+    <Link
+      href={`#${headingId}`}
+    >
+      {headingText}
+    </Link>
+  </li>
+```
+
+이제 `headingId`를 `rehype-slug`가 가공하는 방식대로 동일하게 맞춰줄 필요가 있습니다.
+[rehype-slug의 내부 코드](https://github.com/rehypejs/rehype-slug/blob/main/lib/index.js)에서는 `github-slugger`라는 라이브러리를 통해 id를 생성하고 있었습니다.
+
+[github-slugger](https://github.com/Flet/github-slugger)는
+GitHub에서 마크다운 제목에 사용하는 것과 같은 방식으로 슬러그를 생성해주는 라이브러리입니다.
+주로 공백을 `-`로 변환해주는 간단한 라이브러리이지만, `rehype-slug`와의 통일성을 위해 함께 사용하기로 결정하였습니다.
+
+```ts
+slug('어떻게 구현할까?');
+// -> '어떻게-구현할까'
+```
+
+따라서 마찬가지로 `github-slugger`를 통해 슬러그를 생성하고, Link의 href에 해당 슬러그를 해시로 넣어 이동 기능을 구현하였습니다.
+
+## 현재 화면에 해당하는 헤딩 활성화
+
+마지막으로 스크롤을 내려가며 글을 읽을 때, 현재 목차에서 보고 있는 단락이 어느 순서인지를 명시해주는 활성화 기능을 추가하였습니다.
+
+### `Scroll Event` vs `Intersection Observer`
+
+해당 기능은 `Intersection Observer`를 통해 구현하였습니다.
+
+`Scroll Event`를 통해서 구현할 수도 있지만, 사용자가 스크롤할 때마다 등록된 리스너의 콜백이 수행된다면 성능 측면에서 상당히 비효율적이라고 생각했습니다.
+물론, 스로틀링을 통해 어느정도 성능 문제를 해결할 수 있다지만, 메인 스레드에서 실행되는 것은 분명하기 때문에 이는 성능에 영향을 끼칠 수 밖에 없다고 판단하였습니다.
+
+무엇보다도 scrollTop, offsetTop, offsetHeight, getBoundingClientRect()와 같은 속성들을 자주 참조하면 reflow(레이아웃 계산) 또는 layout trashing이 발생할 수 있다는 점에 더 꺼리게 된 것 같습니다.
+
+이에 비해 [Intersection Observer API](https://developer.mozilla.org/ko/docs/Web/API/Intersection_Observer_API)는 화면(viewport)에서 요소의 변화를 비동기적으로 관찰하기 때문에 메인 스레드에 영향을 주지 않고, 따라서 `Scroll Event`에 비해 성능 저하가 적을 것이라고 판단하여 채택하게 되었습니다.
+
+### 헤딩 활성화하기
+
+활성화할 헤딩을 감지하기 위해 먼저 `Intersection Observer`를 생성해주어야 합니다.
+`Intersection Observer`는 아래와 같은 생성자를 통해 교차가 감지되었을 때 실행시킬 `callback`과 observer의 감지 범위와 정도를 설정할 수 있는 `options`를 파라미터로 받습니다.
+
+```ts
+new IntersectionObserver(callback[, options]);
+```
+저는 화면의 최하단으로부터 약 **60%** 올라온 지점이 현재 눈에서 바라보고 있는 이상적인 위치라고 생각하여 options의 rootMargin을 조정하여 options을 설정해주었습니다.
+(rootMargin에 대한 내용은 [HEROPY님 블로그](https://www.heropy.dev/p/ydKoQO#h3_rootMargin)에서 설명이 너무 잘 되어있습니다.)
+
+그리고 해당 지점에서 교차가 감지된 요소가 헤딩이라면 상태에 해당 요소의 id를 저장하는 callback을 파라미터로 전달하여 Observer를 생성하였습니다.
+
+```ts
+  const [activeHeadingId, setActiveHeadingId] = useState<string>("");
+
+  const opitions = {
+    root: null,
+    /* NOTE: 아래에서부터 영역을 지워야하기 때문에 bottom -60% */
+    rootMargin: "0px 0px -60% 0px",
+    threshold: 1.0,
+  };
+
+  const onIntersect: IntersectionObserverCallback = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.target.id !== "") {
+        setActiveHeadingId(entry.target.id);
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(onIntersect, opitions);
+```
+
+마지막으로 위 로직을 커스텀 훅으로 분리하고, 생성한 Observer에게 교차 감지를 수행하게 하면서 기능을 완성할 수 있었습니다.
+
+```ts
+export const useGetActiveHeading = () => {
+  const headingQuery = "h1, h2, h3";
+  const observer = useRef<IntersectionObserver>(null);
+  const [activeHeadingId, setActiveHeadingId] = useState<string>("");
+
+  useEffect(() => {
+    const opitions = {
+      root: null,
+      rootMargin: "0px 0px -60% 0px",
+      threshold: 1.0,
+    };
+
+    const onIntersect: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.target.id !== "") {
+          setActiveHeadingId(entry.target.id);
+        }
+      });
+    };
+
+    observer.current = new IntersectionObserver(onIntersect, opitions);
+
+    const elements = document.querySelectorAll(headingQuery);
+    elements.forEach((element) => observer.current?.observe(element));
+
+    return () => observer.current?.disconnect();
+  }, []);
+
+  return `#${activeHeadingId}`;
+};
+```
+
+## 어떤 것을 추가하면 좋을까? 🤔
+
+기본적인 기능 구현을 끝내고, 어떤 내용을 추가하면 좋을까 생각해보았습니다.
+그리고 아래의 내용들을 추가하였습니다.
+
+### Indentation
+
+"h1, h2, h3" 3개의 헤딩을 사용하고 있는데, 각 헤딩은 글의 흐름에 따라 나누어 사용하는 것이 일반적입니다.
+따라서 목차에서 해당 헤딩의 사용에 대해 알 수 있도록 `indent`를 추가해주면 좋을 것 같다는 생각이 들었습니다.
+
+게시글을 파싱하여 TOC 컴포넌트에 헤딩들의 정보를 넘겨줄 때, 기존에는 text와 link로 이루어진 객체들의 배열을 prop으로 넘겨주었습니다.
+이때 추가적으로 #의 개수에 따라 indentCount를 계산하여 함께 넘겨주었습니다.
+
+```ts
+interface HeadingInfo {
+  text: string;
+  link: string;
+  indentCount: number;
+}
+```
+
+그리고 아래 함수를 통해 게시글에 사용된 헤딩들 중, 가장 큰 헤딩을 기준으로 indent가 적용되도록 구현하였습니다.
+예를 들어, 게시글에 h3 헤딩만 사용했다거나 h2가 가장 큰 헤딩일 때 항상 고정된 indent를 적용하게 되면 불필요한 indent가 존재한다고 생각했기 때문입니다.
+따라서 항상 가장 큰 헤딩을 기준으로 항목들이 왼쪽 끝에 붙을 수 있도록 하였습니다.
+
+```ts
+  export const createTOCInfo = (content: string): HeadingInfo[] => {
+    /* 게시글 파싱 */
+    /*   ...    */
+
+    const tocInfo = headingList.map((heading: string) => {
+      return {
+        text: heading.replace(/^#+\s*/, ""),
+        link: `#${slug(heading).replace(/-/, "")}`,
+        indentCount: heading.match(/#/g)?.length || 3,
+      };
+    });
+
+    /* 가장 큰 heading을 기준으로 indent 적용 */
+    const minIndentCount = Math.min(...tocInfo.map((item) => item.indentCount));
+
+    return tocInfo.map((item) => ({
+      ...item,
+      indentCount: item.indentCount - minIndentCount,
+    }));
+  };
+```
+
+### Animation
+
+디프만 16기를 진행하며 인터랙션을 자주 접하다보니 게시글 페이지에 진입했을떄, 단순히 TOC 항목들이 나타나기보다 무언가 애니메이션이 추가되면 어떨까라는 생각을 했습니다.
+
+이전에 자주 보던 [정현수님의 블로그](https://junghyeonsu.com/)도 인터랙션이 많다보니 은근 재미요소(?)가 있었기 때문입니다.
+
+따라서 헤딩이 큰 순서대로, 또 위에서부터 순차적으로 나타나는 효과를 주기로 하였습니다.
+
+애니메이션은 pandaCSS의 config 파일에 keyframe을 등록하고, transform 속성에서 translateX를 조정하여 구현하였습니다.
+또 항목 순서와 indentCount를 offset으로 animationDelay를 조정하여 등장하는 순서를 조정하였습니다.
+
+gif로 만들면서 조금 깨져보이지만 그래도 원하는대로 적용이 된 것 같습니다.
+
+![결과물..](/post-images/blog-2/2.gif)
+
+### scroll-margin
+
+구현을 끝냈을 때, 아래와 같이 클릭한 지점으로 이동 시 헤딩 텍스트가 헤더에 가려지는 현상이 존재했습니다.
+
+![AS-IS](/post-images/blog-2/3.gif)
+
+따라서 h1, h2, h3의 `scroll-margin` 속성을 조정하여 아래와 같이 자연스럽게 이동되도록 수정하였습니다.
+
+![TO-BE](/post-images/blog-2/4.gif)
+
+# 마무리
+
+블로그를 직접 만드는 분들이 많아서 소스도 많이 존재했지만, 직접 만들어보면 어떨까라는 생각만 가지고 무작정 구현한 것 같아요.
+
+그래도 이전에 무한 스크롤을 Intersection Observer로 구현해본 경험이 TOC 기능 구현에 큰 도움이 된 것 같아서 뿌듯했습니다.
+
+다음으로는 Giscus로 댓글 기능 도입이나 다크 모드에 대한 이야기를 다루어보겠습니다 :)
