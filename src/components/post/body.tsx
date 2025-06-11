@@ -117,6 +117,7 @@ export const proseStyle = css({
 
   // Lists
   "& ul": {
+    paddingBottom: "4px",
     margin: "0",
     display: "block",
     listStyleType: "disc",
