@@ -1,5 +1,4 @@
 import { getAllPosts } from "./api";
-import { Feed } from "feed";
 
 const flattenMarkdown = (content: string): string => {
   return (
@@ -54,33 +53,4 @@ export const generateRSS = async () => {
 </rss>`;
 
   return rss;
-};
-
-export const generateRssFeed = async () => {
-  const baseUrl = "https://heojooon.vercel.app";
-
-  const feed = new Feed({
-    title: "Heojooon's Blog RSS Feed",
-    description: "개발과 일상에 대한 이야기를 나누는 공간입니다.",
-    id: baseUrl,
-    link: baseUrl,
-    language: "ko",
-    copyright: `© ${new Date().getFullYear()}. Heojoooon all rights reserved.`,
-    updated: new Date(),
-  });
-
-  const posts = await getAllPosts(); // 마크다운에서 불러오든 DB에서 불러오든
-
-  posts.forEach((post) => {
-    feed.addItem({
-      title: post.title,
-      id: `${baseUrl}/${post.slug}`,
-      link: `${baseUrl}/${post.slug}`,
-      description: post.description,
-      date: new Date(post.updatedAt || post.createdAt),
-      content: flattenMarkdown(post.content),
-    });
-  });
-
-  return feed.rss2(); // XML 문자열
 };
