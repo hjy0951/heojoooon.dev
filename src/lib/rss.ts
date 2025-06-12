@@ -29,12 +29,12 @@ export const generateRSS = async () => {
   const items = await Promise.all(
     posts.map(async (post) => {
       return `<item>
-        <title>${post.title}</title>
+        <title><![CDATA[${post.title}]]></title>
         <link>${baseUrl}/${post.slug}</link>
-        <guid>${baseUrl}/${post.slug}</guid>
+        <guid isPermaLink="false">${baseUrl}/${post.slug}</guid>
         <pubDate>${new Date(post.updatedAt || post.createdAt).toUTCString()}</pubDate>
-        <description><![CDATA[${post.description}]]></description>
-        <content:encoded><![CDATA[${flattenMarkdown(post.content)}]]></content:encoded>
+        <description><![CDATA[ ${post.description} ]]></description>
+        <content:encoded><![CDATA[ ${flattenMarkdown(post.content)} ]]></content:encoded>
       </item>`;
     })
   );
@@ -42,9 +42,9 @@ export const generateRSS = async () => {
   const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Heojooon's Blog RSS Feed</title>
+    <title><![CDATA[Heojooon's Blog RSS Feed]]></title>
+    <description><![CDATA[프론트엔드 개발자 허준영입니다.]]></description>
     <link>${baseUrl}</link>
-    <description>개발과 일상에 대한 이야기를 나누는 공간입니다.</description>
     <language>ko</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${baseUrl}/rss.xml" rel="self" type="application/rss+xml" />
