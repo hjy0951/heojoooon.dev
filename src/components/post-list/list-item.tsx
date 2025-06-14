@@ -26,9 +26,9 @@ export const PostListItem = ({
           className={coverImageStyle}
           src={`/post-images/${slug}/cover.png`}
           alt={`"${title}" 커버 이미지`}
-          fill
+          width={180}
+          height={180}
           priority
-          style={{ objectFit: "cover" }}
         />
       </div>
 
@@ -83,6 +83,9 @@ const coverImageWrawpperStyle = css({
 
 const coverImageStyle = css({
   borderRadius: "6px",
+  width: "180px",
+  height: "180px",
+  objectFit: "cover",
 });
 
 const postInfoStyle = css({
