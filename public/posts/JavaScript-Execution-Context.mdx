@@ -172,7 +172,7 @@ a();
 `Variable Environment`은 스냅샷을 저장하여 변경 사항이 반영되지 않지만, `Lexical Environment`는 변경 사항이 반영된다는 것이다.
 
 따라서 구조는 다음 그림과 같다.
-![실행 컨텍스트의 구조](https://mblogthumb-phinf.pstatic.net/MjAyMjAyMjNfMjc0/MDAxNjQ1NTUwMjIxMDUx.nGjo0U33rrCpjg2Z2lER3YJn0LgzkPndhuH3CYoDeV4g.sQeiGYFMpwFvJAX2NC_0G2ntDpFUmzk2YGFXNfFL7SYg.PNG.dlaxodud2388/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2022-02-23_%EC%98%A4%EC%A0%84_2.16.56.png?type=w800)
+![실행 컨텍스트의 구조](/post-images/JavaScript-Execution-Context/2.png)
 
 글로만 보면 뭔소린지 모르겠으니 그림으로 봐보자.
 아래와 같은 코드에 대한 실행 컨텍스트이다.
@@ -190,7 +190,9 @@ function Hi() {
 Hi();
 ```
 
-![컨텍스트 구성 예시](https://mblogthumb-phinf.pstatic.net/MjAyMjAyMjNfMTQg/MDAxNjQ1NTUwMzE1NDAx.EfBq7ns6ja0JJt1ub4k4cMlMQdwRjJ_4S-ghf9gejYYg.GFY1AQGYI8dSAVkZcwEMQsXarxXyzoG6LTd-YRBQL5kg.PNG.dlaxodud2388/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2022-02-23_%EC%98%A4%EC%A0%84_2.18.17.png?type=w800)
+![컨텍스트 구성 예시](/post-images/JavaScript-Execution-Context/3.png)
+
+(["[JavaScript] ES6의 Execution Context(실행 컨텍스트)의 동작 방식과 Lexical Nesting Structure(Scope chain)"](https://m.blog.naver.com/dlaxodud2388/222655214381) 내용을 참조하였습니다.)
 
 ## 호이스팅(Hoisting)이 일어나는 이유
 
