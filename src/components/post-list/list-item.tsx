@@ -20,7 +20,7 @@ export const PostListItem = ({
   const displayDate = updatedAt ? `${updatedAt} (updated)` : createdAt;
 
   return (
-    <Link href={`/${slug}`} className={containerStyle}>
+    <Link href={`/${slug}`} className={containerStyle} prefetch={true}>
       <div className={cx(coverImageWrawpperStyle, coverImageStyle)}>
         <Image
           className={coverImageStyle}

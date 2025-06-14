@@ -9,11 +9,11 @@ import type { MetadataRoute } from "next";
     }
 */
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const todayDate = new Date();
   const baseUrl = "https://heojooon.vercel.app";
-  const tagList = await getAllTags();
-  const postList = await getAllPosts();
+  const tagList = getAllTags();
+  const postList = getAllPosts();
 
   return [
     { url: baseUrl, lastModified: todayDate },
@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/tag/${tagName}`,
       lastModified: todayDate,
     })),
-    ...postList.map(({ slug }) => ({
+    ...postList.map((slug) => ({
       url: `${baseUrl}/${slug}`,
       lastModified: todayDate,
     })),

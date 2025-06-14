@@ -9,8 +9,8 @@ type TagParams = {
   }>;
 };
 
-export const generateStaticParams = async () => {
-  const tagInfo = await getAllTags();
+export const generateStaticParams = () => {
+  const tagInfo = getAllTags();
   const params = tagInfo.map(({ tagName }) => ({ tag: tagName }));
 
   return params;
