@@ -2,14 +2,15 @@ import { css } from "#/styled-system/css";
 import { getAllPosts, getAllTags } from "@/lib/api";
 import { PostList, Tags } from "../post-list";
 import { SNSLinkGroup } from "../layout";
+import { Suspense } from "react";
 
 interface MainPageProps {
   selectedTag?: string;
 }
 
-export const MainPage = ({ selectedTag }: MainPageProps) => {
-  const posts = getAllPosts();
-  const tagInfo = getAllTags();
+export const MainPage = async ({ selectedTag }: MainPageProps) => {
+  const [posts, tagInfo] = await Promise.all([getAllPosts(), getAllTags()]);
+
   const allPosts = selectedTag
     ? posts.filter((post) => post.tags.includes(selectedTag))
     : posts;
@@ -23,7 +24,9 @@ export const MainPage = ({ selectedTag }: MainPageProps) => {
       />
 
       <main className={mainStyle}>
-        <PostList posts={allPosts} wide />
+        <Suspense fallback={<div>Loading...</div>}>
+          <PostList posts={allPosts} wide />
+        </Suspense>
       </main>
 
       <SNSLinkGroup />

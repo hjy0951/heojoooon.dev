@@ -1,5 +1,4 @@
 import { getAllPostSlugs, getPostBySlug } from "@/lib/api";
-import { use } from "react";
 import { css } from "#/styled-system/css";
 import { createTOCInfo } from "@/lib/utils";
 import { Body, Giscus, Header, TOC } from "@/components/post";
@@ -17,7 +16,7 @@ export const generateMetadata = async ({
   params,
 }: PostParams): Promise<Metadata> => {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   const baseUrl = "https://heojooon.vercel.app";
   const title = `${post.title} | Heojoooon.`;
@@ -44,17 +43,17 @@ export const generateMetadata = async ({
   };
 };
 
-export const generateStaticParams = () => {
-  const params = getAllPostSlugs().map((slug) => ({
+export const generateStaticParams = async () => {
+  const params = (await getAllPostSlugs()).map((slug) => ({
     slug,
   }));
 
   return params;
 };
 
-const PostPage = (props: PostParams) => {
-  const { slug } = use(props.params);
-  const post = getPostBySlug(slug);
+const PostPage = async (props: PostParams) => {
+  const { slug } = await props.params;
+  const post = await getPostBySlug(slug);
   const tocInfo = createTOCInfo(post.content);
 
   return (

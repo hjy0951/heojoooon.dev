@@ -24,7 +24,7 @@ const flattenMarkdown = (content: string): string => {
 
 export const generateRSS = async () => {
   const baseUrl = "https://heojooon.vercel.app";
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
 
   const items = await Promise.all(
     posts.map(async (post) => {
