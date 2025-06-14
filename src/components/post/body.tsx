@@ -11,7 +11,7 @@ import {
   BlockQuote,
   CustomLink,
   CallOut,
-  Image,
+  MDXImage,
 } from "../mdx-components";
 import { Post } from "@/lib/api";
 import moonlightTheme from "@/assets/themes/moonlight-ii.json" with { type: "json" };
@@ -41,7 +41,7 @@ export const Body = ({ post }: BodyProps) => {
         components={{
           code: Code,
           blockquote: BlockQuote,
-          img: Image,
+          img: MDXImage,
           a: CustomLink,
           CallOut,
           pre: CodeBlock,
