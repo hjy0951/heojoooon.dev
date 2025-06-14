@@ -9,7 +9,7 @@ interface SNSButtonProps {
 
 const SNSLink = ({ icon, url }: SNSButtonProps) => {
   return (
-    <Link href={url} target="_blank">
+    <Link href={url} target="_blank" rel="noopener noreferrer">
       <div className={iconWrapperStyle}>{icon}</div>
     </Link>
   );
