@@ -1,7 +1,7 @@
 import { css } from "#/styled-system/css";
 import { getAllPosts, getAllTags } from "@/lib/api";
-import { ProfileCard } from "../layout";
 import { PostList, Tags } from "../post-list";
+import { SNSLinkGroup } from "../layout";
 
 interface MainPageProps {
   selectedTag?: string;
@@ -26,7 +26,7 @@ export const MainPage = ({ selectedTag }: MainPageProps) => {
         <PostList posts={allPosts} wide />
       </main>
 
-      <ProfileCard isViewName={false} />
+      <SNSLinkGroup />
     </div>
   );
 };

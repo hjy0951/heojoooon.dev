@@ -2,9 +2,9 @@ import { getAllPostSlugs, getPostBySlug } from "@/lib/api";
 import { use } from "react";
 import { css } from "#/styled-system/css";
 import { createTOCInfo } from "@/lib/utils";
-import { ProfileCard } from "@/components/layout";
 import { Body, Giscus, Header, TOC } from "@/components/post";
 import { Metadata } from "next";
+import { SNSLinkGroup } from "@/components/layout";
 
 type PostParams = {
   params: Promise<{
@@ -66,7 +66,7 @@ const PostPage = (props: PostParams) => {
           <Body post={post} />
         </article>
 
-        <ProfileCard />
+        <SNSLinkGroup />
 
         <Giscus />
       </div>
