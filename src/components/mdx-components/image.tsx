@@ -1,19 +1,30 @@
 import { css, cx } from "#/styled-system/css";
 import { SourceIcon } from "@/components/icons";
+import Image, { ImageProps } from "next/image";
 
-interface ImageProps {
-  src: string;
-  alt: string;
-}
-
-export const Image = ({ src, alt }: ImageProps) => {
+export const MDXImage = ({ src, alt, ...rest }: ImageProps) => {
   const match = alt.match(/link::(https?:\/\/[^\s]+)/);
+  const isUnoptimized =
+    typeof src === "string" ? /\.(svg|gif)$/i.test(src) : false;
 
   return (
     <>
-      <img src={src} alt={alt} className={imageStyle} />
+      <Image
+        src={src}
+        alt={alt}
+        width={800}
+        height={400}
+        className={imageStyle}
+        unoptimized={isUnoptimized}
+        {...rest}
+      />
       {alt !== "" && match ? (
-        <a className={cx(textStyle, linkStyle)} href={match[1]} target="_blank">
+        <a
+          className={cx(textStyle, linkStyle)}
+          href={match[1]}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <SourceIcon width={14} height={14} color="#868686" />
           <span>출처</span>
         </a>
