@@ -1,5 +1,5 @@
 /* 공식문서 예제 "blog-start" code base */
-import fs from "fs";
+import fs from "fs/promises";
 import matter from "gray-matter";
 import { join } from "path";
 
@@ -15,24 +15,26 @@ export type Post = {
 
 const postsDirectory = join(process.cwd(), "public/posts");
 
-function readDir(path: string) {
-  return fs.readdirSync(path).filter((fileName) => fileName !== ".DS_Store");
+async function readDir(path: string) {
+  const files = await fs.readdir(path);
+  return files.filter((fileName) => fileName !== ".DS_Store");
 }
 
-export function getAllPostSlugs() {
-  return readDir(postsDirectory).map((slug) => slug.replace(/\.mdx$/, ""));
+export async function getAllPostSlugs() {
+  const files = await readDir(postsDirectory);
+  return files.map((slug) => slug.replace(/\.mdx$/, ""));
 }
 
-export function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string) {
   const fullPath = join(postsDirectory, `${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const fileContents = await fs.readFile(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
   return { ...data, slug, content } as Post;
 }
 
-function getPostsBySlugs(slugs: string[]) {
-  const posts = slugs.map((slug) => getPostBySlug(slug));
+async function getPostsBySlugs(slugs: string[]) {
+  const posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug)));
   return posts;
 }
 
@@ -56,15 +58,15 @@ export function extractTagsInPosts(posts: Post[]) {
   return Object.entries(tagMap).map(([tagName, count]) => ({ tagName, count }));
 }
 
-export function getAllTags() {
-  const slugs = getAllPostSlugs();
-  const posts = getPostsBySlugs(slugs);
+export async function getAllTags() {
+  const slugs = await getAllPostSlugs();
+  const posts = await getPostsBySlugs(slugs);
   const tagInfo = extractTagsInPosts(posts);
   return tagInfo;
 }
 
-export function getAllPosts() {
-  const slugs = getAllPostSlugs();
-  const posts = sortPostsByLatest(getPostsBySlugs(slugs));
-  return posts;
+export async function getAllPosts() {
+  const slugs = await getAllPostSlugs();
+  const posts = await getPostsBySlugs(slugs);
+  return sortPostsByLatest(posts);
 }
