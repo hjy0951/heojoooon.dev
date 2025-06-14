@@ -1,15 +1,11 @@
 import { css, cx } from "#/styled-system/css";
 import { SourceIcon } from "@/components/icons";
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 
-interface ImageProps {
-  src: string;
-  alt: string;
-}
-
-export const MDXImage = ({ src, alt }: ImageProps) => {
+export const MDXImage = ({ src, alt, ...rest }: ImageProps) => {
   const match = alt.match(/link::(https?:\/\/[^\s]+)/);
-  const isUnoptimized = /\.(svg|gif)$/i.test(src);
+  const isUnoptimized =
+    typeof src === "string" ? /\.(svg|gif)$/i.test(src) : false;
 
   return (
     <>
@@ -20,6 +16,7 @@ export const MDXImage = ({ src, alt }: ImageProps) => {
         height={400}
         className={imageStyle}
         unoptimized={isUnoptimized}
+        {...rest}
       />
       {alt !== "" && match ? (
         <a
