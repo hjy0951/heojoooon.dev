@@ -16,6 +16,8 @@ export const MDXImage = ({ src, alt, ...rest }: ImageProps) => {
         height={400}
         className={imageStyle}
         unoptimized={isUnoptimized}
+        loading="lazy"
+        quality={85}
         {...rest}
       />
       {alt !== "" && match ? (
