@@ -1,9 +1,12 @@
 "use client";
 
-import { createContext, useLayoutEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { script } from "@/scripts/mode";
 
 export const COLOR_MODES = ["light", "dark"] as const;
 export type ColorModeType = (typeof COLOR_MODES)[number];
+
+const COLOR_MODE_KEY = "color-mode" as const;
 
 interface ColorModeContextProps {
   colorMode: ColorModeType;
@@ -15,39 +18,51 @@ export const ColorModeContext = createContext<
 >(undefined);
 
 interface ColorModeProviderProps {
-  children: React.ReactNode;
-  initialMode?: ColorModeType;
+  children: ReactNode;
 }
 
-export const ColorModeProvider = ({
-  children,
-  initialMode,
-}: ColorModeProviderProps) => {
-  const [colorMode, setColorMode] = useState<ColorModeType>(
-    initialMode || "light"
-  );
+export const ColorModeProvider = ({ children }: ColorModeProviderProps) => {
+  const [colorMode, setColorMode] = useState<ColorModeType>(() => {
+    if (typeof window === "undefined") return "light";
+
+    const savedMode = localStorage.getItem(COLOR_MODE_KEY);
+    if (savedMode === "dark" || savedMode === "light") {
+      return savedMode;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  });
 
   const toggleColorMode = () => {
     const next = colorMode === "light" ? "dark" : "light";
     setColorMode(next);
-    document.cookie = `color-mode=${next};`;
+    localStorage.setItem(COLOR_MODE_KEY, next);
     document.documentElement.setAttribute("data-color-mode", next);
   };
 
-  useLayoutEffect(() => {
-    if (initialMode) {
-      document.documentElement.setAttribute("data-color-mode", initialMode);
-      return;
-    }
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === COLOR_MODE_KEY && e.newValue) {
+        const newMode = e.newValue as ColorModeType;
+        setColorMode(newMode);
+        document.documentElement.setAttribute("data-color-mode", newMode);
+      }
+    };
 
-    const match = document.cookie.match(/(?:^|;\s*)color-mode=([^;]*)/);
-    const mode = (match?.[1] === "dark" ? "dark" : "light") as ColorModeType;
-    setColorMode(mode);
-    document.documentElement.setAttribute("data-color-mode", mode);
-  }, [initialMode]);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <ColorModeContext.Provider value={{ colorMode, toggleColorMode }}>
+      <script
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: script,
+        }}
+      />
       {children}
     </ColorModeContext.Provider>
   );

@@ -3,25 +3,21 @@ import "@/styles/globals.css";
 import { Footer } from "@/components/layout";
 import SimpleHeader from "@/components/layout/simple-header";
 import { css } from "#/styled-system/css";
-import { cookies } from "next/headers";
-import { ColorModeProvider, ColorModeType } from "@/contexts/color-mode";
+import { ColorModeProvider } from "@/contexts/color-mode";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Heojoooon.",
   description: "프론트엔드 개발자 허준영입니다.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const currentColorMode = (cookieStore.get("color-mode")?.value ||
-    "light") as ColorModeType;
-
   return (
-    <html lang="ko" data-color-mode={currentColorMode}>
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <meta
           name="google-site-verification"
@@ -34,11 +30,9 @@ export default async function RootLayout({
       </head>
 
       <body className={bodyStyle}>
-        <ColorModeProvider initialMode={currentColorMode}>
+        <ColorModeProvider>
           <SimpleHeader />
-
           {children}
-
           <Footer />
         </ColorModeProvider>
       </body>
