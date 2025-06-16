@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useState } from "react";
 import { script } from "@/scripts/mode";
 
 export const COLOR_MODES = ["light", "dark"] as const;
@@ -41,19 +41,6 @@ export const ColorModeProvider = ({ children }: ColorModeProviderProps) => {
     localStorage.setItem(COLOR_MODE_KEY, next);
     document.documentElement.setAttribute("data-color-mode", next);
   };
-
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === COLOR_MODE_KEY && e.newValue) {
-        const newMode = e.newValue as ColorModeType;
-        setColorMode(newMode);
-        document.documentElement.setAttribute("data-color-mode", newMode);
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
 
   return (
     <ColorModeContext.Provider value={{ colorMode, toggleColorMode }}>
