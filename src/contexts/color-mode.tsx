@@ -45,7 +45,6 @@ export const ColorModeProvider = ({ children }: ColorModeProviderProps) => {
   return (
     <ColorModeContext.Provider value={{ colorMode, toggleColorMode }}>
       <script
-        suppressHydrationWarning
         dangerouslySetInnerHTML={{
           __html: script,
         }}
