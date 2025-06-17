@@ -29,7 +29,7 @@ const SNSs = [
     url: "https://www.instagram.com/heojoooon/",
   },
   {
-    name: "hjy0951@gmail.com",
+    name: "Email",
     icon: <MdOutlineEmail className={iconStyle} size={28} />,
     url: "mailto:hjy0951@gmail.com",
   },
@@ -52,14 +52,18 @@ const linkGroupStyle = css({
 });
 
 interface SNSButtonProps {
+  name: string;
   icon: ReactNode;
   url: string;
 }
 
-const SNSLink = ({ icon, url }: SNSButtonProps) => {
+const SNSLink = ({ name, icon, url }: SNSButtonProps) => {
   return (
     <Link href={url} target="_blank">
-      <div className={iconWrapperStyle}>{icon}</div>
+      <div className={iconWrapperStyle}>
+        {icon}
+        <span className={tooltipStyle}>{name}</span>
+      </div>
     </Link>
   );
 };
@@ -73,5 +77,31 @@ const iconWrapperStyle = css({
   justifyContent: "center",
   alignItems: "center",
   borderRadius: "50",
-  _hover: { bg: "background.sns" },
+  position: "relative",
+
+  _hover: {
+    bg: "background.sns",
+    "& span": {
+      animation: "slideUp 0.1s ease-out forwards",
+    },
+  },
+});
+
+const tooltipStyle = css({
+  position: "absolute",
+  top: "-4px",
+  fontSize: "12px",
+  color: "background.primary",
+  whiteSpace: "nowrap",
+  opacity: 0,
+  pointerEvents: "none",
+  zIndex: 1,
+  backgroundColor: "background.reverse",
+  borderRadius: "4px",
+  padding: "2px 8px",
+
+  boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.2)",
+  _dark: {
+    boxShadow: "4px 4px 8px rgba(255, 255, 255, 0.10)",
+  },
 });

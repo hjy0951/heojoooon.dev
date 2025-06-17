@@ -94,7 +94,7 @@ export default defineConfig({
               secondary: { value: "#303030" },
             },
             badge: { value: { base: "#303030", _dark: "#D6E4FF" } },
-            sns: { value: { base: "#e0e0e0", _dark: "#546EFF" } },
+            sns: { value: { base: "#e0e0e0", _dark: "#70707080" } },
           },
           border: {
             blockquote: { value: { base: "#194D7C", _dark: "#5B8DF6" } },
