@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { BiSolidArrowToTop, BiCommentDetail, BiLinkAlt } from "react-icons/bi";
 import { TbArrowBackUp } from "react-icons/tb";
 import { IconType } from "react-icons";
+import { Toast } from "./toast";
+import { useToast } from "@/hooks/use-toast";
 
 type ButtonConfig = {
   icon: IconType;
@@ -14,6 +16,7 @@ type ButtonConfig = {
 
 export const UtilityButtonGroup = () => {
   const router = useRouter();
+  const { isVisible, message, showToast } = useToast();
 
   const handleBack = () => {
     router.back();
@@ -25,10 +28,11 @@ export const UtilityButtonGroup = () => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
+    showToast("링크가 복사되었습니다.");
   };
 
   const handleScrollToComments = () => {
-    const giscusElement = document.querySelector('iframe[src*="giscus"]');
+    const giscusElement = document.querySelector(".giscus");
     if (giscusElement) {
       giscusElement.scrollIntoView({ behavior: "smooth" });
     }
@@ -58,22 +62,26 @@ export const UtilityButtonGroup = () => {
   ];
 
   return (
-    <div className={buttonGroupStyle}>
-      {buttons.map(({ icon: Icon, label, onClick }, index) => (
-        <button
-          key={label}
-          onClick={onClick}
-          className={buttonStyle}
-          aria-label={label}
-          style={{
-            animation: `fadeIn 0.4s ease-out ${index * 0.08}s forwards`,
-            opacity: 0,
-          }}
-        >
-          <Icon className={iconStyle} />
-        </button>
-      ))}
-    </div>
+    <>
+      <div className={buttonGroupStyle}>
+        {buttons.map(({ icon: Icon, label, onClick }, index) => (
+          <button
+            key={label}
+            onClick={onClick}
+            className={buttonStyle}
+            aria-label={label}
+            style={{
+              animation: `fadeIn 0.4s ease-out ${index * 0.08}s forwards`,
+              opacity: 0,
+            }}
+          >
+            <Icon className={iconStyle} />
+          </button>
+        ))}
+      </div>
+
+      <Toast message={message} isVisible={isVisible} />
+    </>
   );
 };
 
