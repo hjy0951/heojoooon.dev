@@ -62,7 +62,6 @@ const PostPage = (props: PostParams) => {
       <div className={containerStyle}>
         <article className={articleStyle}>
           <Header post={post} />
-
           <Body post={post} />
         </article>
 
@@ -98,4 +97,5 @@ const articleStyle = css({
   minWidth: "100%",
   maxWidth: "800px",
   p: "60px 20px",
+  animation: "slideInFromTop 0.4s ease-in-out forwards",
 });

@@ -45,4 +45,5 @@ const mainStyle = css({
   pb: "80px",
   maxWidth: "1000px",
   minWidth: "320px",
+  animation: "slideInFromTop 0.4s ease-in-out forwards",
 });
