@@ -62,6 +62,7 @@ export const TOC = ({ data }: Props) => {
 
 const layoutStyle = css({
   display: "none",
+  scrollBehavior: "smooth",
 
   md: { display: "block" },
 });
