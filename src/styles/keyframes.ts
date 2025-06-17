@@ -10,6 +10,11 @@ export const keyframes = defineKeyframes({
     },
   },
 
+  fadeIn: {
+    "0%": { opacity: "0" },
+    "100%": { opacity: "1" },
+  },
+
   flickerEffect: {
     "0%": {
       opacity: 1,
@@ -56,6 +61,11 @@ export const keyframes = defineKeyframes({
 
   slideInFromRight: {
     "0%": { transform: "translateX(20px)", opacity: "0" },
+    "100%": { transform: "translateX(0)", opacity: "1" },
+  },
+
+  slideInFromLeft: {
+    "0%": { transform: "translateX(-20px)", opacity: "0" },
     "100%": { transform: "translateX(0)", opacity: "1" },
   },
 

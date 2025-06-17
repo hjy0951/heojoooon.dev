@@ -2,7 +2,13 @@ import { getAllPostSlugs, getPostBySlug } from "@/lib/api";
 import { use } from "react";
 import { css } from "#/styled-system/css";
 import { createTOCInfo } from "@/lib/utils";
-import { Body, Giscus, Header, TOC } from "@/components/post";
+import {
+  Body,
+  Giscus,
+  Header,
+  TOC,
+  UtilityButtonGroup,
+} from "@/components/post";
 import { Metadata } from "next";
 import { SNSLinkGroup } from "@/components/layout";
 
@@ -69,8 +75,12 @@ const PostPage = (props: PostParams) => {
 
         <Giscus />
       </div>
-
-      <TOC data={tocInfo} />
+      <aside className={asideStyle}>
+        <div className={menuWrapperStyle}>
+          <TOC data={tocInfo} />
+          <UtilityButtonGroup />
+        </div>
+      </aside>
     </div>
   );
 };
@@ -98,4 +108,19 @@ const articleStyle = css({
   maxWidth: "800px",
   p: "60px 20px",
   animation: "slideInFromTop 0.4s ease-in-out forwards",
+});
+
+const asideStyle = css({
+  display: "none",
+  scrollBehavior: "smooth",
+
+  md: { display: "block" },
+});
+
+const menuWrapperStyle = css({
+  position: "sticky",
+  bottom: 0,
+  top: "160px",
+  ml: "12px",
+  width: "260px",
 });

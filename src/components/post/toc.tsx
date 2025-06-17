@@ -20,60 +20,41 @@ export const TOC = ({ data }: Props) => {
   const validIndents = ["0", "1", "2"] as const;
 
   return (
-    <aside className={layoutStyle}>
-      <div className={wrapperStyle}>
-        {data.length > 0 && (
-          <>
-            <p className={cx(suite.className, titleStyle)}>On this page</p>
-            <ul className={cx(suite.className, contentListStyle)}>
-              {data.map((item, index) => {
-                return (
-                  <li
-                    key={item.link}
-                    className={cx(
-                      contentRecipe({
-                        variant:
-                          activeHeadingId === item.link ? "active" : "inactive",
-                      }),
-                      liAnimation
-                    )}
-                    style={{
-                      animationDelay: `${index * (2 + item.indentCount) * 0.02}s`,
-                    }}
-                  >
-                    <Link
-                      href={item.link}
-                      className={indentRecipe({
-                        count: validIndents[item.indentCount],
-                      })}
-                    >
-                      {item.text}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </>
-        )}
-      </div>
-    </aside>
+    data.length > 0 && (
+      <>
+        <p className={cx(suite.className, titleStyle)}>On this page</p>
+        <ul className={cx(suite.className, contentListStyle)}>
+          {data.map((item, index) => {
+            return (
+              <li
+                key={item.link}
+                className={cx(
+                  contentRecipe({
+                    variant:
+                      activeHeadingId === item.link ? "active" : "inactive",
+                  }),
+                  liAnimation
+                )}
+                style={{
+                  animationDelay: `${index * (2 + item.indentCount) * 0.02}s`,
+                }}
+              >
+                <Link
+                  href={item.link}
+                  className={indentRecipe({
+                    count: validIndents[item.indentCount],
+                  })}
+                >
+                  {item.text}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </>
+    )
   );
 };
-
-const layoutStyle = css({
-  display: "none",
-  scrollBehavior: "smooth",
-
-  md: { display: "block" },
-});
-
-const wrapperStyle = css({
-  position: "sticky",
-  bottom: 0,
-  top: "160px",
-  ml: "12px",
-  width: "260px",
-});
 
 const titleStyle = css({
   fontWeight: 700,
