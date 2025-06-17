@@ -2,7 +2,6 @@ import { css, cx } from "#/styled-system/css";
 import { pretendard } from "@/styles/font";
 import Image from "next/image";
 import Link from "next/link";
-import { PaperPlaneIcon } from "../icons";
 import { Badge } from "./badge";
 import { convertTagName, TagType } from "@/lib/utils";
 import { Post } from "@/lib/api";
@@ -47,7 +46,6 @@ export const PostListItem = ({
           </div>
 
           <div className={dateWrapperStyle}>
-            <PaperPlaneIcon />
             <p className={dateStyle}>{displayDate}</p>
           </div>
         </div>
