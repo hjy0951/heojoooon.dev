@@ -1,6 +1,15 @@
 import { defineKeyframes } from "@pandacss/dev";
 
 export const keyframes = defineKeyframes({
+  bounce: {
+    "0%, 100%": {
+      transform: "translateY(0)",
+    },
+    "50%": {
+      transform: "translateY(-6px)",
+    },
+  },
+
   flickerEffect: {
     "0%": {
       opacity: 1,

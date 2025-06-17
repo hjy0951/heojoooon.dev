@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "motion/react";
-import { RiMoonFill, RiQuestionMark, RiSunFill } from "react-icons/ri";
+import { RiMoonFill, RiSunFill } from "react-icons/ri";
 import { css, cva, cx } from "#/styled-system/css";
 import { useIsMounted } from "@/hooks/use-is-mounted";
 import { useColorMode } from "@/hooks/use-color-mode";
+import { LoadingDots } from "@/components/icons/loading-dots";
 
 export const ModeButton = () => {
   const isMounted = useIsMounted();
@@ -17,7 +18,7 @@ export const ModeButton = () => {
   if (!isMounted)
     return (
       <div className={layoutStyle}>
-        <RiQuestionMark size={20} />
+        <LoadingDots size={22} />
       </div>
     );
 
@@ -56,7 +57,7 @@ const buttonRecipe = cva({
       light: {
         backgroundColor: "sky.200",
         _hover: {
-          backgroundColor: "gray.300",
+          backgroundColor: "orange.300",
         },
       },
       dark: {
