@@ -28,7 +28,7 @@ export const UtilityButtonGroup = () => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
-    showToast("링크가 복사되었습니다.");
+    showToast("✓ 링크가 복사되었습니다.");
   };
 
   const handleScrollToComments = () => {
