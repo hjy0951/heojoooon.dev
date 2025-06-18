@@ -36,7 +36,7 @@ export const TOC = ({ data }: Props) => {
                   liAnimation
                 )}
                 style={{
-                  animationDelay: `${index * (2 + item.indentCount) * 0.02}s`,
+                  animationDelay: `${index * (1 + item.indentCount) * 0.02}s`,
                 }}
               >
                 <Link
