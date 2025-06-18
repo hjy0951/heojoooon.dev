@@ -35,6 +35,17 @@ function getPostsBySlugs(slugs: string[]) {
   const posts = slugs.map((slug) => getPostBySlug(slug));
   return posts;
 }
+export function getAdjacentPosts(currentSlug: string) {
+  const posts = getAllPosts();
+  const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
+
+  if (currentIndex === -1) return { prev: null, next: null };
+
+  return {
+    prev: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    next: currentIndex > 0 ? posts[currentIndex - 1] : null,
+  };
+}
 
 function sortPostsByLatest(posts: Post[]) {
   // sort posts by date in descending order

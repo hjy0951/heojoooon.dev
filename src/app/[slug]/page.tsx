@@ -1,4 +1,4 @@
-import { getAllPostSlugs, getPostBySlug } from "@/lib/api";
+import { getAdjacentPosts, getAllPostSlugs, getPostBySlug } from "@/lib/api";
 import { use } from "react";
 import { css } from "#/styled-system/css";
 import { createTOCInfo } from "@/lib/utils";
@@ -7,6 +7,7 @@ import {
   Giscus,
   Header,
   TOC,
+  PostNavigation,
   UtilityButtonGroup,
 } from "@/components/post";
 import { Metadata } from "next";
@@ -55,6 +56,8 @@ export const generateStaticParams = () => {
     slug,
   }));
 
+  console.log(params);
+
   return params;
 };
 
@@ -62,6 +65,7 @@ const PostPage = (props: PostParams) => {
   const { slug } = use(props.params);
   const post = getPostBySlug(slug);
   const tocInfo = createTOCInfo(post.content);
+  const { prev, next } = getAdjacentPosts(slug);
 
   return (
     <div className={wrapperStyle}>
@@ -69,6 +73,7 @@ const PostPage = (props: PostParams) => {
         <article className={articleStyle}>
           <Header post={post} />
           <Body post={post} />
+          <PostNavigation prev={prev} next={next} />
         </article>
 
         <SNSLinkGroup />
