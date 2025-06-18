@@ -23,7 +23,7 @@ const flattenMarkdown = (content: string): string => {
 };
 
 export const generateRSS = async () => {
-  const baseUrl = "https://heojooon.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const posts = getAllPosts();
 
   const items = await Promise.all(
@@ -42,7 +42,7 @@ export const generateRSS = async () => {
   const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title><![CDATA[Heojooon's Blog RSS Feed]]></title>
+    <title><![CDATA[HEOJOOON's Blog RSS Feed]]></title>
     <description><![CDATA[프론트엔드 개발자 허준영입니다.]]></description>
     <link>${baseUrl}</link>
     <language>ko</language>

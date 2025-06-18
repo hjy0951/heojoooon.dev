@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://heojooon.vercel.app/sitemap.xml
+Sitemap: https://heojooon.dev/sitemap.xml

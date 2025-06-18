@@ -10,20 +10,20 @@ import type { MetadataRoute } from "next";
 */
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const todayDate = new Date();
-  const baseUrl = "https://heojooon.vercel.app";
+  const lastModified = new Date();
+  const url = process.env.NEXT_PUBLIC_BASE_URL || "";
   const tagList = getAllTags();
   const postList = getAllPosts();
 
   return [
-    { url: baseUrl, lastModified: todayDate },
+    { url, lastModified },
     ...tagList.map(({ tagName }) => ({
-      url: `${baseUrl}/tag/${tagName}`,
-      lastModified: todayDate,
+      url: `${url}/tag/${tagName}`,
+      lastModified,
     })),
     ...postList.map(({ slug }) => ({
-      url: `${baseUrl}/${slug}`,
-      lastModified: todayDate,
+      url: `${url}/${slug}`,
+      lastModified,
     })),
   ];
 }
