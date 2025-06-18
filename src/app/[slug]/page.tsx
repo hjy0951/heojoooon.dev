@@ -27,7 +27,7 @@ export const generateMetadata = async ({
   const post = getPostBySlug(slug);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const title = `${post.title} | Heojooon.`;
+  const title = `${post.title} | HEOJOOON.`;
   const imageUrl = `${baseUrl}/post-images/${slug}/cover.png`;
   const publishedTime = new Date(post.createdAt).toISOString();
 
