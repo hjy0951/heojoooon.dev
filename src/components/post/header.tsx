@@ -12,7 +12,7 @@ export const Header = ({ post }: HeaderProps) => {
   const timeToRead = calculateTimeToRead(post.content);
   return (
     <header className={cx(postDescriptionStyle, `${suite.className}`)}>
-      <h1 className={postTitleStyle}>{post.title}</h1>
+      <p className={postTitleStyle}>{post.title}</p>
 
       <div className={cx(postInfoStyle, `${yeongdeokSea.className}`)}>
         <h3>{post.createdAt},</h3>
