@@ -26,8 +26,8 @@ export const generateMetadata = async ({
   const { slug } = await params;
   const post = getPostBySlug(slug);
 
-  const baseUrl = "https://heojooon.vercel.app";
-  const title = `${post.title} | Heojoooon.`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const title = `${post.title} | Heojooon.`;
   const imageUrl = `${baseUrl}/post-images/${slug}/cover.png`;
   const publishedTime = new Date(post.createdAt).toISOString();
 

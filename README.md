@@ -1,4 +1,4 @@
-### Heojoooon.
+### Heojooon.
 
 > 개발 및 일상을 다루는 블로그
 

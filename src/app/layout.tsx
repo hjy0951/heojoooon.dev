@@ -7,7 +7,7 @@ import { ColorModeProvider } from "@/contexts/color-mode";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Heojoooon.",
+  title: "Heojooon.",
   description: "프론트엔드 개발자 허준영입니다.",
 };
 

@@ -23,7 +23,7 @@ const flattenMarkdown = (content: string): string => {
 };
 
 export const generateRSS = async () => {
-  const baseUrl = "https://heojooon.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const posts = getAllPosts();
 
   const items = await Promise.all(
