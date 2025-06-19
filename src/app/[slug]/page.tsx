@@ -12,6 +12,7 @@ import {
 } from "@/components/post";
 import { Metadata } from "next";
 import { SNSLinkGroup } from "@/components/layout";
+import { blogTitle } from "@/constants";
 
 type PostParams = {
   params: Promise<{
@@ -27,7 +28,7 @@ export const generateMetadata = async ({
   const post = getPostBySlug(slug);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const title = `${post.title} | HEOJOOON.`;
+  const title = `${post.title} | ${blogTitle}`;
   const keywords = post.tags.map((tag) => convertTagName(tag));
   const imageUrl = `${baseUrl}/post-images/${slug}/cover.png`;
   const publishedTime = new Date(post.createdAt).toISOString();

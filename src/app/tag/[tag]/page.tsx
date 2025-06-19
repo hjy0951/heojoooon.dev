@@ -3,6 +3,7 @@ import { getAllTags } from "@/lib/api";
 import { use } from "react";
 import { Metadata } from "next";
 import { convertTagName, TagType } from "@/lib/utils";
+import { blogTitle } from "@/constants";
 
 type TagParams = {
   params: Promise<{
@@ -16,7 +17,7 @@ export const generateMetadata = async ({
 }: TagParams): Promise<Metadata> => {
   const { tag } = await params;
   const convertedTag = convertTagName(tag);
-  const title = `#${convertedTag} | HEOJOOON.`;
+  const title = `#${convertedTag} | ${blogTitle}`;
 
   return {
     title,

@@ -3,9 +3,10 @@ import { Section } from "@/components/about";
 import { ProfileCard } from "@/components/layout";
 import { pretendard } from "@/styles/font";
 import { Metadata } from "next";
+import { blogTitle } from "@/constants";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const title = "About | HEOJOOON.";
+  const title = `About | ${blogTitle}`;
 
   return {
     title,
