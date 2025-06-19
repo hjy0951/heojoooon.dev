@@ -105,6 +105,7 @@ const descriptionStyle = css({
 });
 
 const postTagsStyle = css({
+  mt: "8px",
   display: "flex",
   gap: "4px",
   justifyContent: "end",
