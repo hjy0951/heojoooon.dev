@@ -13,6 +13,8 @@ import { Metadata } from "next";
 import { SNSLinkGroup } from "@/components/layout";
 import { blogTitle } from "@/constants";
 
+export const dynamicParams = false;
+
 type PostParams = {
   params: Promise<{
     slug: string;

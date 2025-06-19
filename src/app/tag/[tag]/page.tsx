@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import { convertTagName, TagType } from "@/lib/utils";
 import { blogTitle } from "@/constants";
 
+export const dynamicParams = false;
+
 type TagParams = {
   params: Promise<{
     section: string;
