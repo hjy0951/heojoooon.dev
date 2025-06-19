@@ -58,8 +58,6 @@ export const generateStaticParams = () => {
     slug,
   }));
 
-  console.log(params);
-
   return params;
 };
 
