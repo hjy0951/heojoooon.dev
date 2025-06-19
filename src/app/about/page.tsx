@@ -2,6 +2,26 @@ import { css, cx } from "#/styled-system/css";
 import { Section } from "@/components/about";
 import { ProfileCard } from "@/components/layout";
 import { pretendard } from "@/styles/font";
+import { Metadata } from "next";
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  const title = "About | HEOJOOON.";
+
+  return {
+    title,
+    keywords: ["허준영", "프론트엔드"],
+
+    openGraph: {
+      title,
+      type: "profile",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/about`,
+    },
+    twitter: {
+      card: "summary",
+      title,
+    },
+  };
+};
 
 const AboutPage = () => {
   return (

@@ -1,7 +1,7 @@
 import { getAdjacentPosts, getAllPostSlugs, getPostBySlug } from "@/lib/api";
 import { use } from "react";
 import { css } from "#/styled-system/css";
-import { createTOCInfo } from "@/lib/utils";
+import { convertTagName, createTOCInfo } from "@/lib/utils";
 import {
   Body,
   Giscus,
@@ -28,12 +28,14 @@ export const generateMetadata = async ({
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const title = `${post.title} | HEOJOOON.`;
+  const keywords = post.tags.map((tag) => convertTagName(tag));
   const imageUrl = `${baseUrl}/post-images/${slug}/cover.png`;
   const publishedTime = new Date(post.createdAt).toISOString();
 
   return {
     title,
     description: post.description,
+    keywords,
 
     openGraph: {
       title,

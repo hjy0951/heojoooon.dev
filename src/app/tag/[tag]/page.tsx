@@ -1,12 +1,36 @@
 import { MainPage } from "@/components/page";
 import { getAllTags } from "@/lib/api";
 import { use } from "react";
+import { Metadata } from "next";
+import { convertTagName, TagType } from "@/lib/utils";
 
 type TagParams = {
   params: Promise<{
     section: string;
-    tag: string;
+    tag: TagType;
   }>;
+};
+
+export const generateMetadata = async ({
+  params,
+}: TagParams): Promise<Metadata> => {
+  const { tag } = await params;
+  const convertedTag = convertTagName(tag);
+  const title = `#${convertedTag} | HEOJOOON.`;
+
+  return {
+    title,
+    keywords: [convertedTag],
+    openGraph: {
+      title,
+      type: "website",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/tag/${tag}`,
+    },
+    twitter: {
+      card: "summary",
+      title,
+    },
+  };
 };
 
 export const generateStaticParams = () => {
