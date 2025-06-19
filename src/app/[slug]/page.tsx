@@ -1,7 +1,7 @@
 import { getAdjacentPosts, getAllPostSlugs, getPostBySlug } from "@/lib/api";
 import { use } from "react";
 import { css } from "#/styled-system/css";
-import { createTOCInfo } from "@/lib/utils";
+import { convertTagName, createTOCInfo } from "@/lib/utils";
 import {
   Body,
   Giscus,
@@ -12,6 +12,7 @@ import {
 } from "@/components/post";
 import { Metadata } from "next";
 import { SNSLinkGroup } from "@/components/layout";
+import { blogTitle } from "@/constants";
 
 type PostParams = {
   params: Promise<{
@@ -27,14 +28,18 @@ export const generateMetadata = async ({
   const post = getPostBySlug(slug);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const title = `${post.title} | HEOJOOON.`;
+  const title = `${post.title} | ${blogTitle}`;
+  const keywords = [...post.tags.map((tag) => convertTagName(tag)), "frontend"];
   const imageUrl = `${baseUrl}/post-images/${slug}/cover.png`;
   const publishedTime = new Date(post.createdAt).toISOString();
 
   return {
     title,
     description: post.description,
-
+    keywords,
+    alternates: {
+      canonical: `${baseUrl}/${slug}`,
+    },
     openGraph: {
       title,
       description: post.description,
@@ -55,8 +60,6 @@ export const generateStaticParams = () => {
   const params = getAllPostSlugs().map((slug) => ({
     slug,
   }));
-
-  console.log(params);
 
   return params;
 };

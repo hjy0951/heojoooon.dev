@@ -5,10 +5,11 @@ import SimpleHeader from "@/components/layout/simple-header";
 import { css } from "#/styled-system/css";
 import { ColorModeProvider } from "@/contexts/color-mode";
 import { ReactNode } from "react";
+import { blogDescription, blogTitle } from "@/constants";
 
 export const metadata: Metadata = {
-  title: "HEOJOOON.",
-  description: "프론트엔드 개발자 허준영입니다.",
+  title: blogTitle,
+  description: blogDescription,
 };
 
 export default function RootLayout({

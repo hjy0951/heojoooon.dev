@@ -2,9 +2,10 @@ import { css } from "#/styled-system/css";
 import { getAllPosts, getAllTags } from "@/lib/api";
 import { PostList, Tags } from "../post-list";
 import { SNSLinkGroup } from "../layout";
+import { TagType } from "@/lib/utils";
 
 interface MainPageProps {
-  selectedTag?: string;
+  selectedTag?: TagType;
 }
 
 export const MainPage = ({ selectedTag }: MainPageProps) => {
