@@ -7,6 +7,8 @@ const tagMap = {
   develop: "개발",
   cicd: "CI/CD",
   javascript: "JavaScript",
+  typescript: "TypeScript",
+  svg: "SVG",
   react: "React",
   nextjs: "NextJS",
   css: "CSS",
