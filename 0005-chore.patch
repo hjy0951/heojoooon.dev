@@ -1,0 +1,29 @@
+From 85b7e3fd801ad95d3fa5a733aea4e285b0f1de36 Mon Sep 17 00:00:00 2001
+From: hjy0951 <hjy0951@gmail.com>
+Date: Thu, 19 Jun 2025 14:58:50 +0900
+Subject: [PATCH 5/5] =?UTF-8?q?chore:=20=EC=BD=98=EC=86=94=20=EC=A0=9C?=
+ =?UTF-8?q?=EA=B1=B0?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/app/[slug]/page.tsx | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/app/[slug]/page.tsx b/src/app/[slug]/page.tsx
+index 528fe39..0c69d93 100644
+--- a/src/app/[slug]/page.tsx
++++ b/src/app/[slug]/page.tsx
+@@ -58,8 +58,6 @@ export const generateStaticParams = () => {
+     slug,
+   }));
+ 
+-  console.log(params);
+-
+   return params;
+ };
+ 
+-- 
+2.41.0
+

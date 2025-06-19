@@ -1,0 +1,52 @@
+From ae8dd02cb83e8c4cd8188f3f2c156ffcc70ef52d Mon Sep 17 00:00:00 2001
+From: hjy0951 <hjy0951@gmail.com>
+Date: Thu, 19 Jun 2025 14:55:12 +0900
+Subject: [PATCH 2/5] =?UTF-8?q?fix:=20=EB=88=84=EB=9D=BD=EB=90=9C=20TagTyp?=
+ =?UTF-8?q?e=20=ED=83=80=EC=9E=85=20=EC=A7=80=EC=A0=95=20=EC=B6=94?=
+ =?UTF-8?q?=EA=B0=80?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/components/page/main.tsx | 3 ++-
+ src/lib/api.ts               | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/components/page/main.tsx b/src/components/page/main.tsx
+index f527fd0..12ca5da 100644
+--- a/src/components/page/main.tsx
++++ b/src/components/page/main.tsx
+@@ -2,9 +2,10 @@ import { css } from "#/styled-system/css";
+ import { getAllPosts, getAllTags } from "@/lib/api";
+ import { PostList, Tags } from "../post-list";
+ import { SNSLinkGroup } from "../layout";
++import { TagType } from "@/lib/utils";
+ 
+ interface MainPageProps {
+-  selectedTag?: string;
++  selectedTag?: TagType;
+ }
+ 
+ export const MainPage = ({ selectedTag }: MainPageProps) => {
+diff --git a/src/lib/api.ts b/src/lib/api.ts
+index d4933b5..cb3aaaa 100644
+--- a/src/lib/api.ts
++++ b/src/lib/api.ts
+@@ -2,11 +2,12 @@
+ import fs from "fs";
+ import matter from "gray-matter";
+ import { join } from "path";
++import { TagType } from "./utils";
+ 
+ export type Post = {
+   slug: string;
+   title: string;
+-  tags: string[];
++  tags: TagType[];
+   description: string;
+   createdAt: string;
+   updatedAt?: string;
+-- 
+2.41.0
+
