@@ -1,5 +1,4 @@
 import { getAdjacentPosts, getAllPostSlugs, getPostBySlug } from "@/lib/api";
-import { use } from "react";
 import { css } from "#/styled-system/css";
 import { convertTagName, createTOCInfo } from "@/lib/utils";
 import {
@@ -16,7 +15,6 @@ import { blogTitle } from "@/constants";
 
 type PostParams = {
   params: Promise<{
-    section: string;
     slug: string;
   }>;
 };
@@ -64,8 +62,8 @@ export const generateStaticParams = () => {
   return params;
 };
 
-const PostPage = (props: PostParams) => {
-  const { slug } = use(props.params);
+const PostPage = async (props: PostParams) => {
+  const { slug } = await props.params;
   const post = getPostBySlug(slug);
   const tocInfo = createTOCInfo(post.content);
   const { prev, next } = getAdjacentPosts(slug);

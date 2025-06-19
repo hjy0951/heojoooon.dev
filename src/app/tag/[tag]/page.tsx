@@ -1,6 +1,5 @@
 import { MainPage } from "@/components/page";
 import { getAllTags } from "@/lib/api";
-import { use } from "react";
 import { Metadata } from "next";
 import { convertTagName, TagType } from "@/lib/utils";
 import { blogTitle } from "@/constants";
@@ -45,8 +44,8 @@ export const generateStaticParams = () => {
   return params;
 };
 
-const TagedMainPage = (props: TagParams) => {
-  const { tag } = use(props.params);
+const TagedMainPage = async (props: TagParams) => {
+  const { tag } = await props.params;
   return <MainPage selectedTag={tag} />;
 };
 
