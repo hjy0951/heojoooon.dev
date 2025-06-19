@@ -2,11 +2,12 @@
 import fs from "fs";
 import matter from "gray-matter";
 import { join } from "path";
+import { TagType } from "./utils";
 
 export type Post = {
   slug: string;
   title: string;
-  tags: string[];
+  tags: TagType[];
   description: string;
   createdAt: string;
   updatedAt?: string;
