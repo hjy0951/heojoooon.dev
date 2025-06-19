@@ -7,15 +7,18 @@ import { blogTitle } from "@/constants";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const title = `About | ${blogTitle}`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   return {
     title,
-    keywords: ["허준영", "프론트엔드"],
-
+    keywords: ["허준영", "frontend"],
+    alternates: {
+      canonical: `${baseUrl}/about`,
+    },
     openGraph: {
       title,
       type: "profile",
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/about`,
+      url: `${baseUrl}/about`,
     },
     twitter: {
       card: "summary",

@@ -18,14 +18,18 @@ export const generateMetadata = async ({
   const { tag } = await params;
   const convertedTag = convertTagName(tag);
   const title = `#${convertedTag} | ${blogTitle}`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   return {
     title,
     keywords: [convertedTag],
+    alternates: {
+      canonical: `${baseUrl}/tag/${tag}`,
+    },
     openGraph: {
       title,
       type: "website",
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/tag/${tag}`,
+      url: `${baseUrl}/tag/${tag}`,
     },
     twitter: {
       card: "summary",

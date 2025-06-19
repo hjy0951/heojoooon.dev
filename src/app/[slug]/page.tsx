@@ -29,7 +29,7 @@ export const generateMetadata = async ({
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const title = `${post.title} | ${blogTitle}`;
-  const keywords = post.tags.map((tag) => convertTagName(tag));
+  const keywords = [...post.tags.map((tag) => convertTagName(tag)), "frontend"];
   const imageUrl = `${baseUrl}/post-images/${slug}/cover.png`;
   const publishedTime = new Date(post.createdAt).toISOString();
 
@@ -37,7 +37,9 @@ export const generateMetadata = async ({
     title,
     description: post.description,
     keywords,
-
+    alternates: {
+      canonical: `${baseUrl}/${slug}`,
+    },
     openGraph: {
       title,
       description: post.description,
