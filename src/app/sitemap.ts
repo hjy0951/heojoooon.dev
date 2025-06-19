@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     })),
     ...postList.map(({ slug }) => ({
-      url: `${url}/${slug}`,
+      url: `${url}/post/${slug}`,
       lastModified,
     })),
   ];

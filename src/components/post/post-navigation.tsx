@@ -11,7 +11,7 @@ export const PostNavigation = ({ prev, next }: PostNavigationProps) => {
   return (
     <nav className={navigationStyle}>
       {prev && (
-        <Link href={`/${prev.slug}`} className={linkStyle}>
+        <Link href={`/post/${prev.slug}`} className={linkStyle}>
           <div className={contentStyle}>
             <span className={labelStyle}>이전 글</span>
             <span className={`${titleStyle} title`}>{prev.title}</span>
@@ -19,7 +19,7 @@ export const PostNavigation = ({ prev, next }: PostNavigationProps) => {
         </Link>
       )}
       {next && (
-        <Link href={`/${next.slug}`} className={linkStyle}>
+        <Link href={`/post/${next.slug}`} className={linkStyle}>
           <div className={cx(contentStyle, nextContentStyle)}>
             <span className={labelStyle}>다음 글</span>
             <span className={`${titleStyle} title`}>{next.title}</span>

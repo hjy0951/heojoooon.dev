@@ -45,7 +45,7 @@ export const generateMetadata = async ({
       description: post.description,
       publishedTime,
       type: "article",
-      url: `${baseUrl}/${slug}`,
+      url: `${baseUrl}/post/${slug}`,
       images: [imageUrl],
     },
     twitter: {

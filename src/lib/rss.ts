@@ -30,8 +30,8 @@ export const generateRSS = async () => {
     posts.map(async (post) => {
       return `<item>
         <title><![CDATA[${post.title}]]></title>
-        <link>${baseUrl}/${post.slug}</link>
-        <guid isPermaLink="false">${baseUrl}/${post.slug}</guid>
+        <link>${baseUrl}/post/${post.slug}</link>
+        <guid isPermaLink="false">${baseUrl}/post/${post.slug}</guid>
         <pubDate>${new Date(post.updatedAt || post.createdAt).toUTCString()}</pubDate>
         <description><![CDATA[ ${post.description} ]]></description>
         <content:encoded><![CDATA[ ${flattenMarkdown(post.content)} ]]></content:encoded>
