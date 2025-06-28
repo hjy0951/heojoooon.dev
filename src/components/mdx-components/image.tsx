@@ -3,7 +3,14 @@ import { SourceIcon } from "@/components/icons";
 import Image, { ImageProps } from "next/image";
 
 export const MDXImage = ({ src, alt, ...rest }: ImageProps) => {
-  const match = alt.match(/link::(https?:\/\/[^\s]+)/);
+  // NOTE: 크기 정보 파싱 (::800x600 형태)
+  const sizeMatch = alt.match(/::(\d+)x(\d+)/);
+  const width = sizeMatch ? parseInt(sizeMatch[1]) : 800;
+  const height = sizeMatch ? parseInt(sizeMatch[2]) : 400;
+  const cleanedAlt = alt.replace(/::\d+x\d+/, "").trim();
+
+  // NOTE: 출처 링크 파싱 (link:: 형태)
+  const linkMatch = cleanedAlt.match(/link::(https?:\/\/[^\s]+)/);
   const isUnoptimized =
     typeof src === "string" ? /\.(svg|gif)$/i.test(src) : false;
 
@@ -11,19 +18,19 @@ export const MDXImage = ({ src, alt, ...rest }: ImageProps) => {
     <>
       <Image
         src={src}
-        alt={alt}
-        width={800}
-        height={400}
+        alt={cleanedAlt}
+        width={width}
+        height={height}
         className={imageStyle}
         unoptimized={isUnoptimized}
         loading="lazy"
         quality={85}
         {...rest}
       />
-      {alt !== "" && match ? (
+      {cleanedAlt !== "" && linkMatch ? (
         <a
           className={cx(textStyle, linkStyle)}
-          href={match[1]}
+          href={linkMatch[1]}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -31,7 +38,7 @@ export const MDXImage = ({ src, alt, ...rest }: ImageProps) => {
           <span>출처</span>
         </a>
       ) : (
-        <span className={cx(textStyle, descriptionStyle)}>{alt}</span>
+        <span className={cx(textStyle, descriptionStyle)}>{cleanedAlt}</span>
       )}
     </>
   );
