@@ -71,7 +71,7 @@ export const proseStyle = css({
     marginBottom: "prose.block",
   },
   // Typography
-  "& h1, & h2, & h3": {
+  "& h1, & h2, & h3, & h4": {
     paddingTop: "prose.heading",
     paddingBottom: "prose.text",
     color: "prose.text",
@@ -85,6 +85,9 @@ export const proseStyle = css({
   },
   "& h3": {
     textStyle: "prose.h3",
+  },
+  "& h4": {
+    textStyle: "prose.h4",
   },
 
   "& p": {

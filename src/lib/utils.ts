@@ -42,7 +42,7 @@ const removeLink = (text: string) => {
 };
 
 export const createTOCInfo = (content: string): HeadingInfo[] => {
-  const regex = /^(#|##|###) (.*$)/gim;
+  const regex = /^(##|###|####) (.*$)/gim;
   const headingList = content.match(regex);
 
   if (!headingList) return [];

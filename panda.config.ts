@@ -40,22 +40,29 @@ export default defineConfig({
       textStyles: {
         "prose.h1": {
           value: {
-            fontSize: "36px",
+            fontSize: "40px",
             fontWeight: "800",
             lineHeight: "1.2",
           },
         },
         "prose.h2": {
           value: {
-            fontSize: "28px",
+            fontSize: "32px",
             fontWeight: "800",
-            lineHeight: "1.3",
+            lineHeight: "1.2",
           },
         },
         "prose.h3": {
           value: {
+            fontSize: "26px",
+            fontWeight: "800",
+            lineHeight: "1.3",
+          },
+        },
+        "prose.h4": {
+          value: {
             fontSize: "20px",
-            fontWeight: "700",
+            fontWeight: "800",
             lineHeight: "1.4",
           },
         },

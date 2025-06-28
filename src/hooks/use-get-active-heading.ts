@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export const useGetActiveHeading = () => {
-  const headingQuery = "h1, h2, h3";
+  const headingQuery = "h2, h3, h4";
   const observer = useRef<IntersectionObserver>(null);
   const [activeHeadingId, setActiveHeadingId] = useState<string>("");
 
