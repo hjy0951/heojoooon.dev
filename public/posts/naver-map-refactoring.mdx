@@ -1,0 +1,413 @@
+---
+slug: naver-map-refactoring
+title: "지도 컴포넌트 리팩토링: 구조 개선하기"
+description: "기능 확장에 따라 커져가는 컴포넌트를 개선해보았습니다."
+tags: ["refactoring"]
+createdAt: "2025.06.30"
+---
+
+[디프만](https://www.depromeet.com/) 16기로 활동하며 ["다함께 정하는 중간 장소 서비스, 콕(Kok)"](https://www.kokokok.com) 프로젝트를 진행하였습니다.
+
+콕은 다음과 같은 문제를 해결해보자는 취지를 가지고 만들어진 서비스입니다.
+
+> "사람들과 여러 모임을 진행할 때, 각자 출발지가 다른데 어디서 만나면 좋을까?"
+
+그리고 다음과 같은 플로우를 가집니다.
+
+1. 모임을 생성하여 모임 구성원들에게 **카카오톡 공유하기**를 통해 초대장을 보낼 수 있습니다.
+2. 각자의 출발지를 입력하면 모든 출발지를 기반으로 **중간장소 후보지를 추천**해줍니다.
+3. **투표**를 통해 모든 후보지 중 최종 장소를 선정할 수 있는 간단한 서비스입니다.
+
+이번 글에서는 콕을 개발하며 기능 확장에 따라 커져가는 지도 컴포넌트의 구조를 개선한 경험을 기록해보려고 합니다.
+
+해당 프로젝트에서 프론트엔드 팀원들과 논의를 거치며 **UI 패키지를 통해 디자인 시스템을 관리하고, 외부 API 또한 별도의 패키지로 관리**하기 위해 **모노레포** 환경을 채택하였습니다.
+
+이때 외부 API 중, 지도 기능을 위해 [네이버 지도 API](https://www.ncloud.com/product/applicationService/maps)를 사용하였고, 이를 지도 패키지로 래핑하여 기능 구현에 활용하였습니다.
+
+## 순조로운 출발 🚀
+
+기획 초반, 1차 MVP에서는 아래와 같이 지도의 활용이 많지 않아, 각자 패키지에서 지도 컴포넌트를 임포트하여 간단하게 화면을 구성할 수 있었습니다.
+
+![1차 MVP의 지도 사용 화면::640x320](/post-images/naver-map-refactoring/1.png)
+
+따라서 지도 컴포넌트 또한 아래와 같이 네이버 지도 API를 이용해 초기화하여 불러오는 용도로 활용되었습니다.
+
+```tsx
+"use client";
+
+import { useEffect, useRef } from "react";
+import { NaverMapProps } from "./types";
+
+export const NaverMap = ({ width, height }: NaverMapProps) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_NAVER_CLIENT_ID) {
+      console.error("네이버 ID 부재");
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_CLIENT_ID}`;
+    script.async = true;
+
+    script.onerror = () => {
+      console.error("네이버 지도 로드 실패");
+    };
+
+    script.onload = () => {
+      if (!mapRef.current || !window.naver) {
+        console.error("지도 초기화 불가");
+        return;
+      }
+      try {
+        const mapOptions = {
+          /* 지도 기본 옵션 설정 */
+        };
+
+        new naver.maps.Map(mapRef.current, mapOptions);
+      } catch (error) {
+        console.error("네이버 지도 생성 실패", error);
+      }
+    };
+
+    document.head.appendChild(script);
+  }, []);
+
+  return <div ref={mapRef} style={{ width, height }} />;
+};
+
+```
+
+## 문제 발생 🚨
+
+그러나, **출발지 검색** 기능을 구현하며 문제가 발생하였습니다.
+검색 결과로 나온 장소를 클릭했을때 해당 장소로 이동해야 했는데, 네이버 지도 API에서 지도 이동을 위한 [panTo](https://navermaps.github.io/maps.js.ncp/docs/naver.maps.Map.html#panTo__anchor) 함수는 **네이버 지도 객체**를 이용해야만 했기 때문입니다.
+
+현재 상황에서는 네이버 지도 컴포넌트 내에서만 지도 객체를 다루고 있기에 해당 기능을 사용할 수 없었습니다.
+하지만 panTo 기능을 활용하기 위해 props를 뚫는 것은 비효율적이라고 생각했습니다.
+
+panTo나 마커와 같은 기능들은 지도라는 **메인 기능을 위한 서브 기능**들이라고 생각하고,
+**하나의 컴포넌트에서 여러 개의 책임을 갖게 된다면 의존성이 커지며 확장과 수정에 불리하다고 판단**했기 때문입니다.
+
+이러한 이유로 팀원들에게 **현재 화면 띄워진 지도에 대한 객체를 Context에 저장하도록 구조 변경**을 제안하였습니다.
+이렇게 한다면 Context에 저장된 지도 객체를 통해 외부에서 부가 기능들을 활용할 수 있기 때문입니다.
+TanStack Query의 QueryClient를 사용하는 것처럼 말이죠.
+
+따라서 지도 객체의 저장을 위한 Context를 정의하고, 지도 컴포넌트가 초기화될 때 해당 지도에 대한 객체를 Context에 저장하였습니다.
+이를 통해 저장된 지도 객체를 불러와 검색 결과에 표시된 아이템을 클릭했을때 panTo 함수를 통해 해당 아이템의 주소로 쉽게 이동하는 기능을 구현할 수 있었습니다.
+[(관련 PR)](https://github.com/depromeet/kok-client/pull/43/files)
+
+![검색 아이템 클릭 시 이동::280x140](/post-images/naver-map-refactoring/3.gif)
+
+## 함께 개선해보면 어떨까요 😁
+
+이후 개발 마감 기한인 런칭데이 약 2주 전, 2차와 3차 MVP에서 다음과 같은 기획들과 함께 화면이 추가되었습니다.
+
+1. 모임에 초대된 인원들이 출발지를 입력하면, 현재 입력된 출발지들의 중간장소를 보여준다.
+2. 후보지 투표 시, 후보지 주변의 장소들을 둘러볼 수 있다.
+
+팀원들과 시간상의 이유로 1번 기능과 남은 버그를 해결하여 런칭데이를 진행하고, 2번 기능은 최종 발표 이전까지 구현하기로 계획하였습니다.
+
+![기능 확장에 따라 추가된 화면::640x320](/post-images/naver-map-refactoring/2.png)
+
+기존에는 지도 중앙에 하나의 마커만을 표기하면 되었지만, 여러 종류의 마커, 그리고 폴리곤을 그려야하는 상황이 추가되었습니다.
+해당 기능을 맡아주신 팀원분께서 너무 잘 구현해주셨지만 Context에 저장된 객체를 통해 외부 기능을 활용하려 했던 의도와는 달리, 지도 컴포넌트에 props를 추가하는 방향으로 개발을 진행하셨습니다.
+
+우선 기능 동작에는 문제가 없었기에, 담당 팀원분께 런칭데이 이후 함께 리팩토링해보면 어떨지 제안하였습니다.
+팀원분께서도 리팩토링을 염두하고 계셨다고 하시면서 흔쾌히 제안에 수락해주셨습니다.
+
+### Before
+
+기존에 지도 컴포넌트에 전달되는 props는 지도에 필요한 정보들과 함께, 아래와 같이 각 마커나 폴리곤에 대한 데이터가 옵셔널로 포함되어 있었습니다.
+
+```ts {4-13}
+  export interface NaverMapProps {
+    width?: string;
+    height?: string;
+    markerData?: MarkerDataCollection | MarkerItem[];
+    finalCenterMarker?: LocationCentroid;
+    centerMarker?: LocationCentroid;
+    memberMarkers?: {
+      latitude: number;
+      longitude: number;
+      imageUrl?: string;
+    }[];
+    onMarkerClick?: (markerId: number) => void;
+    polygon?: { lat: number; lng: number }[];
+  }
+```
+
+이에 따라 지도 컴포넌트에는 지도 초기화, 마커 종류별 처리 등 여러 책임이 한 곳에 모여있었습니다.
+아래는 리팩토링 전 구현된 지도 컴포넌트입니다. [(NaverMap.tsx)](https://github.com/depromeet/kok-client/blob/03f51d3ef104e66ded5fab7611dcb0b6681854da/packages/naver-map/src/NaverMap.tsx)
+
+```tsx
+"use client";
+
+import Polygon from "./Polygon";
+import DotMarker from "./DotMarker";
+import { getFinalMarkerElement } from "./FinalMarker";
+import { ProfileMarker } from "./overlays/profile-marker";
+
+export const NaverMap = ({
+  width,
+  height,
+  markerData = [],
+  centerMarker,
+  finalCenterMarker,
+  memberMarkers = [],
+  onMarkerClick,
+  polygon = [],
+}: NaverMapProps) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [mapInstance, setMapInstance] = useState<NaverMapInstance | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [showPolygon, setShowPolygon] = useState<boolean>(false);
+  const centerMarkerRef = useRef<naver.maps.Marker | null>(null);
+  const leaderMarkerRef = useRef<naver.maps.Marker | null>(null);
+  const memberMarkersRef = useRef<naver.maps.Marker[]>([]);
+  const { setMap } = useNaverMap();
+
+  const loadNaverMapScript = () => {
+    /* 네이버 지도 script 생성 및 append */
+  };
+
+  const initializeMap = () => {
+    /* 네이버 지도 초기화 */
+  };
+
+  const updateCenterMarker = () => {
+    /* 기존 마커 제거 및 기본 중앙 마커 생성 */
+  };
+
+  const createLeaderMarker = () => {
+    /* 기존 마커 제거 및 모임장 마커 생성 */
+  };
+
+  const updateMemberMarkers = () => {
+    /* 기존 마커 제거 및 모임 구성원 마커 생성 */
+  };
+
+  const handleMarkerClicked = (markerId: number) => {
+    /* 마커 클릭 핸들링 */
+  };
+
+  useEffect(() => {
+    /* 지도 script 생성 또는 초기화 */
+  }, [isLoaded]);
+
+  useEffect(() => {
+    /* props로 centerMarker가 전달되었다면 기본 마커 설정 */
+  }, [mapInstance, centerMarker, finalCenterMarker]);
+
+  useEffect(() => {
+    /* props로 markerData가 전달되었다면 모임장 마커 설정 */
+  }, [mapInstance, markerData]);
+
+  useEffect(() => {
+    /* props로 memberMarkers가 전달되었다면 모임 구성원 마커 설정 */
+  }, [mapInstance, memberMarkers]);
+
+  const isMarkerDataValid = Array.isArray(markerData) && markerData.length > 0;
+  const isPolygonValid = Array.isArray(polygon) && polygon.length > 0;
+
+  return (
+    <Flex>
+      <div ref={mapRef}>
+        {!isLoaded ? (
+          <div>
+            <LoadingSpinner />
+          </div>
+        ) : (
+          mapInstance && (
+            <>
+              {showPolygon && isPolygonValid && (
+                <Polygon map={mapInstance} path={polygon} />
+              )}
+              {isMarkerDataValid && markerData.length > 1 && (
+                <DotMarker
+                  map={mapInstance}
+                  markerData={markerData}
+                  onMarkerClicked={handleMarkerClicked}
+                />
+              )}
+            </>
+          )
+        )}
+      </div>
+    </Flex>
+  );
+};
+
+export default NaverMap;
+```
+
+### After
+
+해당 코드에서 제가 리팩토링 포인트로 잡은 지점은 다음과 같습니다.
+
+1. 마커의 종류에 따라 다른 props를 통해 마커에 대한 데이터를 전달하기 때문에**동일한 로직에 대한 코드가 중복으로 발생한다.**
+2. 지도 관련 기능이 추가 혹은 확장될 때, **컴포넌트의 책임이 증가하고 수정 포인트가 늘어날 수 있다.**
+
+그리고 아래와 같이 리팩토링을 진행하였습니다. [(관련 PR)](https://github.com/depromeet/kok-client/pull/135)
+
+먼저, 아래와 같이 지도 컴포넌트의 책임을 **지도 초기화로 축소**하였습니다. [(NaverMap.tsx)](https://github.com/depromeet/kok-client/blob/main/packages/naver-map/src/NaverMap.tsx)
+
+```tsx
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { Flex, LoadingSpinner } from "@repo/ui/components";
+import { useNaverMap } from "./naver-map-provider";
+
+export const NaverMap = ({
+  width,
+  height,
+  center,
+  zoom = NAVER_MAP_CONFIG.ZOOM_LEVEL,
+  children,
+}: NaverMapCoreProps) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [mapInstance, setMapInstance] = useState<NaverMapInstance | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasSetInitialCenter, setHasSetInitialCenter] = useState(false);
+  const { setMap } = useNaverMap();
+
+  const loadNaverMapScript = () => {
+    /* 네이버 지도 script 생성 및 append */
+  };
+
+  const initializeMap = () => {
+    /* 네이버 지도 초기화 */
+  };
+
+  useEffect(() => {
+    /* 지도 script 생성 또는 초기화 */
+  }, [isLoaded]);
+
+  useEffect(() => {
+    /* 지도 초기 위치 초기화 */
+  }, [mapInstance, center, hasSetInitialCenter]);
+
+  return (
+    <Flex>
+      <div ref={mapRef}>
+        {!isLoaded ? (
+          <Flex>
+            <LoadingSpinner />
+          </Flex>
+        ) : (
+          mapInstance && children
+        )}
+      </div>
+    </Flex>
+  );
+};
+
+export default NaverMap;
+```
+
+그리고 마커나 폴리곤과 관련된 로직을 모두 분리할 것이기 때문에, 관련된 로직이 모두 빠져 옵셔널로 내려주던 관련 props들 또한 모두 사라졌습니다.
+
+```tsx
+export interface NaverMapCoreProps {
+  width: string | number;
+  height: string | number;
+  center?: { latitude: number; longitude: number };
+  zoom?: number;
+  children?: ReactNode;
+};
+```
+
+이후 마커, 폴리곤 등의 오버레이 기능들은 커스텀 훅으로 정의하여 필요로 하는 컴포넌트에서 불러와 사용할 수 있도록 하였습니다.
+마커를 생성하는 `create` 함수와 현재 화면에 표기된 마커를 지우는 `cleanUp` 함수를 반환하도록 하였고,
+`create` 함수에서는 원하는 마커의 형태를 주입하여 생성할 수 있도록 구현하였습니다.
+이를 통해 **여러 종류의 마커에 대한 대응을 하나의 훅으로 처리**할 수 있게 되었습니다.
+
+```tsx
+// useMarker.ts
+"use client";
+
+import { useRef } from "react";
+import { NaverMapInstance, NaverMapMarker } from "../types";
+
+interface MarkerParams {
+  map: NaverMapInstance;
+}
+
+export const useMarker = ({ map }: MarkerParams) => {
+  const markersRef = useRef<NaverMapMarker[]>([]);
+
+  const create = ({
+    latitude,
+    longitude,
+    customMarkerData,
+  }: {
+    latitude: number;
+    longitude: number;
+    customMarkerData?: {
+      marker: HTMLDivElement;
+      width?: number;
+      height?: number;
+    };
+  }) => {
+    if (!window.naver || !map) return;
+
+    const markerOptions = {
+      map,
+      position: new naver.maps.LatLng(latitude, longitude),
+      icon: customMarkerData && {
+        content: customMarkerData.marker,
+      },
+    };
+    const marker = new naver.maps.Marker(markerOptions);
+    markersRef.current.push(marker);
+    return marker;
+  };
+
+  const cleanUp = () => {
+    if (!window.naver || !map) return;
+
+    markersRef.current.forEach((marker) => {
+      marker.setMap(null);
+    });
+    markersRef.current = [];
+  };
+
+  return { create, cleanUp };
+};
+```
+
+폴리곤 또한 위 `useMarker`과 같은 방식으로 구현되었습니다.
+
+## 마무리
+
+위의 리팩토링 과정을 통해 아래와 같은 결과를 얻을 수 있었습니다.
+
+1. 기존의 지도 컴포넌트에 **밀집된 책임을 분리**하고, 코드를 **약 50% 줄이며** 코드 가독성을 높일 수 있었습니다. (276 line -> 135 line)
+2. 지도에 기능이 추가되더라도 지도 객체를 통해 **기존의 코드 수정을 최소화하여 확장**할 수 있습니다.
+3. 여러 종류의 마커를 각각 처리하지 않고, **하나의 훅에서 처리**할 수 있습니다.
+
+이후 최종 발표까지 후보지 둘러보기 기능을 추가할 때에도 새로운 마커 UI만 추가하여 `useMarker` 훅을 통해 해당 기능이 구현되었습니다.
+
+만약 여기서 좀더 개선할 포인트가 있다면, 기능이 추가되거나 수정되면서 하나의 페이지에 여러 지도가 띄워져 지도 객체가 덮어씌워지는 부분이 있을 것 같습니다.
+
+현재 구조상 하나의 페이지에 여러 지도가 띄워질 일이 없기 때문에 지도 객체가 덮어씌워질 일은 없지만,
+이후 그러한 일이 발생한다면 Context에 지도 객체를 **스택**에 저장하여 해결할 수 있을 것 같습니다.
+
+Context에 존재하는 스택에 지도가 **마운트될 때 해당 지도 객체를 push, 언마운트될 때 pop**한다면 화면 상단에 유지되는 지도를 관리할 수 있기 때문입니다.
+
+## 느낀 점
+
+이번 리팩토링을 통해 개발 과정에서 **코드의 유지보수성과 확장성**에 대한 중요성을 깊이 느낄 수 있었습니다.
+
+이전까지 사이드 프로젝트를 진행할 때는 팀에 민폐가 되지 않도록 기능 구현에만 몰입하여 마감 기한을 맞추는 것이 최우선이라고 생각했습니다.
+단순히 요구사항을 만족시키는 것에 만족했고, 코드 품질은 나중에 개선하면 된다는 생각이었죠.
+
+하지만 이번 프로젝트를 통해 기능이 추가되면서 기존 코드의 한계를 직접 체감하며 시야를 넓힐 수 있는 기회였습니다.
+특히, 기능 구현 후 코드 품질 개선에 대한 팀원들의 동의와 함께 성장하는 개발 문화의 중요성을 느낄 수 있었어요.
+
+앞으로는 기능 구현과 동시에 **코드의 구조와 설계**에도 더 많은 관심을 기울여야겠다는 다짐을 하게 되었습니다.
+단순히 동작하는 코드가 아니라, **확장 가능하고 유지보수하기 쉬운 코드**를 작성하는 것이 장기적으로 훨씬 더 중요하다는 것을 이번 경험을 통해 깨달을 수 있었습니다.
+
+이번 프로젝트는 단순한 기능 구현을 넘어서 **개발자로서의 성장**을 경험할 수 있는 소중한 기회였던 것 같습니다 :)
