@@ -90,7 +90,7 @@ export const proseStyle = css({
     textStyle: "prose.h4",
   },
 
-  "& p": {
+  "& p, & strike": {
     width: "100%",
     paddingBottom: "prose.text",
     color: "prose.text",
