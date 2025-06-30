@@ -62,9 +62,9 @@ jobs:
 시간은 총 3분 39초로, 두 개의 job이 비슷한 시간동안 실행된다.
 하지만, 자세히 보면 의존성 설치 과정이 **두 job 모두에서 약 1분 동안 실행**되는 것을 확인할 수 있다.
 
-![github-actions-v1-1](/post-images/GitHub-Actions-application-and-improvement/1.png)
-![github-actions-v1-2](/post-images/GitHub-Actions-application-and-improvement/2.png)
-![github-actions-v1-3](/post-images/GitHub-Actions-application-and-improvement/3.png)
+![github-actions-v1-1](/post-images/github-actions-application-and-improvement/1.png)
+![github-actions-v1-2](/post-images/github-actions-application-and-improvement/2.png)
+![github-actions-v1-3](/post-images/github-actions-application-and-improvement/3.png)
 
 따라서 의존성 설치에 대한 시간이 불필요하다고 생각하여, 이를 `캐싱`을 통해 개선해보고자 했다.
 
@@ -154,14 +154,14 @@ jobs:
 물론, 두 job의 의존성이 모두 캐싱되어있는 상황이지만, 의존성이 바뀌더라도 약 1분 정도의 시간이 추가될 것이라 예상한다.
 그렇더라도 빌드 테스트에서 약 1분이 줄어들기 때문에 충분히 개선할 가치가 있다고 생각한다.
 
-![github-actions-v2-1](/post-images/GitHub-Actions-application-and-improvement/4.png)
-![github-actions-v2-2](/post-images/GitHub-Actions-application-and-improvement/5.png)
-![github-actions-v2-3](/post-images/GitHub-Actions-application-and-improvement/6.png)
+![github-actions-v2-1](/post-images/github-actions-application-and-improvement/4.png)
+![github-actions-v2-2](/post-images/github-actions-application-and-improvement/5.png)
+![github-actions-v2-3](/post-images/github-actions-application-and-improvement/6.png)
 
 참고로 캐싱된 데이터들은 actions 탭의 왼쪽 메뉴중 cache를 통해 확인 가능하다.
 
-![github-actions-cache-1](/post-images/GitHub-Actions-application-and-improvement/7.png)
-![github-actions-cache-2](/post-images/GitHub-Actions-application-and-improvement/8.png)
+![github-actions-cache-1](/post-images/github-actions-application-and-improvement/7.png)
+![github-actions-cache-2](/post-images/github-actions-application-and-improvement/8.png)
 
 ### 이 정도로도 성에 안찬다면?
 
