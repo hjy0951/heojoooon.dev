@@ -20,6 +20,7 @@ const tagMap = {
   "code-review": "코드 리뷰",
   blog: "블로그 제작기",
   refactoring: "리팩토링",
+  ai: "AI",
 } as const;
 
 export type TagType = keyof typeof tagMap;
