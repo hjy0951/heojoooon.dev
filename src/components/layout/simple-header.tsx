@@ -1,8 +1,8 @@
 "use client";
 
 import { css, cx } from "#/styled-system/css";
-import { useEffect, useRef, useState } from "react";
 import { CustomLink } from "../mdx-components";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { ModeButton } from "./mode-button";
 
 const navs = [
@@ -11,29 +11,13 @@ const navs = [
 ];
 
 const SimpleHeader = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsScrolled(!entry.isIntersecting);
-      },
-      {
-        rootMargin: "0px",
-        threshold: 0,
-      }
-    );
-
-    observer.observe(sentinel);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  const [sentinelRef, isIntersecting] = useIntersectionObserver<HTMLDivElement>(
+    {
+      rootMargin: "0px",
+      threshold: 0,
+    }
+  );
+  const isScrolled = !isIntersecting;
 
   return (
     <>
