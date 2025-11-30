@@ -38,7 +38,7 @@ const SimpleHeader = () => {
   return (
     <>
       <div ref={sentinelRef} className={sentinelStyle} />
-      <header className={cx(wrapperStyle, isScrolled && scrolledShadowStyle)}>
+      <header className={cx(wrapperStyle, isScrolled && scrolledBorderStyle)}>
         <div className={containerStyle}>
           {navs.map(({ href, text }) => (
             <CustomLink
@@ -82,11 +82,12 @@ const wrapperStyle = css({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  transition: "box-shadow 0.2s ease-in-out",
+  borderBottom: "1px solid transparent",
+  transition: "border-bottom-color 0.2s ease-in-out",
 });
 
-const scrolledShadowStyle = css({
-  boxShadow: "0 0 12px 6px rgba(0, 0, 0, 0.15)",
+const scrolledBorderStyle = css({
+  borderBottomColor: "border.header",
 });
 
 const containerStyle = css({

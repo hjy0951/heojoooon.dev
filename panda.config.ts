@@ -105,6 +105,12 @@ export default defineConfig({
           },
           border: {
             blockquote: { value: { base: "#194D7C", _dark: "#5B8DF6" } },
+            header: {
+              value: {
+                base: "rgba(0, 0, 0, 0.1)",
+                _dark: "rgba(255, 255, 255, 0.1)",
+              },
+            },
           },
           prose: {
             text: { value: { base: "#202125", _dark: "#fdfdfd" } },
