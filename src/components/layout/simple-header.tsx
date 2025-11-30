@@ -1,4 +1,7 @@
-import { css } from "#/styled-system/css";
+"use client";
+
+import { css, cx } from "#/styled-system/css";
+import { useEffect, useRef, useState } from "react";
 import { CustomLink } from "../mdx-components";
 import { ModeButton } from "./mode-button";
 
@@ -8,27 +11,64 @@ const navs = [
 ];
 
 const SimpleHeader = () => {
-  return (
-    <header className={wrapperStyle}>
-      <div className={containerStyle}>
-        {navs.map(({ href, text }) => (
-          <CustomLink
-            key={`nav-to-${text}`}
-            href={href}
-            color={"secondary"}
-            currentWindow
-          >
-            {text}
-          </CustomLink>
-        ))}
-      </div>
+  const [isScrolled, setIsScrolled] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-      <ModeButton />
-    </header>
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsScrolled(!entry.isIntersecting);
+      },
+      {
+        rootMargin: "0px",
+        threshold: 0,
+      }
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <>
+      <div ref={sentinelRef} className={sentinelStyle} />
+      <header className={cx(wrapperStyle, isScrolled && scrolledShadowStyle)}>
+        <div className={containerStyle}>
+          {navs.map(({ href, text }) => (
+            <CustomLink
+              key={`nav-to-${text}`}
+              href={href}
+              color={"secondary"}
+              currentWindow
+            >
+              {text}
+            </CustomLink>
+          ))}
+        </div>
+
+        <ModeButton />
+      </header>
+    </>
   );
 };
 
 export default SimpleHeader;
+
+const sentinelStyle = css({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "1px",
+  height: "1px",
+  pointerEvents: "none",
+  visibility: "hidden",
+});
 
 const wrapperStyle = css({
   zIndex: 10000,
@@ -39,10 +79,14 @@ const wrapperStyle = css({
   height: "72px",
   backdropFilter: "blur(12px)",
   backgroundColor: "rgba(var(--colors-background-primary), 0.5)",
-  boxShadow: "0 0 12px 6px rgba(0, 0, 0, 0.15)",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  transition: "box-shadow 0.2s ease-in-out",
+});
+
+const scrolledShadowStyle = css({
+  boxShadow: "0 0 12px 6px rgba(0, 0, 0, 0.15)",
 });
 
 const containerStyle = css({
