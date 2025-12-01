@@ -1,5 +1,8 @@
-import { css } from "#/styled-system/css";
+"use client";
+
+import { css, cx } from "#/styled-system/css";
 import { CustomLink } from "../mdx-components";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { ModeButton } from "./mode-button";
 
 const navs = [
@@ -8,27 +11,48 @@ const navs = [
 ];
 
 const SimpleHeader = () => {
-  return (
-    <header className={wrapperStyle}>
-      <div className={containerStyle}>
-        {navs.map(({ href, text }) => (
-          <CustomLink
-            key={`nav-to-${text}`}
-            href={href}
-            color={"secondary"}
-            currentWindow
-          >
-            {text}
-          </CustomLink>
-        ))}
-      </div>
+  const [sentinelRef, isIntersecting] = useIntersectionObserver<HTMLDivElement>(
+    {
+      rootMargin: "0px",
+      threshold: 0,
+    }
+  );
+  const isScrolled = !isIntersecting;
 
-      <ModeButton />
-    </header>
+  return (
+    <>
+      <div ref={sentinelRef} className={sentinelStyle} />
+      <header className={cx(wrapperStyle, isScrolled && scrolledBorderStyle)}>
+        <div className={containerStyle}>
+          {navs.map(({ href, text }) => (
+            <CustomLink
+              key={`nav-to-${text}`}
+              href={href}
+              color={"secondary"}
+              currentWindow
+            >
+              {text}
+            </CustomLink>
+          ))}
+        </div>
+
+        <ModeButton />
+      </header>
+    </>
   );
 };
 
 export default SimpleHeader;
+
+const sentinelStyle = css({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "1px",
+  height: "1px",
+  pointerEvents: "none",
+  visibility: "hidden",
+});
 
 const wrapperStyle = css({
   zIndex: 10000,
@@ -37,11 +61,17 @@ const wrapperStyle = css({
   paddingX: "6%",
   width: "full",
   height: "72px",
-  backgroundColor: "background.primary",
-  boxShadow: "0 0 6px 3px rgba(0, 0, 0, 0.1)",
+  backdropFilter: "blur(12px)",
+  backgroundColor: "rgba(var(--colors-background-primary), 0.5)",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  borderBottom: "1px solid transparent",
+  transition: "border-bottom-color 0.2s ease-in-out",
+});
+
+const scrolledBorderStyle = css({
+  borderBottomColor: "border.header",
 });
 
 const containerStyle = css({
